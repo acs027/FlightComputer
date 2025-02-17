@@ -8,7 +8,7 @@
 import SwiftUI
 
 
-struct CustomTextField<U: UnitType>: View {
+struct UnitConversionTextField<U: UnitType>: View {
     let unit: U
     @FocusState var focused: U?
     @Binding var value: Double

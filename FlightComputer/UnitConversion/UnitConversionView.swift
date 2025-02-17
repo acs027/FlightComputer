@@ -50,7 +50,7 @@ struct UnitConversionView: View {
     var volumeConversion: some View {
         VStack {
             ForEach(UnitConversion.Volume.allCases, id: \.self) { unit in
-                CustomTextField(unit: unit, value: $viewModel.unitConversion.volumeValue, currentUnit: $viewModel.unitConversion.volumeUnit)
+                UnitConversionTextField(unit: unit, value: $viewModel.unitConversion.volumeValue, currentUnit: $viewModel.unitConversion.volumeUnit)
             }
         }
     }
@@ -58,7 +58,7 @@ struct UnitConversionView: View {
     var areaConversion: some View {
         VStack {
             ForEach(UnitConversion.Area.allCases, id: \.self) { unit in
-                CustomTextField(unit: unit, value: $viewModel.unitConversion.areaValue, currentUnit: $viewModel.unitConversion.areaUnit)
+                UnitConversionTextField(unit: unit, value: $viewModel.unitConversion.areaValue, currentUnit: $viewModel.unitConversion.areaUnit)
             }
         }
     }
@@ -66,7 +66,7 @@ struct UnitConversionView: View {
     var distanceConversion: some View {
         VStack {
             ForEach(UnitConversion.Distance.allCases, id: \.self) { unit in
-                CustomTextField(unit: unit, value: $viewModel.unitConversion.distanceValue, currentUnit: $viewModel.unitConversion.distanceUnit)
+                UnitConversionTextField(unit: unit, value: $viewModel.unitConversion.distanceValue, currentUnit: $viewModel.unitConversion.distanceUnit)
             }
         }
     }
@@ -74,7 +74,7 @@ struct UnitConversionView: View {
     var massConversion: some View {
         VStack {
             ForEach(UnitConversion.Mass.allCases, id: \.self) { unit in
-                CustomTextField(unit: unit, value: $viewModel.unitConversion.massValue, currentUnit: $viewModel.unitConversion.massUnit)
+                UnitConversionTextField(unit: unit, value: $viewModel.unitConversion.massValue, currentUnit: $viewModel.unitConversion.massUnit)
             }
         }
     }
@@ -82,7 +82,7 @@ struct UnitConversionView: View {
     var pressureConversion: some View {
         VStack {
             ForEach(UnitConversion.Pressure.allCases, id: \.self) { unit in
-                CustomTextField(unit: unit, value: $viewModel.unitConversion.pressureValue, currentUnit: $viewModel.unitConversion.pressureUnit)
+                UnitConversionTextField(unit: unit, value: $viewModel.unitConversion.pressureValue, currentUnit: $viewModel.unitConversion.pressureUnit)
             }
         }
     }
@@ -90,7 +90,7 @@ struct UnitConversionView: View {
     var temperatureConversion: some View {
         VStack {
             ForEach(UnitConversion.Temperature.allCases, id: \.self) { unit in
-                CustomTextField(unit: unit, value: $viewModel.unitConversion.temperatureValue, currentUnit: $viewModel.unitConversion.temperatureUnit)
+                UnitConversionTextField(unit: unit, value: $viewModel.unitConversion.temperatureValue, currentUnit: $viewModel.unitConversion.temperatureUnit)
             }
         }
     }

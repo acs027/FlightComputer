@@ -13,30 +13,33 @@ struct WindCorrectionAngleCalculator {
     var windDirection: Double = 0
     var windSpeed: Double = 0
     private var windAngle: Double? {
-//        guard let windDirection = windDirection,
-//              let trueCourse = trueCourse else { return nil }
         return windDirection - trueCourse
     }
+    
+    var headWind: Double? {
+        guard let windAngle = windAngle else { return nil }
+        return windSpeed * cos( windAngle / 180 * .pi )
+    }
+    
+    var crossWind: Double? {
+        guard let windAngle = windAngle else { return nil }
+        return windSpeed * sin( windAngle / 180 * .pi )
+    }
     var windCorrectionAngle: Double? {
-        guard let windAngle = windAngle
-//           let trueAirSpeed = trueAirSpeed,
-//              let windSpeed = windSpeed
+        guard let crossWind = crossWind
         else { return nil }
-        let result = asin(windSpeed * sin(windAngle / 180 * Double.pi) / trueAirSpeed)*180/Double.pi
+        let result = asin(crossWind / trueAirSpeed) * 180 / .pi
         return result
     }
     
     var groundSpeed: Double? {
-//        guard let trueAirSpeed = trueAirSpeed,
-//           let windSpeed = windSpeed,
-//           let windAngle = windAngle else { return nil }
-        guard let windAngle = windAngle else { return nil }
-        let result = (pow(trueAirSpeed, 2) - pow(windSpeed, 2) * sin(windAngle / 180 * Double.pi)).squareRoot() + windSpeed * cos(windAngle / 180 * Double.pi)
+        guard let headWind = headWind
+        else { return nil }
+        let result = trueAirSpeed - headWind
         return result
     }
     
     var heading: Double? {
-//        guard let trueCourse = trueCourse,
         guard let windCorrectionAngle = windCorrectionAngle else { return nil }
         return trueCourse + windCorrectionAngle
     }
