@@ -11,6 +11,8 @@ struct WindSideView: View {
     @State var vm = WindSideViewModel()
     @State var step: WCACalculationSteps = .windDirection
     @State var rotation: Angle = Angle(degrees: 0)
+    @State var isControllerShowing = false
+    @State var isValuesShowing = false
     
     @State var scale: CGFloat = 1
     @GestureState var gestureScale: CGFloat = 1
@@ -27,18 +29,14 @@ struct WindSideView: View {
     @GestureState var gesturePan: CGOffset = .zero
     private var totalPan: CGOffset { pan + gesturePan }
     
-    @State var isControllerShowing = false
-    @State var isValuesShowing = false
-    
     private var unitHeight: CGFloat { vm.unitHeight }
     
+    //MARK: - Body
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .center) {
                 windSideComponents
-                .offset(totalPan)
-                .scaleEffect(totalScale)
-                controllerViewButton
+                controllerButtons
                 values.opacity(isValuesShowing ? 1 : 0)
             }
             .simultaneousGesture(
@@ -56,14 +54,12 @@ struct WindSideView: View {
                 vm.screenWidth = geometry.size.width
             }
             .onChange(of: step) { oldValue, newValue in
-                if newValue == .result {
-                    isValuesShowing.toggle()
-                    isControllerShowing.toggle()
-                }
+                handleStepChange(newValue: newValue)
             }
         }
     }
     
+    //MARK: Main components
     var windSideComponents: some View {
         Group{
             windSideBackground
@@ -75,6 +71,9 @@ struct WindSideView: View {
             // Adding Headwind speed to True Air Speed
             .offset(y: (vm.wCACalculator.headWind ?? 0) * unitHeight)
         }
+        // Enables users to move and scale content for better inspection.
+        .offset(totalPan)
+        .scaleEffect(totalScale)
     }
     
     var windSideBackground: some View {
@@ -106,6 +105,17 @@ struct WindSideView: View {
                 .rotationEffect(Angle(degrees: markDegree))
         }
         .offset(y: verticalOffset)
+    }
+    
+    private var values: some View {
+        ZStack(alignment: .topLeading) {
+            Color.clear
+            VStack(alignment: .leading) {
+                ForEach(vm.results, id: \.label) { result in
+                    ResultTextView(label: result.label, value: result.value, valueType: result.type)
+                }
+            }
+        }
     }
     
     //MARK: Sliders
@@ -220,47 +230,49 @@ struct WindSideView: View {
         }
     }
     
-    var controllerViewButton: some View {
+    //MARK: Controller buttons
+    var controllerButtons: some View {
         ZStack(alignment: .bottom) {
-            Color.clear
-                .frame(maxHeight: .infinity)
-            HStack {
-                Button {
-                    isControllerShowing.toggle()
-                } label: {
-                    UnevenRoundedRectangle(topLeadingRadius: 15, bottomLeadingRadius: 15)
-                        .overlay {
-                            Text("Set Values")
-                                .foregroundStyle(.white)
-                        }
+            VStack {
+                Spacer()
+                HStack {
+                    setValuesButton
+                    toggleValuesButton
                 }
-                Button {
-                    isValuesShowing.toggle()
-                } label: {
-                    UnevenRoundedRectangle(bottomTrailingRadius: 15, topTrailingRadius: 15)
-                        .overlay {
-                            Text("Toggle Values")
-                                .foregroundStyle(.white)
-                        }
-                }
-            }
-            .foregroundStyle(.blue.gradient)
-            .frame(height: 50, alignment: .bottom)
-            .padding()
-        }
-    }
-    
-    private var values: some View {
-        ZStack(alignment: .topLeading) {
-            Color.clear
-            VStack(alignment: .leading) {
-                ForEach(vm.results, id: \.label) { result in
-                    ResultTextView(label: result.label, value: result.value, valueType: result.type)
+                .foregroundStyle(.blue.gradient)
+                .frame(height: 50)
+                .padding()
+                .safeAreaInset(edge: .bottom) {
+                    Color.clear.frame(height: 50)
                 }
             }
         }
     }
     
+    private var setValuesButton: some View {
+        Button {
+            isControllerShowing.toggle()
+        } label: {
+            UnevenRoundedRectangle(topLeadingRadius: 15, bottomLeadingRadius: 15)
+                .overlay {
+                    Text("Set Values")
+                        .foregroundStyle(.white)
+                }
+        }
+    }
+    
+    private var toggleValuesButton: some View {
+        Button {
+            isValuesShowing.toggle()
+        } label: {
+            UnevenRoundedRectangle(bottomTrailingRadius: 15, topTrailingRadius: 15)
+                .overlay {
+                    Text("Toggle Values")
+                        .foregroundStyle(.white)
+                }
+        }
+    }
+        
     private var nextButton: some View {
         Button {
             vm.setValue(for: step, speedValue: Double(speedValue), markValue: Double(markValue), angle: rotation.degrees)
@@ -290,9 +302,17 @@ struct WindSideView: View {
             }
     }
     
+    //MARK: Functions
     private func centerView() {
         pan = .zero
         scale = 1
+    }
+    
+    private func handleStepChange(newValue: WCACalculationSteps) {
+        if newValue == .result {
+            isValuesShowing.toggle()
+            isControllerShowing.toggle()
+        }
     }
 }
 
