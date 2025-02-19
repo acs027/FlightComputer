@@ -9,8 +9,8 @@ import Foundation
 
 extension UnitConversion {
     enum Temperature: String, CaseIterable, Hashable, UnitType {
-        case fahrenheit = "F"
         case celsius = "C"
+        case fahrenheit = "F"
         case kelvin = "K"
         
         func convert(value: Double, to: Temperature) -> Double {

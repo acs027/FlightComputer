@@ -9,10 +9,10 @@ import Foundation
 
 extension UnitConversion {
     enum Distance: String, CaseIterable, Hashable, UnitType {
+        case meters = "m"
+        case kilometers = "km"
         case nauticalMiles = "NM"
         case statuteMiles = "mi"
-        case kilometers = "km"
-        case meters = "m"
         case feet = "ft"
         case yards = "yd"
         

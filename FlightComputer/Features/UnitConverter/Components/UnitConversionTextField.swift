@@ -31,17 +31,36 @@ struct UnitConversionTextField<U: UnitType>: View {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(lineWidth: 1)
                 .frame(height: 36)
+            textField
+            valueText
+        }
+    }
+    
+    var textField: some View {
+        HStack {
             TextField("Value", value: $value, formatter: numberFormatter)
                 .padding(5)
                 .focused($focused, equals: unit)
-                .opacity(currentUnit == unit ? 1 : 0)
-            
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+            Text("\(unit.symbol)")
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding()
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+        }
+        .opacity(currentUnit == unit ? 1 : 0)
+    }
+    
+    var valueText: some View {
+        HStack {
             Text(numberFormatter.string(from: convertedValue as NSNumber) ?? "err")
                 .padding(.vertical, 8)
                 .padding(.horizontal, 5)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .contentShape(RoundedRectangle(cornerRadius: 10))
-                .opacity(currentUnit == unit ? 0 : 1)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
                 .onTapGesture {
                     self.value = currentUnit.convert(value: value, to: unit)
                     self.focused = unit
@@ -50,6 +69,9 @@ struct UnitConversionTextField<U: UnitType>: View {
             Text("\(unit.symbol)")
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .padding()
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
         }
+        .opacity(currentUnit == unit ? 0 : 1)
     }
 }

@@ -9,14 +9,19 @@ import SwiftUI
 
 struct UnitConversionView: View {
     @State var viewModel = UnitConversionViewModel()
+    let gridItems = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    
     var body: some View {
         VStack {
             segmentedPicker
             conversionView
-                .padding()
+                .padding(5)
+            Spacer()
+            NumPad(value: $viewModel.value)
         }
-        .frame(maxHeight: .infinity)
-        .background(.gray)
     }
     
     var segmentedPicker: some View {
@@ -27,6 +32,7 @@ struct UnitConversionView: View {
             }
         }
         .pickerStyle(.segmented)
+        .frame(alignment: .top)
     }
     
     @ViewBuilder
@@ -48,7 +54,7 @@ struct UnitConversionView: View {
     }
     
     var volumeConversion: some View {
-        VStack {
+        LazyVGrid(columns: gridItems, spacing: 5) {
             ForEach(UnitConversion.Volume.allCases, id: \.self) { unit in
                 UnitConversionTextField(unit: unit, value: $viewModel.unitConversion.volumeValue, currentUnit: $viewModel.unitConversion.volumeUnit)
             }
@@ -56,7 +62,7 @@ struct UnitConversionView: View {
     }
     
     var areaConversion: some View {
-        VStack {
+        LazyVGrid(columns: gridItems, spacing: 5) {
             ForEach(UnitConversion.Area.allCases, id: \.self) { unit in
                 UnitConversionTextField(unit: unit, value: $viewModel.unitConversion.areaValue, currentUnit: $viewModel.unitConversion.areaUnit)
             }
@@ -64,7 +70,7 @@ struct UnitConversionView: View {
     }
     
     var distanceConversion: some View {
-        VStack {
+        LazyVGrid(columns: gridItems, spacing: 5) {
             ForEach(UnitConversion.Distance.allCases, id: \.self) { unit in
                 UnitConversionTextField(unit: unit, value: $viewModel.unitConversion.distanceValue, currentUnit: $viewModel.unitConversion.distanceUnit)
             }
@@ -72,7 +78,7 @@ struct UnitConversionView: View {
     }
     
     var massConversion: some View {
-        VStack {
+        LazyVGrid(columns: gridItems, spacing: 5) {
             ForEach(UnitConversion.Mass.allCases, id: \.self) { unit in
                 UnitConversionTextField(unit: unit, value: $viewModel.unitConversion.massValue, currentUnit: $viewModel.unitConversion.massUnit)
             }
@@ -80,7 +86,7 @@ struct UnitConversionView: View {
     }
     
     var pressureConversion: some View {
-        VStack {
+        LazyVGrid(columns: gridItems, spacing: 5) {
             ForEach(UnitConversion.Pressure.allCases, id: \.self) { unit in
                 UnitConversionTextField(unit: unit, value: $viewModel.unitConversion.pressureValue, currentUnit: $viewModel.unitConversion.pressureUnit)
             }

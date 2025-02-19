@@ -11,9 +11,15 @@ import Foundation
 @Observable class WindSideViewModel {
     var wCACalculator = WindCorrectionAngleCalculator()
     var screenWidth: Double = 0
+    var screenHeight: Double = 0
+//    var unitHeight: Double {
+//        let ratio: CGFloat = 100 / 51
+//        let height = screenWidth * ratio * 0.83
+//        return height / 220
+//    }
+    var referenceHeight: Double = 0
     var unitHeight: Double {
-        let ratio: CGFloat = 100 / 51
-        let height = screenWidth * ratio * 0.83
+        let height = referenceHeight * 0.83
         return height / 220
     }
     
@@ -38,6 +44,34 @@ import Foundation
         let highestPoint: CGFloat = .zero
         let lowestPoint: CGFloat = -unitHeight * 50
         return lowestPoint...highestPoint
+    }
+    
+    func verticalStepperIncrement(value: Double) -> Double {
+        if value > -unitHeight * 89 {
+            return value - unitHeight
+        }
+        return -unitHeight * 90
+    }
+    
+    func verticalStepperDecrement(value: Double) -> Double {
+        if value < unitHeight * 129 {
+            return value + unitHeight
+        }
+        return unitHeight * 130
+    }
+    
+    func markStepperIncrement(value: Double) -> Double {
+        if value > -unitHeight * 49 {
+            return value - unitHeight
+        }
+        return -unitHeight * 50
+    }
+    
+    func markStepperDecrement(value: Double) -> Double {
+        if value < -unitHeight {
+            return value + unitHeight
+        }
+        return 0
     }
     
     func calculateVerticalOffset(value: Double) -> Double {

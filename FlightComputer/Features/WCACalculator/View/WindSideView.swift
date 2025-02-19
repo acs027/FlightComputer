@@ -19,17 +19,15 @@ struct WindSideView: View {
     private var totalScale: CGFloat { scale * gestureScale }
     
     @State var verticalOffset: CGFloat = 0
-    private var speedValue: CGFloat { 170 - verticalOffset / unitHeight }
+    private var speedValue: CGFloat { 170 - verticalOffset / vm.unitHeight }
     
     @State var markOffset: CGFloat = 0
-    private var markValue: CGFloat { -markOffset / unitHeight }
+    private var markValue: CGFloat { -markOffset / vm.unitHeight }
     var markDegree: Double { vm.wCACalculator.windDirection - rotation.degrees }
     
     @State var pan: CGOffset = .zero
     @GestureState var gesturePan: CGOffset = .zero
     private var totalPan: CGOffset { pan + gesturePan }
-    
-    private var unitHeight: CGFloat { vm.unitHeight }
     
     //MARK: - Body
     var body: some View {
@@ -52,6 +50,7 @@ struct WindSideView: View {
             }
             .onAppear {
                 vm.screenWidth = geometry.size.width
+                vm.screenHeight = geometry.size.height
             }
             .onChange(of: step) { oldValue, newValue in
                 handleStepChange(newValue: newValue)
@@ -69,7 +68,7 @@ struct WindSideView: View {
                 markOnRotor
             }
             // Adding Headwind speed to True Air Speed
-            .offset(y: (vm.wCACalculator.headWind ?? 0) * unitHeight)
+            .offset(y: (vm.wCACalculator.headWind ?? 0) * vm.unitHeight)
         }
         // Enables users to move and scale content for better inspection.
         .offset(totalPan)
@@ -77,15 +76,22 @@ struct WindSideView: View {
     }
     
     var windSideBackground: some View {
-        Image("windsidebackground")
-            .resizable()
-            .aspectRatio(contentMode: .fit)
+        GeometryReader { geometry in
+            Image("windsidebackground")
+                .resizable()
+                .scaledToFit()
+                .frame(width: geometry.size.width)
+                .onAppear {
+                    vm.referenceHeight = geometry.size.height
+                    print(geometry.size.height)
+                }
+        }
     }
     
     var windSideStator: some View {
         Image("windsiderotorouter")
             .resizable()
-            .aspectRatio(5.1 / 10, contentMode: .fill)
+            .scaledToFit()
             .offset(y: verticalOffset)
     }
     
@@ -121,12 +127,17 @@ struct WindSideView: View {
     //MARK: Sliders
     var verticalSlider: some View {
         VStack{
-            Slider(value: $verticalOffset, in: vm.verticalRange, step: unitHeight)
-            Stepper(value: $verticalOffset, in: vm.verticalRange, step: unitHeight) {
+            Slider(value: $verticalOffset, in: vm.verticalRange, step: vm.unitHeight)
+                .rotationEffect(.degrees(180))
+            Stepper {
                 HStack {
-                    Text("True Air Speed: ")
+                    Text("Wind speed: ")
                     TextField("Enter a number", text: verticalFormattedBinding)
                 }
+            } onIncrement: {
+                verticalOffset = vm.verticalStepperIncrement(value: verticalOffset)
+            } onDecrement: {
+                verticalOffset = vm.verticalStepperDecrement(value: verticalOffset)
             }
         }
     }
@@ -145,12 +156,17 @@ struct WindSideView: View {
     
     var markSlider: some View {
         VStack{
-            Slider(value: $markOffset, in: vm.markRange, step: unitHeight)
-            Stepper(value: $markOffset, in: vm.markRange, step: unitHeight) {
+            Slider(value: $markOffset, in: vm.markRange, step: vm.unitHeight)
+                .rotationEffect(.degrees(180))
+            Stepper {
                 HStack {
                     Text("Wind speed: ")
                     TextField("Enter a number", text: markFormattedBinding)
                 }
+            } onIncrement: {
+                markOffset = vm.markStepperIncrement(value: markOffset)
+            } onDecrement: {
+                markOffset = vm.markStepperDecrement(value: markOffset)
             }
         }
     }
@@ -232,20 +248,33 @@ struct WindSideView: View {
     
     //MARK: Controller buttons
     var controllerButtons: some View {
-        ZStack(alignment: .bottom) {
-            VStack {
+        VStack {
+            HStack {
                 Spacer()
-                HStack {
-                    setValuesButton
-                    toggleValuesButton
-                }
-                .foregroundStyle(.blue.gradient)
-                .frame(height: 50)
-                .padding()
-                .safeAreaInset(edge: .bottom) {
-                    Color.clear.frame(height: 50)
-                }
+                centerButton
             }
+            .padding()
+            Spacer()
+            HStack {
+                setValuesButton
+                toggleValuesButton
+            }
+            .foregroundStyle(.blue.gradient)
+            .frame(height: 50)
+        }
+        .padding()
+    }
+    
+    private var centerButton: some View {
+        Button {
+            centerView()
+        } label: {
+            Image(systemName: "scope")
+                .font(.largeTitle)
+                .background(
+                    Circle()
+                        .tint(.white)
+                )
         }
     }
     
@@ -272,7 +301,7 @@ struct WindSideView: View {
                 }
         }
     }
-        
+    
     private var nextButton: some View {
         Button {
             vm.setValue(for: step, speedValue: Double(speedValue), markValue: Double(markValue), angle: rotation.degrees)
@@ -285,7 +314,7 @@ struct WindSideView: View {
                     RoundedRectangle(cornerRadius: 15)
                         .foregroundStyle(.green.gradient)
                 )
-            }
+        }
     }
     
     private var backButton: some View {
@@ -299,19 +328,20 @@ struct WindSideView: View {
                     RoundedRectangle(cornerRadius: 15)
                         .foregroundStyle(.red.gradient)
                 )
-            }
+        }
     }
     
     //MARK: Functions
     private func centerView() {
         pan = .zero
         scale = 1
+        print(UIScreen.main.bounds.height)
     }
     
     private func handleStepChange(newValue: WCACalculationSteps) {
         if newValue == .result {
-            isValuesShowing.toggle()
-            isControllerShowing.toggle()
+            isValuesShowing = true
+            isControllerShowing = false
         }
     }
 }
