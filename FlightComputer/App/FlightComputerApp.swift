@@ -13,8 +13,9 @@ struct FlightComputerApp: App {
         WindowGroup {
 //            FlightComputerView()
 //            UnitConversionView()
-//            WindSideView()
-            MainTabView()
+            WindSideView()
+//            MainTabView()
+//            WindCorrectionCalculatorView()
         }
     }
 }

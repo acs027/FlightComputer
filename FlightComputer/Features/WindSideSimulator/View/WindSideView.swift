@@ -123,91 +123,7 @@ struct WindSideView: View {
             }
         }
     }
-    
-    //MARK: Sliders
-    var verticalSlider: some View {
-        VStack{
-            Slider(value: $verticalOffset, in: vm.verticalRange, step: vm.unitHeight)
-                .rotationEffect(.degrees(180))
-            Stepper {
-                HStack {
-                    Text("Wind speed: ")
-                    TextField("Enter a number", text: verticalFormattedBinding)
-                }
-            } onIncrement: {
-                verticalOffset = vm.verticalStepperIncrement(value: verticalOffset)
-            } onDecrement: {
-                verticalOffset = vm.verticalStepperDecrement(value: verticalOffset)
-            }
-        }
-    }
-    
-    private var verticalFormattedBinding: Binding<String> {
-        Binding(
-            get: { String(format: "%.2f", speedValue) },
-            set: { newValue in
-                if let value = Double(newValue),
-                   vm.isVerticalOffsetInRange(value: value){
-                    verticalOffset = vm.calculateVerticalOffset(value: value)
-                }
-            }
-        )
-    }
-    
-    var markSlider: some View {
-        VStack{
-            Slider(value: $markOffset, in: vm.markRange, step: vm.unitHeight)
-                .rotationEffect(.degrees(180))
-            Stepper {
-                HStack {
-                    Text("Wind speed: ")
-                    TextField("Enter a number", text: markFormattedBinding)
-                }
-            } onIncrement: {
-                markOffset = vm.markStepperIncrement(value: markOffset)
-            } onDecrement: {
-                markOffset = vm.markStepperDecrement(value: markOffset)
-            }
-        }
-    }
-    
-    private var markFormattedBinding: Binding<String> {
-        Binding(
-            get: { String(format: "%.2f", abs(markValue)) },
-            set: { newValue in
-                if let value = Double(newValue),
-                   vm.isMarkInRange(value: value)
-                {
-                    markOffset = vm.calculateMarkOffset(value: value)
-                }
-            }
-        )
-    }
-    
-    var angleSlider: some View {
-        VStack {
-            Slider(value: $rotation.degrees, in: 0...360, step: 1)
-            
-            Stepper(value: $rotation.degrees, in: 0...360, step: 1) {
-                HStack {
-                    Text(step == .windDirection ? "Wind Direction:" : "True Course:")
-                    TextField("Enter a number", text: angleFormattedBinding)
-                }
-            }
-        }
-    }
-    
-    private var angleFormattedBinding: Binding<String> {
-        Binding(
-            get: { String(format: "%.0f°", rotation.degrees) },
-            set: { newValue in
-                if let value = Double(newValue), vm.isAngleInRange(value: value) {
-                    rotation.degrees = value
-                }
-            }
-        )
-    }
-    
+
     //MARK: Gestures
     var panGesture: some Gesture {
         DragGesture()
@@ -234,9 +150,9 @@ struct WindSideView: View {
     var controllerView: some View {
         VStack {
             switch step {
-            case .trueCourse, .windDirection: angleSlider
-            case .windVelocity: markSlider
-            case .trueAirSpeed: verticalSlider
+            case .trueCourse, .windDirection: WindSideAngleSlider(vm: vm, rotation: $rotation, step: step)
+            case .windVelocity: WindSideWindSpeedSlider(vm: vm, markOffset: $markOffset, markValue: markValue)
+            case .trueAirSpeed: WindSideTASSlider(vm: vm, verticalOffset: $verticalOffset, speedValue: speedValue)
             case .result: EmptyView()
             }
             HStack {
