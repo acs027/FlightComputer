@@ -9,7 +9,8 @@ import Foundation
 
 @Observable class UnitConversionViewModel {
     var unitConversion = UnitConversion()
-    var selectedConversion: ConversionType = .area
+    var selectedConversion: ConversionType = .distance
+    var isConversionViewShowing = false
     
     var value: Double {
         get {
@@ -45,5 +46,9 @@ import Foundation
             }
         }
         
+    }
+    
+    func swapUnits() {
+        unitConversion.swapUnits(for: selectedConversion)
     }
 }

@@ -14,45 +14,39 @@ struct WindCorrectionCalculatorView: View {
             GridItem(.flexible())
         ]
     
+    struct Constants {
+        static let bgColor: Color = Color(.systemBackground)
+    }
+    
     var body: some View {
         VStack {
             IllustrationView(vm: vm)
-            LazyVGrid(columns: columns) {
-                windDirectionText
-                windSpeed
+            LazyVGrid(columns: columns, spacing: 5) {
+                windDirectionTextField
+                windSpeedTextField
                 courseTextField
                 trueAirSpeedTextField
             }
         }
+        .background(Constants.bgColor)
     }
     
-    var windDirectionText: some View {
-        VStack(alignment: .center){
-            Text("Wind Direction")
-                    TextField("Wind Direction:", value: $vm.wCACalculator.windDirection, format: .number)
-                .textFieldStyle(.roundedBorder)
-        }
-        .background(.gray)
+    var windDirectionTextField: some View {
+        WCATextField(title: "Wind Direction", value: $vm.wCACalculator.windDirection, placeHolder: "Enter wind direction")
     }
-    var windSpeed: some View {
-        VStack{
-            Text("Wind Speed")
-                TextField("Course :", value: $vm.wCACalculator.windSpeed, format: .number)
-            }
+    
+    var windSpeedTextField: some View {
+        WCATextField(title: "Wind Speed", value: $vm.wCACalculator.windSpeed, placeHolder: "Enter wind speed")
     }
     var courseTextField: some View {
-            VStack {
-                Text("Course")
-                TextField("Course :", value: $vm.wCACalculator.trueCourse, format: .number)
-            }
+        WCATextField(title: "Course", value: $vm.wCACalculator.trueCourse, placeHolder: "Enter the course")
     }
     var trueAirSpeedTextField: some View {
-            VStack {
-                Text("True Air Speed")
-                TextField("TAS :", value: $vm.wCACalculator.trueAirSpeed, format: .number)
-            }
+        WCATextField(title: "True Air Speed", value: $vm.wCACalculator.trueAirSpeed, placeHolder: "Enter TAS")
     }
 }
+
+
 
 #Preview {
     WindCorrectionCalculatorView()

@@ -31,31 +31,40 @@ struct WindSideView: View {
     
     //MARK: - Body
     var body: some View {
-        GeometryReader { geometry in
-            ZStack(alignment: .center) {
-                windSideComponents
-                controllerButtons
-                values.opacity(isValuesShowing ? 1 : 0)
-            }
-            .simultaneousGesture(
-                panGesture
-            )
-            .simultaneousGesture(
-                magnifyGesture
-            )
-            .sheet(isPresented: $isControllerShowing) {
-                controllerView
-                    .padding()
-                    .presentationDetents([.medium, .fraction(0.3)])
-            }
-            .onAppear {
-                vm.screenWidth = geometry.size.width
-                vm.screenHeight = geometry.size.height
-            }
-            .onChange(of: step) { oldValue, newValue in
-                handleStepChange(newValue: newValue)
-            }
+        ZStack(alignment: .center) {
+            windSideComponents
+            controllerButtons
+            values.opacity(isValuesShowing ? 1 : 0)
+                .padding()
         }
+        .background(Constants.bgColor)
+        .simultaneousGesture(
+            panGesture
+        )
+        .simultaneousGesture(
+            magnifyGesture
+        )
+        .sheet(isPresented: $isControllerShowing) {
+            controllerView
+                .padding()
+                .presentationBackground(Constants.sheetBg)
+                .presentationDetents([.medium, .fraction(0.3)])
+        }
+        .onChange(of: step) { oldValue, newValue in
+            handleStepChange(newValue: newValue)
+        }
+    }
+    
+    //MARK: Constants
+    struct Constants {
+        static let bgColor: Color = Color(.secondarySystemBackground)
+        static let controllerViewFgColor: Color = .primary
+        static let mainButtonColor: AnyGradient = Color.blue.gradient
+        static let buttonTextColor: Color = Color(.tertiarySystemBackground)
+        static let nextButtonColor: AnyGradient = Color.green.gradient
+        static let backButtonColor: AnyGradient = Color.red.gradient
+        static let sheetBg: Color = Color(.systemGroupedBackground)
+        static let centerButtonBgColor: Color = Color(.systemBackground)
     }
     
     //MARK: Main components
@@ -81,10 +90,15 @@ struct WindSideView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: geometry.size.width)
-                .onAppear {
-                    vm.referenceHeight = geometry.size.height
-                    print(geometry.size.height)
+                .preference(key: HeightSizeKey.self, value: geometry.size.height)
+        }
+        .onPreferenceChange(HeightSizeKey.self) { newValue in
+            DispatchQueue.main.async{
+                let threshold: CGFloat = 1.0
+                if abs(vm.referenceHeight - newValue) > threshold {
+                    vm.referenceHeight = newValue
                 }
+            }
         }
     }
     
@@ -123,7 +137,7 @@ struct WindSideView: View {
             }
         }
     }
-
+    
     //MARK: Gestures
     var panGesture: some Gesture {
         DragGesture()
@@ -160,6 +174,7 @@ struct WindSideView: View {
                 nextButton
             }
         }
+        .foregroundStyle(Constants.controllerViewFgColor)
     }
     
     //MARK: Controller buttons
@@ -175,7 +190,7 @@ struct WindSideView: View {
                 setValuesButton
                 toggleValuesButton
             }
-            .foregroundStyle(.blue.gradient)
+            .foregroundStyle(Constants.mainButtonColor)
             .frame(height: 50)
         }
         .padding()
@@ -189,7 +204,7 @@ struct WindSideView: View {
                 .font(.largeTitle)
                 .background(
                     Circle()
-                        .tint(.white)
+                        .tint(Constants.centerButtonBgColor)
                 )
         }
     }
@@ -201,7 +216,7 @@ struct WindSideView: View {
             UnevenRoundedRectangle(topLeadingRadius: 15, bottomLeadingRadius: 15)
                 .overlay {
                     Text("Set Values")
-                        .foregroundStyle(.white)
+                        .foregroundStyle(Constants.buttonTextColor)
                 }
         }
     }
@@ -213,7 +228,7 @@ struct WindSideView: View {
             UnevenRoundedRectangle(bottomTrailingRadius: 15, topTrailingRadius: 15)
                 .overlay {
                     Text("Toggle Values")
-                        .foregroundStyle(.white)
+                        .foregroundStyle(Constants.buttonTextColor)
                 }
         }
     }
@@ -224,11 +239,11 @@ struct WindSideView: View {
             step.next()
         } label: {
             Text("Next")
-                .foregroundStyle(.white)
+                .foregroundStyle(Constants.buttonTextColor)
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 15)
-                        .foregroundStyle(.green.gradient)
+                        .foregroundStyle(Constants.nextButtonColor)
                 )
         }
     }
@@ -238,19 +253,26 @@ struct WindSideView: View {
             step.back()
         } label: {
             Text("Back")
-                .foregroundStyle(.white)
+                .foregroundStyle(Constants.buttonTextColor)
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 15)
-                        .foregroundStyle(.red.gradient)
+                        .foregroundStyle(Constants.backButtonColor)
                 )
+        }
+    }
+    
+    struct HeightSizeKey: PreferenceKey {
+        static var defaultValue: CGFloat = 0
+        static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+            value = nextValue()
         }
     }
     
     //MARK: Functions
     private func centerView() {
         pan = .zero
-        scale = 1
+//        scale = 1
         print(UIScreen.main.bounds.height)
     }
     

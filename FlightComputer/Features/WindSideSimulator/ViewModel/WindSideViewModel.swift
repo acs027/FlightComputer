@@ -10,13 +10,6 @@ import Foundation
 
 @Observable class WindSideViewModel {
     var wCACalculator = WindCorrectionAngleCalculator()
-    var screenWidth: Double = 0
-    var screenHeight: Double = 0
-//    var unitHeight: Double {
-//        let ratio: CGFloat = 100 / 51
-//        let height = screenWidth * ratio * 0.83
-//        return height / 220
-//    }
     var referenceHeight: Double = 0
     var unitHeight: Double {
         let height = referenceHeight * 0.83

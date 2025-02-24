@@ -9,11 +9,11 @@ import Foundation
 
 extension UnitConversion {
     enum Area: String, CaseIterable, Hashable, UnitType {
-        case squareMeters = "m2"
-        case squareMiles = "mi2"
-        case squareFeet = "ft2"
-        case squareInches = "in2"
-        case squareKilometers = "km2"
+        case squareMiles = "mi²"
+        case squareFeet = "ft²"
+        case squareInches = "in²"
+        case squareKilometers = "km²"
+        case squareMeters = "m²"
         case acres = "ac"
         case hectares = "ha"
         

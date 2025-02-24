@@ -8,23 +8,29 @@
 import SwiftUI
 
 struct UnitConversionView: View {
-    @State var viewModel = UnitConversionViewModel()
+//    @State var viewModel = UnitConversionViewModel()
+    @Environment(UnitConversionViewModel.self) var viewModel
     let gridItems = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
     
     var body: some View {
+        @Bindable var viewModel = viewModel
         VStack {
-            segmentedPicker
+//            segmentedPicker
             conversionView
                 .padding(5)
             Spacer()
-            NumPad(value: $viewModel.value)
+            NumPad(value: $viewModel.value, swapFunction: { swapUnits()})
         }
+        .animation(.easeInOut, value: viewModel.selectedConversion)
+        .background(Color(.secondarySystemBackground))
     }
     
+    @ViewBuilder
     var segmentedPicker: some View {
+        @Bindable var viewModel = viewModel
         Picker("Conversion Type", selection: $viewModel.selectedConversion) {
             ForEach(ConversionType.allCases, id: \.self) {
                 type in
@@ -32,7 +38,7 @@ struct UnitConversionView: View {
             }
         }
         .pickerStyle(.segmented)
-        .frame(alignment: .top)
+        .frame(height: 50, alignment: .bottom)
     }
     
     @ViewBuilder
@@ -54,54 +60,82 @@ struct UnitConversionView: View {
     }
     
     var volumeConversion: some View {
-        LazyVGrid(columns: gridItems, spacing: 5) {
-            ForEach(UnitConversion.Volume.allCases, id: \.self) { unit in
-                UnitConversionTextField(unit: unit, value: $viewModel.unitConversion.volumeValue, currentUnit: $viewModel.unitConversion.volumeUnit)
-            }
+        VStack {
+            @Bindable var viewModel = viewModel
+            TwoUnitsConversion(
+                mainUnit: $viewModel.unitConversion.volumeUnit,
+                toUnit: $viewModel.unitConversion.toVolumeUnit,
+                units: Array(UnitConversion.Volume.allCases),
+                value: $viewModel.unitConversion.volumeValue
+            )
         }
     }
     
     var areaConversion: some View {
-        LazyVGrid(columns: gridItems, spacing: 5) {
-            ForEach(UnitConversion.Area.allCases, id: \.self) { unit in
-                UnitConversionTextField(unit: unit, value: $viewModel.unitConversion.areaValue, currentUnit: $viewModel.unitConversion.areaUnit)
-            }
+        VStack {
+            @Bindable var viewModel = viewModel
+            TwoUnitsConversion(
+                mainUnit: $viewModel.unitConversion.areaUnit,
+                toUnit: $viewModel.unitConversion.toAreaUnit,
+                units: Array(UnitConversion.Area.allCases),
+                value: $viewModel.unitConversion.areaValue
+            )
         }
     }
     
     var distanceConversion: some View {
-        LazyVGrid(columns: gridItems, spacing: 5) {
-            ForEach(UnitConversion.Distance.allCases, id: \.self) { unit in
-                UnitConversionTextField(unit: unit, value: $viewModel.unitConversion.distanceValue, currentUnit: $viewModel.unitConversion.distanceUnit)
-            }
+        VStack {
+            @Bindable var viewModel = viewModel
+            TwoUnitsConversion(
+                mainUnit: $viewModel.unitConversion.distanceUnit,
+                toUnit: $viewModel.unitConversion.toDistanceUnit,
+                units: Array(UnitConversion.Distance.allCases),
+                value: $viewModel.unitConversion.distanceValue
+            )
         }
     }
     
     var massConversion: some View {
-        LazyVGrid(columns: gridItems, spacing: 5) {
-            ForEach(UnitConversion.Mass.allCases, id: \.self) { unit in
-                UnitConversionTextField(unit: unit, value: $viewModel.unitConversion.massValue, currentUnit: $viewModel.unitConversion.massUnit)
-            }
+        VStack {
+            @Bindable var viewModel = viewModel
+            TwoUnitsConversion(
+                mainUnit: $viewModel.unitConversion.massUnit,
+                toUnit: $viewModel.unitConversion.toMassUnit,
+                units: Array(UnitConversion.Mass.allCases),
+                value: $viewModel.unitConversion.massValue
+            )
         }
     }
     
     var pressureConversion: some View {
-        LazyVGrid(columns: gridItems, spacing: 5) {
-            ForEach(UnitConversion.Pressure.allCases, id: \.self) { unit in
-                UnitConversionTextField(unit: unit, value: $viewModel.unitConversion.pressureValue, currentUnit: $viewModel.unitConversion.pressureUnit)
-            }
+        VStack {
+            @Bindable var viewModel = viewModel
+            TwoUnitsConversion(
+                mainUnit: $viewModel.unitConversion.pressureUnit,
+                toUnit: $viewModel.unitConversion.toPressureUnit,
+                units: Array(UnitConversion.Pressure.allCases),
+                value: $viewModel.unitConversion.pressureValue
+            )
         }
     }
     
     var temperatureConversion: some View {
         VStack {
-            ForEach(UnitConversion.Temperature.allCases, id: \.self) { unit in
-                UnitConversionTextField(unit: unit, value: $viewModel.unitConversion.temperatureValue, currentUnit: $viewModel.unitConversion.temperatureUnit)
-            }
+            @Bindable var viewModel = viewModel
+            TwoUnitsConversion(
+                mainUnit: $viewModel.unitConversion.temperatureUnit,
+                toUnit: $viewModel.unitConversion.toTemperatureUnit,
+                units: Array(UnitConversion.Temperature.allCases),
+                value: $viewModel.unitConversion.temperatureValue
+            )
         }
+    }
+    
+    func swapUnits() {
+        viewModel.swapUnits()
     }
 }
 
-#Preview {
-    UnitConversionView()
-}
+//#Preview {
+//    UnitConversionView()
+//}

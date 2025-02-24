@@ -10,27 +10,19 @@ import SwiftUI
 struct NumPad: View {
     @State private var inputText: String = ""
     @Binding var value: Double
+    let swapFunction: () -> Void
 
     let gridItems = [
-        GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())
+        GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())
     ]
 
     let numbers = [
-        "1", "2", "3",
-        "4", "5", "6",
-        "7", "8", "9",
-        ".", "0", "⌫"
+        "1", "2", "3","⥮",
+        "4", "5", "6","C",
+        "7", "8", "9","",
+        "00", "0", ".","⌫"
     ]
     
-    let numberFormatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 4
-        formatter.minimumFractionDigits = 0
-        formatter.usesGroupingSeparator = false
-        return formatter
-    }()
-
     var body: some View {
         LazyVGrid(columns: gridItems, spacing: 10) {
             ForEach(numbers, id: \.self) { number in
@@ -39,7 +31,7 @@ struct NumPad: View {
                 }) {
                     Text(number)
                         .font(.title)
-                        .frame(width: 50, height: 50)
+                        .frame(width: 45, height: 45)
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(10)
                 }
@@ -53,15 +45,25 @@ struct NumPad: View {
             } else if newValue.isEmpty {
                 self.value = 0
             }
+            print(newValue)
         }
         .onChange(of: value) { oldValue, newValue in
+            print(newValue)
             if inputText != String(newValue) {
-                self.inputText = numberFormatter.string(from: newValue as NSNumber) ?? "0"
+                self.inputText = FormatterUtils.sharedNumberFormatter.string(from: newValue as NSNumber) ?? "0"
             }
         }
     }
 
     private func handleInput(_ value: String) {
+        if value == "⥮" {
+            swapFunction()
+            return
+        }
+        if value == "C" {
+            self.value = 0
+            return
+        }
         if value == "⌫" {
             if !inputText.isEmpty {
                 if inputText.count > 2 {
@@ -88,6 +90,6 @@ struct NumPad: View {
 
 #Preview {
     @Previewable @State var value: Double = 14.5
-    NumPad(value: $value)
+    NumPad(value: $value, swapFunction: { })
 }
 

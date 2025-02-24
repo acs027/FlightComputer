@@ -19,6 +19,7 @@ struct IllustrationView: View {
             topLeadingInfos
             topTrailingInfos
             bottomLeadingInfos
+            bottomTrailingInfos
         }
     }
     
@@ -26,17 +27,18 @@ struct IllustrationView: View {
     private struct Constants {
         static let markSize: CGFloat = 20
         struct ArrowColor {
-            static let first: Color = .red
-            static let second: Color = .blue
-            static let third: Color = .green
+            static let first: Color = .blue
+            static let second: Color = .gray
+            static let third: Color = .mint
+            static let four: Color = .green
         }
+        static let compassColor: Color = .primary
     }
     
     //MARK: - Components
     var topLeadingInfos: some View {
         VStack(alignment: .leading) {
             windInfo
-            wcaInfo
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding()
@@ -60,6 +62,14 @@ struct IllustrationView: View {
         .padding()
     }
     
+    var bottomTrailingInfos: some View {
+        VStack(alignment: .leading) {
+            wcaInfo
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+        .padding()
+    }
+    
     
     var windInfo: some View {
         HStack {
@@ -78,7 +88,7 @@ struct IllustrationView: View {
             Text("WCA: ")
             Text(String(format: "%.0f", vm.wCACalculator.windCorrectionAngle ?? 0))
         }
-        .foregroundStyle(.gray)
+        .foregroundStyle(Constants.ArrowColor.four)
     }
     
     var courseInfo: some View {
@@ -130,15 +140,20 @@ struct IllustrationView: View {
                     Circle()
                         .stroke()
                         .aspectRatio(1, contentMode: .fit)
-                        .onAppear {
-                            vm.circleRadius = geometry.size.width
-                            print(vm.circleRadius)
-                        }
+                        .preference(key: CircleSizeKey.self, value: geometry.size.width)
                 }
                 .aspectRatio(1, contentMode: .fit)
                 Text("S")
             }
             Text("E")
+        }
+        .foregroundStyle(Constants.compassColor)
+        .padding()
+        .onPreferenceChange(CircleSizeKey.self) { newSize in
+            DispatchQueue.main.async {
+                   guard vm.circleRadius != newSize else { return }
+                   vm.circleRadius = newSize
+               }
         }
     }
     
@@ -168,6 +183,13 @@ struct IllustrationView: View {
             .frame(width: 40, height: vm.tasArrowHeight)
             .offset(y: vm.tasArrowOffset) // Move arrow up to align its base to the center
             .rotationEffect(.degrees(vm.wCACalculator.heading ?? 0), anchor: .center)
+    }
+}
+
+private struct CircleSizeKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
     }
 }
 

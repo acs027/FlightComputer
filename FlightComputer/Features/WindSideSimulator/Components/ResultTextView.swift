@@ -28,11 +28,18 @@ struct ResultTextView: View {
     
     var body: some View {
         Text("\(label): \(valueType.string(value: value))")
+            .bold()
         .padding(10)
+        .foregroundStyle(Constants.textColor)
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .foregroundStyle(.blue.gradient)
+                .foregroundStyle(Constants.bgColor)
         )
+    }
+    
+    struct Constants {
+        static let bgColor: AnyGradient = Color(.secondarySystemBackground).gradient
+        static let textColor: Color = .primary
     }
 }
 

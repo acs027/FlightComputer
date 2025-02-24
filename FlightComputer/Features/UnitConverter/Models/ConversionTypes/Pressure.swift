@@ -9,9 +9,9 @@ import Foundation
 
 extension UnitConversion {
     enum Pressure: String, CaseIterable, Hashable, UnitType {
-        case pascals = "Pa"
         case inchesOfMercury = "inHg"
         case millimetersOfMercury = "mmHg"
+        case pascals = "Pa"
         case hectopascals = "hPa"
         case millibars = "mbar"
         case atmospheres = "atm"
