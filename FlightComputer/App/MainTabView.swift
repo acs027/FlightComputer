@@ -9,8 +9,9 @@ import SwiftUI
 
 enum Tab: String, CaseIterable {
     case unitConverter = "Unit Converter"
-    case windCalculator = "Wind Calculator"
+    case windCalculator = "WCA Simulator"
     case wcaCalculator = "WCA Calculator"
+    case calculator = "Calculator"
     
     var systemImage: String {
         switch self {
@@ -19,6 +20,8 @@ enum Tab: String, CaseIterable {
         case .windCalculator:
             return "wind"
         case .wcaCalculator:
+            return "person"
+        case .calculator:
             return "person"
         }
     }
@@ -33,6 +36,7 @@ struct MainTabView: View {
                 unitConversionView
                 windSideView
                 wcaCalculator
+                calculator
             }
             .toolbarBackground(.visible, for: .tabBar)
             .toolbarBackground(Color(.secondarySystemBackground), for: .tabBar)
@@ -71,6 +75,16 @@ struct MainTabView: View {
                   systemImage: Tab.wcaCalculator.systemImage)
         }
         .tag(Tab.wcaCalculator)
+    }
+    var calculator: some View {
+        NavigationStack {
+            CalculatorListView()
+        }
+        .tabItem {
+            Label(Tab.calculator.rawValue,
+                  systemImage: Tab.calculator.systemImage)
+        }
+        .tag(Tab.calculator)
     }
 }
 

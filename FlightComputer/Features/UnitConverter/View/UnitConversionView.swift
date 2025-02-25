@@ -9,14 +9,14 @@ import SwiftUI
 
 struct UnitConversionView: View {
 //    @State var viewModel = UnitConversionViewModel()
-    @Environment(UnitConversionViewModel.self) var viewModel
+//    @Environment(UnitConversionViewModel.self) var viewModel
+    @Bindable var viewModel: UnitConversionViewModel
     let gridItems = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
     
     var body: some View {
-        @Bindable var viewModel = viewModel
         VStack {
 //            segmentedPicker
             conversionView
@@ -25,12 +25,11 @@ struct UnitConversionView: View {
             NumPad(value: $viewModel.value, swapFunction: { swapUnits()})
         }
         .animation(.easeInOut, value: viewModel.selectedConversion)
-        .background(Color(.secondarySystemBackground))
+        .background(Color(.systemGroupedBackground))
     }
     
     @ViewBuilder
     var segmentedPicker: some View {
-        @Bindable var viewModel = viewModel
         Picker("Conversion Type", selection: $viewModel.selectedConversion) {
             ForEach(ConversionType.allCases, id: \.self) {
                 type in
@@ -61,7 +60,6 @@ struct UnitConversionView: View {
     
     var volumeConversion: some View {
         VStack {
-            @Bindable var viewModel = viewModel
             TwoUnitsConversion(
                 mainUnit: $viewModel.unitConversion.volumeUnit,
                 toUnit: $viewModel.unitConversion.toVolumeUnit,
@@ -73,7 +71,6 @@ struct UnitConversionView: View {
     
     var areaConversion: some View {
         VStack {
-            @Bindable var viewModel = viewModel
             TwoUnitsConversion(
                 mainUnit: $viewModel.unitConversion.areaUnit,
                 toUnit: $viewModel.unitConversion.toAreaUnit,
@@ -85,7 +82,6 @@ struct UnitConversionView: View {
     
     var distanceConversion: some View {
         VStack {
-            @Bindable var viewModel = viewModel
             TwoUnitsConversion(
                 mainUnit: $viewModel.unitConversion.distanceUnit,
                 toUnit: $viewModel.unitConversion.toDistanceUnit,
@@ -97,7 +93,6 @@ struct UnitConversionView: View {
     
     var massConversion: some View {
         VStack {
-            @Bindable var viewModel = viewModel
             TwoUnitsConversion(
                 mainUnit: $viewModel.unitConversion.massUnit,
                 toUnit: $viewModel.unitConversion.toMassUnit,
@@ -109,7 +104,6 @@ struct UnitConversionView: View {
     
     var pressureConversion: some View {
         VStack {
-            @Bindable var viewModel = viewModel
             TwoUnitsConversion(
                 mainUnit: $viewModel.unitConversion.pressureUnit,
                 toUnit: $viewModel.unitConversion.toPressureUnit,
@@ -121,7 +115,6 @@ struct UnitConversionView: View {
     
     var temperatureConversion: some View {
         VStack {
-            @Bindable var viewModel = viewModel
             TwoUnitsConversion(
                 mainUnit: $viewModel.unitConversion.temperatureUnit,
                 toUnit: $viewModel.unitConversion.toTemperatureUnit,

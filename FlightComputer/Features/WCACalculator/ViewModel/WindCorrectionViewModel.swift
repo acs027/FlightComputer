@@ -9,6 +9,8 @@ import Foundation
 
 @Observable class WindCorrectionViewModel {
     var wCACalculator = WindCorrectionAngleCalculator()
+    var flightTimeCalculator = FlightTimeCalculator()
+    var fuelConsumptionCalc = FuelConsumptionCalculator()
     
     var circleRadius: Double = 0
     var maxSpeed: Double {

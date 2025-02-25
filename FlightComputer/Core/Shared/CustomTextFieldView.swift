@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct WCATextField: View {
+struct CustomTextFieldView: View {
     let title: String
     @Binding var value: Double
     let placeHolder: String
@@ -19,23 +19,23 @@ struct WCATextField: View {
             TextField(placeHolder, value: $value, format: .number)
                 .textFieldStyle(CustomTextFieldStyle())
         }
-        .foregroundStyle(Constants.textColor)
-        .padding(10)
+        .padding()
         .background(Constants.bgColor)
         .cornerRadius(10)
+        .padding()
     }
 }
 
 //MARK: Constants
 private struct Constants {
-    static let textColor: Color = .primary
-    static let bgColor: Color = Color(.secondarySystemBackground)
-    static let textFieldColor: Color = Color(.systemBackground)
+    static let bgColor: Color = Color("textfieldframebg")
+    static let textFieldColor: Color = Color("textfieldbg")
 }
 
 private struct CustomTextFieldStyle: TextFieldStyle {
     func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
+            .keyboardType(.decimalPad)
             .padding(10)
             .background(Constants.textFieldColor)
             .cornerRadius(8)
@@ -50,5 +50,5 @@ private struct CustomTextFieldStyle: TextFieldStyle {
 
 #Preview {
     @Previewable @State var value: Double = 240
-    WCATextField(title: "Wind Speed", value: $value, placeHolder: "Enter wind speed")
+    CustomTextFieldView(title: "Wind Speed", value: $value, placeHolder: "Enter wind speed")
 }

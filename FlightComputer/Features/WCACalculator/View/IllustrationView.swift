@@ -36,20 +36,20 @@ struct IllustrationView: View {
     }
     
     //MARK: - Components
-    var topLeadingInfos: some View {
+    var topTrailingInfos: some View {
         VStack(alignment: .leading) {
             windInfo
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
         .padding()
     }
     
-    var topTrailingInfos: some View {
+    var topLeadingInfos: some View {
         VStack(alignment: .leading) {
-            courseInfo
             headingInfo
+            courseInfo
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding()
     }
     

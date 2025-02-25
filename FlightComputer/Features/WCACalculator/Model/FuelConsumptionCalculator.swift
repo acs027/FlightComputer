@@ -8,11 +8,9 @@
 import Foundation
 
 struct FuelConsumptionCalculator {
-    var flightTime: Double?
-    var fuelPerHour: Double?
-    var requiredFuel: Double? {
-        guard let flightTime = flightTime,
-              let fuelPerHour = fuelPerHour else { return nil }
+    var flightTime: Double = 0
+    var fuelPerHour: Double = 0
+    var requiredFuel: Double {
         return (flightTime / 60) * fuelPerHour
     }
     

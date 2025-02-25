@@ -34,25 +34,25 @@ struct TwoUnitsConversion<U: UnitType>: View {
         HStack {
             TextField("Value", value: $value, formatter: FormatterUtils.sharedNumberFormatter)
                 .focused($focused, equals: mainUnit)
-                .modifier(UCTextFieldStyle())
+                .modifier(CustomTextFieldModifier())
                 .frame(maxWidth: .infinity, alignment: .leading)
             Text("\(mainUnit.symbol)")
                 .padding()
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)
         }
-        .modifier(UCTextFieldBackgroundStyle())
+        .modifier(CustomTextFieldBgStyle())
     }
     
     var convertedValueText: some View {
         HStack {
             Text(formattedString)
-                .modifier(UCTextStyle())
+                .modifier(CustomTextStyle())
                 .frame(maxWidth: .infinity, alignment: .leading)
             Text(toUnit.symbol)
                 .padding()
         }
-        .modifier(UCTextFieldBackgroundStyle())
+        .modifier(CustomTextFieldBgStyle())
     }
     
     var unitPickers: some View {
@@ -76,55 +76,6 @@ struct TwoUnitsConversion<U: UnitType>: View {
         }
     }
 }
-
-//MARK: Constants
-private struct Constants {
-//    static let textFieldBg: Color = Color(.systemBackground)
-    static let textFieldBg: Color = Color(.tertiarySystemBackground)
-    static let textFieldSecondaryBg: Color = Color(.systemBackground)
-}
-
-
-struct UCTextStyle: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .lineLimit(1)
-            .minimumScaleFactor(0.5)
-            .padding(10)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Constants.textFieldBg)
-            .cornerRadius(8)
-            .overlay {
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-            }
-    }
-}
-
-struct UCTextFieldBackgroundStyle: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-        .padding(10)
-        .background(Constants.textFieldSecondaryBg)
-        .cornerRadius(10)
-    }
-}
-
-struct UCTextFieldStyle: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .lineLimit(1)
-            .minimumScaleFactor(0.5)
-            .padding(10)
-            .background(Constants.textFieldBg)
-            .cornerRadius(8)
-            .overlay {
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-            }
-    }
-}
-
 
 #Preview {
     @Previewable @State var mainUnit = UnitConversion.Volume.liters

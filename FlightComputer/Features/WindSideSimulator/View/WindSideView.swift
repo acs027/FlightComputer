@@ -57,7 +57,7 @@ struct WindSideView: View {
     
     //MARK: Constants
     struct Constants {
-        static let bgColor: Color = Color(.secondarySystemBackground)
+        static let bgColor: Color = Color(.systemGroupedBackground)
         static let controllerViewFgColor: Color = .primary
         static let mainButtonColor: AnyGradient = Color.blue.gradient
         static let buttonTextColor: Color = Color(.tertiarySystemBackground)

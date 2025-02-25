@@ -8,11 +8,9 @@
 import Foundation
 
 struct FlightTimeCalculator {
-    var distance: Double?
-    var groundSpeed: Double?
-    var flightTime: Double? {
-        guard let distance = distance,
-              let groundSpeed = groundSpeed else { return nil }
+    var distance: Double = 0
+    var groundSpeed: Double = 0
+    var flightTime: Double {
         return (distance / groundSpeed) * 60
     }
 }
