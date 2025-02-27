@@ -25,7 +25,6 @@ struct WindDirectionSpeedCalculatorView: View {
             trueAirSpeed
             trueCourse
             groundSpeed
-            windCorrectionAngle
         }
     }
     
@@ -50,10 +49,6 @@ struct WindDirectionSpeedCalculatorView: View {
     
     var groundSpeed: some View {
         CustomTextFieldView(title: "Ground Speed", value: $vm.windDirectionSpeedCalculator.groundSpeed, placeHolder: "Ground Speed (knots)")
-    }
-    
-    var windCorrectionAngle: some View {
-        CustomTextFieldView(title: "Wind Correction Angle", value: $vm.windDirectionSpeedCalculator.windCorrectionAngle, placeHolder: "Wind Correction Angle (°)")
     }
     
     var windSpeed: some View {

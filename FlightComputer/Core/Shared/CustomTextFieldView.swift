@@ -11,18 +11,25 @@ struct CustomTextFieldView: View {
     let title: String
     @Binding var value: Double
     let placeHolder: String
+    var unit: String?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(.subheadline)
-            TextField(placeHolder, value: $value, format: .number)
-                .textFieldStyle(CustomTextFieldStyle())
+            HStack {
+                TextField(placeHolder, value: $value, format: .number)
+                    .keyboardType(.decimalPad)
+                    .textFieldStyle(CustomTextFieldStyle())
+                if let unit = unit {
+                    Text(unit)
+                }
+            }
         }
         .padding()
         .background(Constants.bgColor)
         .cornerRadius(10)
-        .padding()
+        .padding(.horizontal)
     }
 }
 

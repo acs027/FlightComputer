@@ -11,7 +11,7 @@ struct FormatterUtils {
     static let sharedNumberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 4
+        formatter.maximumFractionDigits = 2
         formatter.minimumFractionDigits = 0
         formatter.usesGroupingSeparator = false
         return formatter

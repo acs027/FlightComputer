@@ -24,6 +24,7 @@ struct DensityAltitudeCalculatorView: View {
     var userInputs: some View {
         VStack {
             pressureAltitude
+            trueAltitude
             oat
         }
     }
@@ -36,19 +37,44 @@ struct DensityAltitudeCalculatorView: View {
     }
 
     var pressureAltitude: some View {
-        CustomTextFieldView(title: "Pressure Altitude", value: $vm.calculator.pressureAltitude, placeHolder: "Altitude (ft)")
+        VStack {
+            CustomTextFieldView(title: "Pressure Altitude", value: $vm.calculator.pressureAltitude, placeHolder: "Altitude (ft)", unit: vm.calculator.pressureAltitudeUnit.symbol)
+            Picker("Pressure Altitude Unit", selection: $vm.calculator.pressureAltitudeUnit) {
+                ForEach(Distance.allCases, id: \.self) {
+                    unit in
+                    Text(unit.symbol).tag(unit)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+        }
+    }
+    
+    var trueAltitude: some View {
+        CustomTextFieldView(title: "True Altitude", value: $vm.calculator.trueAltitude, placeHolder: "True (ft)", unit: vm.calculator.pressureAltitudeUnit.symbol)
+       
     }
 
     var oat: some View {
-        CustomTextFieldView(title: "Outside Air Temperature", value: $vm.calculator.oat, placeHolder: "Temperature (°C)")
+        VStack {
+            CustomTextFieldView(title: "Outside Air Temperature", value: $vm.calculator.oat, placeHolder: "Temperature (°C)", unit: vm.calculator.oatUnit.symbol)
+            Picker("OAT Unit", selection: $vm.calculator.oatUnit) {
+                ForEach(Temperature.allCases, id: \.self) {
+                    unit in
+                    Text(unit.symbol).tag(unit)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+        }
     }
 
     var isaTemp: some View {
-        CustomTextView(title: "ISA Temperature", value: vm.calculator.isaTemp)
+        CustomTextView(title: "ISA Temperature", value: vm.calculator.isaTemp, unit: vm.calculator.oatUnit.symbol)
     }
 
     var densityAltitude: some View {
-        CustomTextView(title: "Density Altitude", value: vm.calculator.densityAltitude)
+        CustomTextView(title: "Density Altitude", value: vm.calculator.densityAltitude, unit: vm.calculator.pressureAltitudeUnit.symbol)
     }
 }
 

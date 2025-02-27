@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NumPad: View {
-    @State private var inputText: String = ""
+    @Binding var inputText: String
     @Binding var value: Double
     let swapFunction: () -> Void
 
@@ -40,18 +40,15 @@ struct NumPad: View {
         }
         .padding()
         .onChange(of: inputText) { oldValue, newValue in
-            if let doubleValue = Double(newValue), !newValue.hasSuffix(".") {
+//            if let doubleValue = Double(newValue), !newValue.hasSuffix(".") {
+//                self.value = doubleValue
+//            } else if newValue.isEmpty {
+//                self.value = 0
+//            }
+            if let doubleValue = Double(newValue) {
                 self.value = doubleValue
-            } else if newValue.isEmpty {
-                self.value = 0
             }
             print(newValue)
-        }
-        .onChange(of: value) { oldValue, newValue in
-            print(newValue)
-            if inputText != String(newValue) {
-                self.inputText = FormatterUtils.sharedNumberFormatter.string(from: newValue as NSNumber) ?? "0"
-            }
         }
     }
 
@@ -60,26 +57,18 @@ struct NumPad: View {
             swapFunction()
             return
         }
-        if value == "C" {
-            self.value = 0
+        else if value == "C" {
+            inputText = ""
             return
         }
-        if value == "⌫" {
-            if !inputText.isEmpty {
-                if inputText.count > 2 {
-                    let index = inputText.index(inputText.endIndex, offsetBy: -2)
-                    let char = inputText[index]
-                    if char == "." {
-                        inputText = String(inputText.dropLast(2))
-                    } else {
-                        inputText.removeLast()
-                    }
-                } else {
-                    inputText.removeLast()
-                }
+        else if value == "⌫" {
+            if inputText.isEmpty {
+                return
             }
-        } else if value == "." {
-            if !inputText.contains(".") {
+            inputText.removeLast()
+        }
+        else if value == "." {
+            if !inputText.contains(".") && !inputText.isEmpty {
                 inputText.append(value)
             }
         } else {
@@ -90,6 +79,7 @@ struct NumPad: View {
 
 #Preview {
     @Previewable @State var value: Double = 14.5
-    NumPad(value: $value, swapFunction: { })
+    @Previewable @State var inputText: String = ""
+    NumPad(inputText: $inputText, value: $value, swapFunction: { })
 }
 

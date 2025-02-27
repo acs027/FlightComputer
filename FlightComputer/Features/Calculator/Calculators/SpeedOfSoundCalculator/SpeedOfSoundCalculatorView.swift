@@ -23,41 +23,56 @@ struct SpeedOfSoundCalculatorView: View {
         VStack {
             altitude
             standardTemperature
-            selectedUnit
         }
     }
     
     var computedResults: some View {
         VStack {
-            calculatedSpeed
-            machNumber
+//            calculatedSpeed
+            speedOfSound
         }
     }
     
     var altitude: some View {
-        CustomTextFieldView(title: "Altitude", value: $vm.speedOfSoundCalculator.altitude, placeHolder: "Altitude (ft or m)")
+        VStack {
+            CustomTextFieldView(title: "Altitude", value: $vm.speedOfSoundCalculator.altitude, placeHolder: "Altitude (ft or m)")
+            Picker("Altimeter Unit", selection: $vm.speedOfSoundCalculator.altitudeUnit) {
+                ForEach(Distance.allCases, id: \.self) {
+                    unit in
+                    Text(unit.symbol).tag(unit)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+        }
     }
     
     var standardTemperature: some View {
-        CustomTextFieldView(title: "Standard Temperature", value: $vm.speedOfSoundCalculator.standardTemperature, placeHolder: "Temperature (°C)")
-    }
-    
-    var selectedUnit: some View {
-        Picker("Speed Unit", selection: $vm.speedOfSoundCalculator.selectedUnit) {
-            Text("Knots").tag(SpeedOfSoundCalculator.SpeedUnit.knots)
-            Text("MPH").tag(SpeedOfSoundCalculator.SpeedUnit.mph)
-            Text("KM/H").tag(SpeedOfSoundCalculator.SpeedUnit.kmh)
-            Text("M/S").tag(SpeedOfSoundCalculator.SpeedUnit.metersPerSecond)
+        VStack {
+            CustomTextFieldView(title: "Standard Temperature", value: $vm.speedOfSoundCalculator.standardTemperature, placeHolder: "Temperature (°C)", unit: vm.speedOfSoundCalculator.standardTemperatureUnit.symbol)
+            Picker("Standart Temperature Unit", selection: $vm.speedOfSoundCalculator.standardTemperatureUnit) {
+                ForEach(Temperature.allCases, id: \.self) {
+                    unit in
+                    Text(unit.symbol).tag(unit)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
         }
-        .pickerStyle(SegmentedPickerStyle())
     }
     
-    var calculatedSpeed: some View {
-        CustomTextView(title: "Speed of Sound", value: vm.speedOfSoundCalculator.calculatedSpeed)
-    }
-    
-    var machNumber: some View {
-        CustomTextView(title: "Mach Number", value: vm.speedOfSoundCalculator.machNumber)
+    var speedOfSound: some View {
+        VStack {
+            CustomTextView(title: "Speed of Sound", value: vm.speedOfSoundCalculator.speedOfSoundAtAltitude, unit: vm.speedOfSoundCalculator.standardTemperatureUnit.symbol)
+            Picker("Speed of Sound", selection: $vm.speedOfSoundCalculator.speedUnit) {
+                ForEach(Speed.allCases, id: \.self) {
+                    unit in
+                    Text(unit.symbol).tag(unit)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+        }
     }
 }
 

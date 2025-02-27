@@ -12,10 +12,17 @@ struct IllustrationView: View {
     
     var body: some View {
         ZStack {
-            compass
-            windArrow
-            courseArrow
-            tasArrow
+            Group {
+                compass
+                windArrow
+                courseArrow
+                tasArrow
+            }.safeAreaInset(edge: .top) {
+                Color.clear.frame(height: 10)
+            }
+            .safeAreaInset(edge: .bottom) {
+                Color.clear.frame(height: 10)
+            }
             topLeadingInfos
             topTrailingInfos
             bottomLeadingInfos

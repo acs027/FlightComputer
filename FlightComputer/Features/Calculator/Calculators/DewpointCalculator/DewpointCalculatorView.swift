@@ -35,7 +35,17 @@ struct DewpointCalculatorView: View {
     }
 
     var airTemp: some View {
-        CustomTextFieldView(title: "Air Temperature", value: $vm.calculator.airTemp, placeHolder: "Temperature (°C)")
+        VStack {
+            CustomTextFieldView(title: "Air Temperature", value: $vm.calculator.airTemp, placeHolder: "Temperature (°C)", unit: vm.calculator.airTempUnit.symbol)
+            Picker("Air Temperature Unit", selection: $vm.calculator.airTempUnit) {
+                ForEach(Temperature.allCases, id: \.self) {
+                    unit in
+                    Text(unit.symbol).tag(unit)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+        }
     }
 
     var relativeHumidity: some View {
@@ -43,7 +53,7 @@ struct DewpointCalculatorView: View {
     }
 
     var dewpoint: some View {
-        CustomTextView(title: "Dewpoint", value: vm.calculator.dewpoint ?? 0)
+        CustomTextView(title: "Dewpoint", value: vm.calculator.dewpoint ?? 0, unit: vm.calculator.airTempUnit.symbol)
     }
 }
 

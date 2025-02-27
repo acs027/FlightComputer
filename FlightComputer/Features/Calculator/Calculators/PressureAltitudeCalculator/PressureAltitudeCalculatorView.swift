@@ -33,15 +33,35 @@ struct PressureAltitudeCalculatorView: View {
     }
 
     var altimeterSetting: some View {
-        CustomTextFieldView(title: "Altimeter Setting", value: $vm.calculator.altimeterSetting, placeHolder: "Altimeter Setting (inHg)")
+        VStack {
+            CustomTextFieldView(title: "Altimeter Setting", value: $vm.calculator.altimeterSetting, placeHolder: "Altimeter Setting (inHg)", unit: vm.calculator.altimeterSettingUnit.symbol)
+            Picker("Altimeter Unit", selection: $vm.calculator.altimeterSettingUnit) {
+                ForEach(Pressure.allCases, id: \.self) {
+                    unit in
+                    Text(unit.symbol).tag(unit)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+        }
     }
 
     var fieldElevation: some View {
-        CustomTextFieldView(title: "Field Elevation", value: $vm.calculator.fieldElevation, placeHolder: "Field Elevation (ft)")
+        VStack {
+            CustomTextFieldView(title: "Field Elevation", value: $vm.calculator.fieldElevation, placeHolder: "Field Elevation (ft)", unit: vm.calculator.fieldElevationUnit.symbol)
+            Picker("Field Elevation Unit", selection: $vm.calculator.fieldElevationUnit) {
+                ForEach(Distance.allCases, id: \.self) {
+                    unit in
+                    Text(unit.symbol).tag(unit)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+        }
     }
 
     var pressureAltitude: some View {
-        CustomTextView(title: "Pressure Altitude", value: vm.calculator.pressureAltitude)
+        CustomTextView(title: "Pressure Altitude", value: vm.calculator.pressureAltitude, unit: vm.calculator.fieldElevationUnit.symbol)
     }
 }
 

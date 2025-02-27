@@ -32,19 +32,49 @@ struct CloudBaseCalculatorView: View {
     }
     
     var ambientTemp: some View {
-        CustomTextFieldView(title: "Ambient Temperature", value: $vm.cloudBaseCalculator.ambientTemp, placeHolder: "Temperature (°C)")
+        VStack {
+            CustomTextFieldView(title: "Ambient Temperature", value: $vm.cloudBaseCalculator.ambientTemp, placeHolder: "Temperature (°C)", unit: vm.cloudBaseCalculator.ambientTempUnit.symbol)
+            Picker("Ambient Temperature Unit", selection: $vm.cloudBaseCalculator.ambientTempUnit) {
+                ForEach(Temperature.allCases, id: \.self) {
+                    unit in
+                    Text(unit.symbol).tag(unit)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+        }
     }
     
     var ambientDewpoint: some View {
-        CustomTextFieldView(title: "Dewpoint", value: $vm.cloudBaseCalculator.ambientDewpoint, placeHolder: "Dewpoint (°C)")
+        VStack {
+            CustomTextFieldView(title: "Dewpoint", value: $vm.cloudBaseCalculator.ambientDewpoint, placeHolder: "Dewpoint (°C)", unit: vm.cloudBaseCalculator.ambientDewpointUnit.symbol)
+            Picker("Dewpoint Unit", selection: $vm.cloudBaseCalculator.ambientDewpointUnit) {
+                ForEach(Temperature.allCases, id: \.self) {
+                    unit in
+                    Text(unit.symbol).tag(unit)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+        }
     }
     
     var stationAltitude: some View {
-        CustomTextFieldView(title: "Station Altitude", value: $vm.cloudBaseCalculator.stationAltitude, placeHolder: "Altitude (m)")
+        VStack {
+            CustomTextFieldView(title: "Station Altitude", value: $vm.cloudBaseCalculator.stationAltitude, placeHolder: "Altitude (m)", unit: vm.cloudBaseCalculator.stationAltitudeUnit.symbol)
+            Picker("Station Altitude Unit", selection: $vm.cloudBaseCalculator.stationAltitudeUnit) {
+                ForEach(Distance.allCases, id: \.self) {
+                    unit in
+                    Text(unit.symbol).tag(unit)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+        }
     }
     
     var cloudBaseAltitude: some View {
-        CustomTextView(title: "Cloud Base Altitude", value: vm.cloudBaseCalculator.cloudBaseAltitude)
+        CustomTextView(title: "Cloud Base Altitude", value: vm.cloudBaseCalculator.cloudBaseAltitude, unit: vm.cloudBaseCalculator.stationAltitudeUnit.symbol)
     }
 }
 

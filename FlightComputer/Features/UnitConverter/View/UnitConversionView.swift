@@ -9,7 +9,6 @@ import SwiftUI
 
 struct UnitConversionView: View {
 //    @State var viewModel = UnitConversionViewModel()
-//    @Environment(UnitConversionViewModel.self) var viewModel
     @Bindable var viewModel: UnitConversionViewModel
     let gridItems = [
         GridItem(.flexible()),
@@ -22,7 +21,7 @@ struct UnitConversionView: View {
             conversionView
                 .padding(5)
             Spacer()
-            NumPad(value: $viewModel.value, swapFunction: { swapUnits()})
+            NumPad(inputText: $viewModel.numPadInput, value: $viewModel.value, swapFunction: { swapUnits()})
         }
         .animation(.easeInOut, value: viewModel.selectedConversion)
         .background(Color(.systemGroupedBackground))
@@ -55,6 +54,8 @@ struct UnitConversionView: View {
             temperatureConversion
         case .volume:
             volumeConversion
+        case .speed:
+            speedConversion
         }
     }
     
@@ -63,8 +64,9 @@ struct UnitConversionView: View {
             TwoUnitsConversion(
                 mainUnit: $viewModel.unitConversion.volumeUnit,
                 toUnit: $viewModel.unitConversion.toVolumeUnit,
-                units: Array(UnitConversion.Volume.allCases),
-                value: $viewModel.unitConversion.volumeValue
+                units: Array(Volume.allCases),
+                value: $viewModel.unitConversion.volumeValue,
+                inputText: viewModel.numPadInput
             )
         }
     }
@@ -74,8 +76,9 @@ struct UnitConversionView: View {
             TwoUnitsConversion(
                 mainUnit: $viewModel.unitConversion.areaUnit,
                 toUnit: $viewModel.unitConversion.toAreaUnit,
-                units: Array(UnitConversion.Area.allCases),
-                value: $viewModel.unitConversion.areaValue
+                units: Array(Area.allCases),
+                value: $viewModel.unitConversion.areaValue,
+                inputText: viewModel.numPadInput
             )
         }
     }
@@ -85,8 +88,9 @@ struct UnitConversionView: View {
             TwoUnitsConversion(
                 mainUnit: $viewModel.unitConversion.distanceUnit,
                 toUnit: $viewModel.unitConversion.toDistanceUnit,
-                units: Array(UnitConversion.Distance.allCases),
-                value: $viewModel.unitConversion.distanceValue
+                units: Array(Distance.allCases),
+                value: $viewModel.unitConversion.distanceValue,
+                inputText: viewModel.numPadInput
             )
         }
     }
@@ -96,8 +100,9 @@ struct UnitConversionView: View {
             TwoUnitsConversion(
                 mainUnit: $viewModel.unitConversion.massUnit,
                 toUnit: $viewModel.unitConversion.toMassUnit,
-                units: Array(UnitConversion.Mass.allCases),
-                value: $viewModel.unitConversion.massValue
+                units: Array(Mass.allCases),
+                value: $viewModel.unitConversion.massValue,
+                inputText: viewModel.numPadInput
             )
         }
     }
@@ -107,8 +112,9 @@ struct UnitConversionView: View {
             TwoUnitsConversion(
                 mainUnit: $viewModel.unitConversion.pressureUnit,
                 toUnit: $viewModel.unitConversion.toPressureUnit,
-                units: Array(UnitConversion.Pressure.allCases),
-                value: $viewModel.unitConversion.pressureValue
+                units: Array(Pressure.allCases),
+                value: $viewModel.unitConversion.pressureValue,
+                inputText: viewModel.numPadInput
             )
         }
     }
@@ -118,8 +124,21 @@ struct UnitConversionView: View {
             TwoUnitsConversion(
                 mainUnit: $viewModel.unitConversion.temperatureUnit,
                 toUnit: $viewModel.unitConversion.toTemperatureUnit,
-                units: Array(UnitConversion.Temperature.allCases),
-                value: $viewModel.unitConversion.temperatureValue
+                units: Array(Temperature.allCases),
+                value: $viewModel.unitConversion.temperatureValue,
+                inputText: viewModel.numPadInput
+            )
+        }
+    }
+    
+    var speedConversion: some View {
+        VStack {
+            TwoUnitsConversion(
+                mainUnit: $viewModel.unitConversion.speedUnit,
+                toUnit: $viewModel.unitConversion.toSpeedUnit,
+                units: Array(Speed.allCases),
+                value: $viewModel.unitConversion.speedValue,
+                inputText: viewModel.numPadInput
             )
         }
     }

@@ -12,6 +12,10 @@ struct TASFromPressureAltCalculator {
     var outsideAirTemp: Double = 0  // OAT in °C
     var indicatedAirSpeed: Double = 0  // IAS in knots
 
+    var pressureAltitudeUnit = Distance.meters // Unit for pressure altitude
+    var outsideAirTempUnit = Temperature.celsius // Unit for outside air temperature
+    var indicatedAirSpeedUnit = Speed.knots // Unit for indicated airspeed
+
     private let seaLevelPressure = 1013.25  // hPa (Standard sea-level pressure)
     private let seaLevelTemp = 288.15  // Kelvin (ISA standard sea-level temperature)
     private let tempLapseRate = 0.0065  // °C per meter
@@ -19,16 +23,19 @@ struct TASFromPressureAltCalculator {
 
     // Calculate pressure at altitude (ISA model)
     private var pressureAtAltitude: Double {
-        seaLevelPressure * pow((1 - (tempLapseRate * pressureAltitude / seaLevelTemp)), exponent)
+        let pressureAltitudeInMeters = pressureAltitudeUnit.convert(value: pressureAltitude, to: .meters)
+        return seaLevelPressure * pow((1 - (tempLapseRate * pressureAltitudeInMeters / seaLevelTemp)), exponent)
     }
 
     // Calculate temperature at altitude (ISA model)
     private var temperatureAtAltitude: Double {
-        seaLevelTemp - (tempLapseRate * pressureAltitude)
+        let pressureAltitudeInMeters = pressureAltitudeUnit.convert(value: pressureAltitude, to: .meters)
+        return seaLevelTemp - (tempLapseRate * pressureAltitudeInMeters)
     }
 
     // Calculate True Airspeed (TAS)
     var trueAirSpeed: Double {
-        indicatedAirSpeed * sqrt(temperatureAtAltitude / seaLevelTemp * seaLevelPressure / pressureAtAltitude)
+        let indicatedAirSpeedInKnots = indicatedAirSpeedUnit.convert(value: indicatedAirSpeed, to: .knots)
+        return indicatedAirSpeedInKnots * sqrt(temperatureAtAltitude / seaLevelTemp * seaLevelPressure / pressureAtAltitude)
     }
 }

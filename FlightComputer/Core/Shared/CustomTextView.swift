@@ -10,6 +10,7 @@ import SwiftUI
 struct CustomTextView: View {
     let title: String
     let value: Double
+    var unit: String?
     
     var formattedValue: String {
         FormatterUtils.sharedNumberFormatter.string(from: value as NSNumber) ?? ""
@@ -19,14 +20,18 @@ struct CustomTextView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(.subheadline)
-            Text("\(formattedValue)")
-                .modifier(CustomTextStyle())
+            HStack {
+                Text("\(formattedValue)")
+                    .modifier(CustomTextStyle())
+                if let unit = unit {
+                    Text(unit)
+                }
+            }
+            
         }
         .padding()
         .background(Color("textfieldframebg"))
         .cornerRadius(10)
-        .padding()
-        
-        
+        .padding(.horizontal)
     }
 }

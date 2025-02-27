@@ -8,10 +8,15 @@
 import Foundation
 
 struct IASFromAltimeterCalculator {
-    var indicatedAltitude: Double = 0 // Indicated Altitude (ft or m)
-    var altimeterSetting: Double = 29.92 // Altimeter Setting (in/hg or hpa)
+    var indicatedAltitude: Double = 0  // Indicated Altitude (ft or m)
+    var altimeterSetting: Double = 29.92 // Altimeter Setting (inHg or hPa)
     var outsideAirTemp: Double = 0 // Outside Air Temperature in °C
     var trueAirSpeed: Double = 0 // True Air Speed (TAS) in knots
+    
+    var altitudeUnit = Distance.feet
+    var temperatureUnit = Temperature.celsius
+    var pressureUnit = Pressure.inchesOfMercury  // Altimeter setting unit (inHg, hPa, etc.)
+    var tasUnit = Speed.knots  // True Air Speed unit (knots, m/s, etc.)
     
     // Constants
     private let seaLevelPressure = 1013.25 // Sea level pressure in hPa (1013.25 hPa = 29.92 inHg)
@@ -20,21 +25,27 @@ struct IASFromAltimeterCalculator {
     
     // Convert the altitude and pressure to pressure altitude
     private var pressureAltitude: Double {
-        return (29.92 - altimeterSetting) * 1000 + indicatedAltitude
+        let altitudeInMeters = altitudeUnit.convert(value: indicatedAltitude, to: .meters)
+        let pressureInPascals = pressureUnit.convert(value: altimeterSetting, to: .pascals)
+        return (pressureInPascals - seaLevelPressure) * 100 + altitudeInMeters
     }
     
     // Convert indicated altitude to density altitude
     private var densityAltitude: Double {
         let isaTemp = 15.0 + (lapseRate * pressureAltitude)
-        let tempDifference = outsideAirTemp - isaTemp
+        let oatInCelsius = temperatureUnit.toCelcius(value: outsideAirTemp)
+        let tempDifference = oatInCelsius - isaTemp
         return pressureAltitude + (118.8 * tempDifference)
     }
     
     // Calculate Indicated Air Speed (IAS)
     var indicatedAirSpeed: Double {
-        let temperatureAtAltitude = outsideAirTemp + 273.15 // Convert to Kelvin
-//        let standardTemperatureAtAltitude = seaLevelTemp - (lapseRate * pressureAltitude)
-        let correctionFactor = sqrt((temperatureAtAltitude / seaLevelTemp) * (seaLevelPressure / 1013.25))
-        return trueAirSpeed * correctionFactor
+        let oatInKelvin = temperatureUnit.convert(value: outsideAirTemp, to: .kelvin) // Convert to Kelvin
+        let correctionFactor = sqrt((oatInKelvin / seaLevelTemp) * (seaLevelPressure / 1013.25))
+        
+        // Convert TAS to knots if needed
+        let tasInKnots = tasUnit.convert(value: trueAirSpeed, to: .knots)
+        
+        return tasInKnots * correctionFactor
     }
 }

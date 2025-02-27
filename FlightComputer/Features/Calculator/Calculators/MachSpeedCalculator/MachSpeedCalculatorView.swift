@@ -15,53 +15,73 @@ struct MachSpeedCalculatorView: View {
     var body: some View {
         ScrollView {
             VStack {
-                userInputs
-                computedResults
+                altitude
+                standardTemperature
+                machSpeed
+                speed
+                machNumber
             }
         }
     }
 
-    var userInputs: some View {
-        VStack {
-            altitude
-            standardTemperature
-            selectedSpeedUnit
-        }
-    }
-
-    var computedResults: some View {
-        VStack {
-            machSpeed
-            calculatedSpeed
-            machNumber
-        }
-    }
-
     var altitude: some View {
-        CustomTextFieldView(title: "Altitude", value: $vm.calculator.altitude, placeHolder: "Altitude (ft or m)")
+        VStack {
+           
+            CustomTextFieldView(title: "Altitude", value: $vm.calculator.altitude, placeHolder: "Altitude (ft or m)", unit: vm.calculator.altitudeUnit.symbol)
+            Picker("Altitude Unit", selection: $vm.calculator.altitudeUnit) {
+                ForEach(Distance.allCases, id: \.symbol) {
+                    unit in
+                    Text(unit.symbol).tag(unit)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+        }
     }
 
     var standardTemperature: some View {
-        CustomTextFieldView(title: "Standard Temperature", value: $vm.calculator.standardTemperature, placeHolder: "Standard Temp (°C)")
-    }
-
-    var selectedSpeedUnit: some View {
-        Picker("Speed Unit", selection: $vm.calculator.selectedSpeedUnit) {
-            Text("Knots").tag(MachSpeedCalculator.SpeedUnit.knots)
-            Text("MPH").tag(MachSpeedCalculator.SpeedUnit.mph)
-            Text("KM/H").tag(MachSpeedCalculator.SpeedUnit.kmh)
-            Text("M/S").tag(MachSpeedCalculator.SpeedUnit.metersPerSecond)
+        VStack {
+            CustomTextFieldView(title: "Standard Temperature", value: $vm.calculator.standardTemperature, placeHolder: "Standard Temp (°C)", unit: vm.calculator.standardTemperatureUnit.symbol)
+            Picker("Standart Temperature", selection: $vm.calculator.standardTemperatureUnit) {
+                ForEach(Temperature.allCases, id: \.symbol) {
+                    unit in
+                    Text(unit.symbol).tag(unit)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
         }
-        .pickerStyle(SegmentedPickerStyle())
     }
 
     var machSpeed: some View {
-        CustomTextView(title: "Mach Speed", value: vm.calculator.machSpeed)
+        VStack {
+            CustomTextView(title: "Mach Speed", value: vm.calculator.speedOfSoundAtAltitude, unit: vm.calculator.machSpeedUnit.symbol)
+//            Picker("Mach Speed Unit", selection: $vm.calculator.machSpeedUnit) {
+//                ForEach(Speed.allCases, id: \.self) {
+//                    unit in
+//                    Text(unit.symbol).tag(unit)
+//                }
+//            }
+//            .pickerStyle(.segmented)
+//            .padding(.horizontal)
+        }
+        
+    }
+    
+    var speed: some View {
+        VStack {
+            CustomTextFieldView(title: "Speed", value: $vm.calculator.speed, placeHolder: "Speed ", unit: vm.calculator.machSpeedUnit.symbol)
+            Picker("Mach Speed Unit", selection: $vm.calculator.machSpeedUnit) {
+                ForEach(Speed.allCases, id: \.self) {
+                    unit in
+                    Text(unit.symbol).tag(unit)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+        }
     }
 
-    var calculatedSpeed: some View {
-        CustomTextView(title: "Speed", value: vm.calculator.calculatedSpeed)
-    }
 
     var machNumber: some View {
         CustomTextView(title: "Mach Number", value: vm.calculator.machNumber)

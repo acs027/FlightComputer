@@ -12,7 +12,7 @@ struct WindComponentCalculator {
     var windDirection: Double = 0  // Wind direction in degrees (from true north)
     var runwayHeading: Double = 0  // Runway direction in degrees (e.g., 270° for RWY 27)
 
-    private var windAngle: Double {
+    var windAngle: Double {
         let angle = windDirection - runwayHeading
         return angle * .pi / 180  // Convert to radians
     }

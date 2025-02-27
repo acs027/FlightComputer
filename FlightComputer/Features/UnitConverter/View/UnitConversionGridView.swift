@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UnitConversionCatalog: View {
-    @State var viewModel = UnitConversionViewModel()
+    @State private var viewModel = UnitConversionViewModel()
     let gridItems = [
         GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())
     ]

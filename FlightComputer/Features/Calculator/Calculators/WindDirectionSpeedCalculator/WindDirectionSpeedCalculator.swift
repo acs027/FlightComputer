@@ -12,16 +12,33 @@ struct WindDirectionSpeedCalculator {
     var trueAirSpeed: Double = 0 // True Airspeed (TAS) in knots
     var trueCourse: Double = 0  // True course in degrees (from true north)
     var groundSpeed: Double = 0  // Ground speed in knots
-    var windCorrectionAngle: Double = 0 // Wind correction angle (in degrees)
-
-    // Calculate wind speed using ground speed, true airspeed, and wind correction angle
-    var windSpeed: Double {
-        sqrt(pow(trueAirSpeed, 2) + pow(groundSpeed, 2) - 2 * trueAirSpeed * groundSpeed * cos(windCorrectionAngle * .pi / 180))
+    
+    private var headWind: Double? {
+        let ySpeed = groundSpeed * cos(trueCourse * .pi / 180) - trueAirSpeed * cos(heading * .pi / 180)
+        return ySpeed
     }
-
-    // Calculate wind direction using true course and wind correction angle
+    
+    private var crossWind: Double? {
+        let xSpeed = groundSpeed * sin(trueCourse * .pi / 180) - trueAirSpeed * sin(heading * .pi / 180)
+        return xSpeed
+    }
+    
+    // Computed property for wind speed
+    var windSpeed: Double {
+        guard let headWind = headWind,
+              let crossWind = crossWind else { return 0 }
+        let windSpeed = sqrt(pow(headWind, 2) + pow(crossWind, 2))
+        return windSpeed
+    }
+    
+    // Computed property for wind direction
     var windDirection: Double {
-        let windAngle = trueCourse + windCorrectionAngle
-        return windAngle.truncatingRemainder(dividingBy: 360)  // Ensure it's between 0° and 360°
+        guard let headWind = headWind,
+              let crossWind = crossWind else { return 0 }
+        
+        
+        // Wind correction angle (WCA) approximation
+        let angle =  atan2(-crossWind , -headWind) * 180 / .pi
+        return (angle + 360).truncatingRemainder(dividingBy: 360)
     }
 }

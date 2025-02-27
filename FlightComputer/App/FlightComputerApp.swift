@@ -9,13 +9,13 @@ import SwiftUI
 
 @main
 struct FlightComputerApp: App {
+    @State var isOnboardingShowing = true
     var body: some Scene {
         WindowGroup {
-//            FlightComputerView()
-//            UnitConversionView()
-//            WindSideView()
             MainTabView()
-//            WindCorrectionCalculatorView()
+                .fullScreenCover(isPresented: $isOnboardingShowing) {
+                    OnboardingView()
+                }
         }
     }
 }

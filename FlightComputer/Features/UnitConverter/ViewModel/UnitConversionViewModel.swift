@@ -6,11 +6,18 @@
 //
 
 import Foundation
+import Observation
 
-@Observable class UnitConversionViewModel {
+@Observable
+class UnitConversionViewModel {
     var unitConversion = UnitConversion()
-    var selectedConversion: ConversionType = .distance
+    var selectedConversion: ConversionType = .distance {
+        didSet {
+            numPadInput = ""
+        }
+    }
     var isConversionViewShowing = false
+    var numPadInput = ""
     
     var value: Double {
         get {
@@ -27,6 +34,8 @@ import Foundation
                 unitConversion.temperatureValue
             case .volume:
                 unitConversion.volumeValue
+            case .speed:
+                unitConversion.speedValue
             }
         }
         set(newValue) {
@@ -43,6 +52,8 @@ import Foundation
                 unitConversion.temperatureValue = newValue
             case .volume:
                 unitConversion.volumeValue = newValue
+            case .speed:
+                unitConversion.speedValue = newValue
             }
         }
         

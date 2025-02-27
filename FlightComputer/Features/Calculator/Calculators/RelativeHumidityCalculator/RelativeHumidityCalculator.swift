@@ -11,16 +11,22 @@ struct RelativeHumidityCalculator {
     var airTemp: Double = 0  // Air temperature in °C
     var dewpoint: Double = 0  // Dewpoint in °C
 
+//    var airTempUnit = Temperature.celsius
+//    var dewpointUnit = Temperature.celsius
+    var tempUnit = Temperature.celsius
+
     var relativeHumidity: Double {
-        let A = 6.112  // Constant for vapor pressure calculation
-        let B = 17.62
-        let C = 243.5
+        let B = 17.625
+        let C = 243.04
 
-        let exponentAirTemp = (B * airTemp) / (C + airTemp)
-        let exponentDew = (B * dewpoint) / (C + dewpoint)
+        let airTempInCelsius = tempUnit.toCelcius(value: airTemp)
+        let dewpointInCelsius = tempUnit.toCelcius(value: dewpoint)
 
-        let vaporPressureAtTemp = A * pow(10.0, exponentAirTemp)
-        let vaporPressureAtDew = A * pow(10.0, exponentDew)
+        let exponentAirTemp = (B * airTempInCelsius) / (C + airTempInCelsius)
+        let exponentDew = (B * dewpointInCelsius) / (C + dewpointInCelsius)
+
+        let vaporPressureAtTemp = exp(exponentAirTemp)
+        let vaporPressureAtDew = exp(exponentDew)
 
         return (vaporPressureAtDew / vaporPressureAtTemp) * 100
     }

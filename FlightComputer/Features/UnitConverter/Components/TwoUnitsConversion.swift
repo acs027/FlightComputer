@@ -10,9 +10,9 @@ import SwiftUI
 struct TwoUnitsConversion<U: UnitType>: View {
     @Binding var mainUnit: U
     @Binding var toUnit: U
-    @FocusState var focused: U?
     let units: [U]
     @Binding var value: Double
+    var inputText: String
     
     var convertedValue: Double {
         mainUnit.convert(value: value, to: toUnit)
@@ -30,12 +30,26 @@ struct TwoUnitsConversion<U: UnitType>: View {
         }
     }
     
+//    var textField: some View {
+//        HStack {
+//            TextField("Value", value: $value, formatter: FormatterUtils.sharedNumberFormatter)
+//                .modifier(CustomTextFieldModifier())
+//                .frame(maxWidth: .infinity, alignment: .leading)
+//            Text("\(mainUnit.symbol)")
+//                .padding()
+//                .lineLimit(1)
+//                .minimumScaleFactor(0.5)
+//        }
+//        .modifier(CustomTextFieldBgStyle())
+//    }
+    
     var textField: some View {
         HStack {
-            TextField("Value", value: $value, formatter: FormatterUtils.sharedNumberFormatter)
-                .focused($focused, equals: mainUnit)
-                .modifier(CustomTextFieldModifier())
+//            Text(FormatterUtils.sharedNumberFormatter.string(from: value as NSNumber) ?? "")
+            Text(inputText)
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .modifier(CustomTextFieldModifier())
+                
             Text("\(mainUnit.symbol)")
                 .padding()
                 .lineLimit(1)
@@ -78,9 +92,14 @@ struct TwoUnitsConversion<U: UnitType>: View {
 }
 
 #Preview {
-    @Previewable @State var mainUnit = UnitConversion.Volume.liters
-    @Previewable @State var toUnit = UnitConversion.Volume.milliliters
+    @Previewable @State var mainUnit = Volume.liters
+    @Previewable @State var toUnit = Volume.milliliters
     @Previewable @State var value: Double = 40
-    let units = Array(UnitConversion.Volume.allCases)
-    TwoUnitsConversion(mainUnit: $mainUnit, toUnit: $toUnit, units: units, value: $value)
+    let units = Array(Volume.allCases)
+    TwoUnitsConversion(mainUnit: $mainUnit,
+                       toUnit: $toUnit,
+                       units: units,
+                       value: $value,
+                       inputText: ""
+    )
 }

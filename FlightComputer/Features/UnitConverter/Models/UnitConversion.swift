@@ -32,6 +32,10 @@ struct UnitConversion {
     var volumeUnit: Volume = .liters
     var toVolumeUnit: Volume = .gallonsUS
     
+    var speedValue: Double = 0
+    var speedUnit: Speed = .knots
+    var toSpeedUnit: Speed = .kilometersPerHour
+    
     mutating func swapUnits(for type: ConversionType) {
         switch type {
         case .distance:
@@ -58,6 +62,10 @@ struct UnitConversion {
             let areaUnit = areaUnit
             self.areaUnit = self.toAreaUnit
             self.toAreaUnit = areaUnit
+        case .speed:
+            let speedUnit = speedUnit
+            self.speedUnit = self.toSpeedUnit
+            self.toSpeedUnit = speedUnit
         }
     }
 }
@@ -69,6 +77,7 @@ enum ConversionType: String, CaseIterable {
     case temperature = "Temperature"
     case pressure = "Pressure"
     case area = "Area"
+    case speed = "Speed"
     
     var systemImage: String {
         switch self {
@@ -84,6 +93,8 @@ enum ConversionType: String, CaseIterable {
             "tirepressure"
         case .area:
             "rectangle.pattern.checkered"
+        case .speed:
+            "person"
         }
     }
 }
