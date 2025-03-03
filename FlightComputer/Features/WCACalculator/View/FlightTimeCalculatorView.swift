@@ -7,8 +7,17 @@
 
 import SwiftUI
 
+extension FlightTimeCalculatorView {
+    enum Focus {
+        case distanceField
+        case groundSpeed
+    }
+}
+
 struct FlightTimeCalculatorView: View {
     @State var vm: WindCorrectionViewModel
+    @FocusState var focused: Focus?
+    
     var body: some View {
         VStack {
             Text("Flight Time for Distance & Ground Speed")
@@ -27,10 +36,12 @@ struct FlightTimeCalculatorView: View {
     
     var distanceField: some View {
         CustomTextFieldView(title: "Distance", value: $vm.flightTimeCalculator.distance, placeHolder: "Distance")
+            .focused($focused, equals: .distanceField)
     }
     
     var groundSpeed: some View {
         CustomTextFieldView(title: "Ground Speed", value: $vm.flightTimeCalculator.groundSpeed, placeHolder: "Ground Speed")
+            .focused($focused, equals: .groundSpeed)
     }
     
     var flightTime: some View {

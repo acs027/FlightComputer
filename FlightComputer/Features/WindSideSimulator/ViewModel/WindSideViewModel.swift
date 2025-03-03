@@ -108,7 +108,7 @@ import Foundation
         case .trueCourse:
             wCACalculator.trueCourse = angle
         case .trueAirSpeed:
-            wCACalculator.trueAirSpeed = speedValue
+            wCACalculator.trueAirSpeed = speedValue + (wCACalculator.headWind?.rounded() ?? 0)
         case .result:
             print("result")
         }

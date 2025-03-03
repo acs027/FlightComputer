@@ -75,9 +75,10 @@ struct WindSideView: View {
                 windSideStator
                 windSideRotor
                 markOnRotor
+                lineOnRotor
             }
             // Adding Headwind speed to True Air Speed
-            .offset(y: (vm.wCACalculator.headWind ?? 0) * vm.unitHeight)
+//            .offset(y: (vm.wCACalculator.headWind ?? 0) * vm.unitHeight)
         }
         // Enables users to move and scale content for better inspection.
         .offset(totalPan)
@@ -122,6 +123,16 @@ struct WindSideView: View {
             Circle()
                 .frame(width: 10)
                 .offset(y: markOffset)
+                .rotationEffect(Angle(degrees: markDegree))
+        }
+        .offset(y: verticalOffset)
+    }
+    
+    var lineOnRotor: some View {
+        Group {
+            Rectangle()
+                .frame(width: 3, height: 50)
+                .offset(y: markOffset - 25)
                 .rotationEffect(Angle(degrees: markDegree))
         }
         .offset(y: verticalOffset)

@@ -7,8 +7,16 @@
 
 import SwiftUI
 
+extension FuelConsumptionView {
+    enum Focus {
+        case flightTime
+        case fuelPerHour
+    }
+}
+
 struct FuelConsumptionView: View {
     @State var vm: WindCorrectionViewModel
+    @FocusState var focused: Focus?
     
     var body: some View {
         VStack {
@@ -28,10 +36,12 @@ struct FuelConsumptionView: View {
     
     var flightTime: some View {
         CustomTextFieldView(title: "Flight Time", value: $vm.fuelConsumptionCalc.flightTime, placeHolder: "Flight Time")
+            .focused($focused, equals: .flightTime)
     }
     
     var fuelPerHour: some View {
         CustomTextFieldView(title: "Fuel per hour", value: $vm.fuelConsumptionCalc.fuelPerHour, placeHolder: "Fuel per hour")
+            .focused($focused, equals: .fuelPerHour)
     }
     
     var requiredFuel: some View {

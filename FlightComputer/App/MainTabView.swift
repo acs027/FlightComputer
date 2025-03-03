@@ -20,9 +20,9 @@ enum Tab: String, CaseIterable {
         case .windCalculator:
             return "wind"
         case .wcaCalculator:
-            return "person"
+            return "angle"
         case .calculator:
-            return "person"
+            return "plusminus"
         }
     }
 }
@@ -46,8 +46,7 @@ struct MainTabView: View {
     
     var unitConversionView: some View {
         NavigationStack {
-//            UnitConversionView()
-            UnitConversionCatalog()
+            UnitConversionGridView()
         }
         .tabItem {
             Label(Tab.unitConverter.rawValue,
@@ -65,7 +64,6 @@ struct MainTabView: View {
         }
         .tag(Tab.windCalculator)
     }
-    
     var wcaCalculator: some View {
         NavigationStack {
             WindCorrectionCalculatorView()

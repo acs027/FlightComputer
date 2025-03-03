@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct UnitConversionCatalog: View {
+struct UnitConversionGridView: View {
     @State private var viewModel = UnitConversionViewModel()
     let gridItems = [
         GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())
@@ -50,6 +50,6 @@ struct UnitConversionCatalog: View {
 
 #Preview {
     NavigationStack {
-        UnitConversionCatalog()
+        UnitConversionGridView()
     }
 }

@@ -7,8 +7,18 @@
 
 import SwiftUI
 
+extension WindCorrectionCalculatorView {
+    enum WCAFocus {
+        case windDirectionTextField
+        case windSpeedTextField
+        case courseTextField
+        case trueAirSpeedTextField
+    }
+}
+
 struct WindCorrectionCalculatorView: View {
     @State var vm = WindCorrectionViewModel()
+    @FocusState var focused: WCAFocus?
     
     let columns = [
 //            GridItem(.flexible()),
@@ -21,7 +31,7 @@ struct WindCorrectionCalculatorView: View {
     
     var body: some View {
         ScrollView {
-            VStack {
+            VStack(spacing: 10) {
                 IllustrationView(vm: vm)
                 wcaCalcComponents
                 FlightTimeCalculatorView(vm: vm)
@@ -46,16 +56,20 @@ struct WindCorrectionCalculatorView: View {
     
     var windDirectionTextField: some View {
         CustomTextFieldView(title: "Wind Direction", value: $vm.wCACalculator.windDirection, placeHolder: "Enter wind direction")
+            .focused($focused, equals: .windDirectionTextField)
     }
     
     var windSpeedTextField: some View {
         CustomTextFieldView(title: "Wind Speed", value: $vm.wCACalculator.windSpeed, placeHolder: "Enter wind speed")
+            .focused($focused, equals: .windSpeedTextField)
     }
     var courseTextField: some View {
         CustomTextFieldView(title: "Course", value: $vm.wCACalculator.trueCourse, placeHolder: "Enter the course")
+            .focused($focused, equals: .courseTextField)
     }
     var trueAirSpeedTextField: some View {
         CustomTextFieldView(title: "True Air Speed", value: $vm.wCACalculator.trueAirSpeed, placeHolder: "Enter TAS")
+            .focused($focused, equals: .trueAirSpeedTextField)
     }
     
     var windCorrectionAngle: some View {
@@ -69,8 +83,6 @@ struct WindCorrectionCalculatorView: View {
         CustomTextView(title: "Ground Speed", value: vm.wCACalculator.groundSpeed ?? 0)
     }
 }
-
-
 
 #Preview {
     WindCorrectionCalculatorView()

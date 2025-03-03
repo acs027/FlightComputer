@@ -12,6 +12,10 @@ struct WindSideTASSlider: View {
     @Binding var verticalOffset: CGFloat
     let speedValue: CGFloat
     
+    var calculatedSpeedValue: CGFloat? {
+        speedValue + (vm.wCACalculator.headWind ?? 0)
+    }
+    
     var body: some View {
         verticalSlider
     }
@@ -22,7 +26,7 @@ struct WindSideTASSlider: View {
                 .rotationEffect(.degrees(180))
             Stepper {
                 HStack {
-                    Text("Wind speed: ")
+                    Text("True Air Speed: ")
                     TextField("Enter a number", text: verticalFormattedBinding)
                 }
             } onIncrement: {
@@ -35,7 +39,7 @@ struct WindSideTASSlider: View {
     
     private var verticalFormattedBinding: Binding<String> {
         Binding(
-            get: { String(format: "%.2f", speedValue) },
+            get: { String(format: "%.0f", (calculatedSpeedValue ?? 0)) },
             set: { newValue in
                 if let value = Double(newValue),
                    vm.isVerticalOffsetInRange(value: value){
