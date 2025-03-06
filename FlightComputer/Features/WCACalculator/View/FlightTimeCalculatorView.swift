@@ -11,6 +11,18 @@ extension FlightTimeCalculatorView {
     enum Focus {
         case distanceField
         case groundSpeed
+        case notFocused
+        
+        mutating func next() {
+            switch self {
+            case .distanceField:
+                self = .groundSpeed
+            case .groundSpeed:
+                self = .notFocused
+            case .notFocused:
+                return
+            }
+        }
     }
 }
 
@@ -37,15 +49,21 @@ struct FlightTimeCalculatorView: View {
     var distanceField: some View {
         CustomTextFieldView(title: "Distance", value: $vm.flightTimeCalculator.distance, placeHolder: "Distance")
             .focused($focused, equals: .distanceField)
+            .onSubmit {
+                focused?.next()
+            }
     }
     
     var groundSpeed: some View {
         CustomTextFieldView(title: "Ground Speed", value: $vm.flightTimeCalculator.groundSpeed, placeHolder: "Ground Speed")
             .focused($focused, equals: .groundSpeed)
+            .onSubmit {
+                focused?.next()
+            }
     }
     
     var flightTime: some View {
-        CustomTextView(title: "Flight Time", value: vm.flightTimeCalculator.flightTime)
+        TimeTextView(title: "Flight Time", value: vm.flightTimeCalculator.flightTime)
     }
 }
 

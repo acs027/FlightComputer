@@ -94,7 +94,7 @@ enum ConversionType: String, CaseIterable {
         case .area:
             "rectangle.pattern.checkered"
         case .speed:
-            "person"
+            "speedometer"
         }
     }
 }

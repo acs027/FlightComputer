@@ -12,6 +12,12 @@ struct TASCalculatorView: View {
     
     var body: some View {
         ScrollView {
+            Picker("TAS Calculator",selection: $vm.calculator) {
+                ForEach(TASCalculatorViewModel.Calculator.allCases, id:\.self) { calculator in
+                    Text(calculator.rawValue)
+                }
+            }
+            .pickerStyle(.segmented)
             calculators
         }
     }

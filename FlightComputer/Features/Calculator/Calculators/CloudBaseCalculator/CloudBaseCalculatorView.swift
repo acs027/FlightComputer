@@ -7,8 +7,11 @@
 
 import SwiftUI
 
+
 struct CloudBaseCalculatorView: View {
     @State var vm = CloudBaseCalculatorViewModel()
+    @FocusState var focused: FocusField?
+    
     
     var body: some View {
         ScrollView {
@@ -33,7 +36,7 @@ struct CloudBaseCalculatorView: View {
     
     var ambientTemp: some View {
         VStack {
-            CustomTextFieldView(title: "Ambient Temperature", value: $vm.cloudBaseCalculator.ambientTemp, placeHolder: "Temperature (°C)", unit: vm.cloudBaseCalculator.ambientTempUnit.symbol)
+            CustomTextFieldView(title: "Ambient Temperature", value: $vm.cloudBaseCalculator.ambientTemp, placeHolder: "Temperature", unit: vm.cloudBaseCalculator.ambientTempUnit.symbol)
             Picker("Ambient Temperature Unit", selection: $vm.cloudBaseCalculator.ambientTempUnit) {
                 ForEach(Temperature.allCases, id: \.self) {
                     unit in
@@ -43,11 +46,15 @@ struct CloudBaseCalculatorView: View {
             .pickerStyle(.segmented)
             .padding(.horizontal)
         }
+        .focused($focused, equals: .ambientTemp)
+        .onSubmit {
+            focused?.next()
+        }
     }
     
     var ambientDewpoint: some View {
         VStack {
-            CustomTextFieldView(title: "Dewpoint", value: $vm.cloudBaseCalculator.ambientDewpoint, placeHolder: "Dewpoint (°C)", unit: vm.cloudBaseCalculator.ambientDewpointUnit.symbol)
+            CustomTextFieldView(title: "Dewpoint", value: $vm.cloudBaseCalculator.ambientDewpoint, placeHolder: "Dewpoint", unit: vm.cloudBaseCalculator.ambientDewpointUnit.symbol)
             Picker("Dewpoint Unit", selection: $vm.cloudBaseCalculator.ambientDewpointUnit) {
                 ForEach(Temperature.allCases, id: \.self) {
                     unit in
@@ -57,11 +64,15 @@ struct CloudBaseCalculatorView: View {
             .pickerStyle(.segmented)
             .padding(.horizontal)
         }
+        .focused($focused, equals: .ambientDewpoint)
+        .onSubmit {
+            focused?.next()
+        }
     }
     
     var stationAltitude: some View {
         VStack {
-            CustomTextFieldView(title: "Station Altitude", value: $vm.cloudBaseCalculator.stationAltitude, placeHolder: "Altitude (m)", unit: vm.cloudBaseCalculator.stationAltitudeUnit.symbol)
+            CustomTextFieldView(title: "Station Altitude", value: $vm.cloudBaseCalculator.stationAltitude, placeHolder: "Station Altitude", unit: vm.cloudBaseCalculator.stationAltitudeUnit.symbol)
             Picker("Station Altitude Unit", selection: $vm.cloudBaseCalculator.stationAltitudeUnit) {
                 ForEach(Distance.allCases, id: \.self) {
                     unit in
@@ -71,10 +82,33 @@ struct CloudBaseCalculatorView: View {
             .pickerStyle(.segmented)
             .padding(.horizontal)
         }
+        .focused($focused, equals: .stationAltitude)
+        .onSubmit {
+            focused?.next()
+        }
     }
     
     var cloudBaseAltitude: some View {
         CustomTextView(title: "Cloud Base Altitude", value: vm.cloudBaseCalculator.cloudBaseAltitude, unit: vm.cloudBaseCalculator.stationAltitudeUnit.symbol)
+    }
+}
+
+extension CloudBaseCalculatorView {
+    enum FocusField {
+        case ambientTemp, ambientDewpoint, stationAltitude, notFocused
+        
+        mutating func next() {
+            switch self {
+            case .ambientTemp:
+                self = .ambientDewpoint
+            case .ambientDewpoint:
+                self = .stationAltitude
+            case .stationAltitude:
+                self = .notFocused
+            default:
+                self = .ambientTemp
+            }
+        }
     }
 }
 

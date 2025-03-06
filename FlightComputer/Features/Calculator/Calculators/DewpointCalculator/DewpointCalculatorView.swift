@@ -11,6 +11,7 @@ import SwiftUI
 
 struct DewpointCalculatorView: View {
     @State var vm = DewpointCalculatorViewModel()
+    @FocusState var focused: FocusField?
 
     var body: some View {
         ScrollView {
@@ -36,7 +37,7 @@ struct DewpointCalculatorView: View {
 
     var airTemp: some View {
         VStack {
-            CustomTextFieldView(title: "Air Temperature", value: $vm.calculator.airTemp, placeHolder: "Temperature (°C)", unit: vm.calculator.airTempUnit.symbol)
+            CustomTextFieldView(title: "Air Temperature", value: $vm.calculator.airTemp, placeHolder: "Air Temperature", unit: vm.calculator.airTempUnit.symbol)
             Picker("Air Temperature Unit", selection: $vm.calculator.airTempUnit) {
                 ForEach(Temperature.allCases, id: \.self) {
                     unit in
@@ -54,6 +55,23 @@ struct DewpointCalculatorView: View {
 
     var dewpoint: some View {
         CustomTextView(title: "Dewpoint", value: vm.calculator.dewpoint ?? 0, unit: vm.calculator.airTempUnit.symbol)
+    }
+}
+
+extension DewpointCalculatorView {
+    enum FocusField {
+        case airTemp, relativeHumidity, notFocused
+        
+        mutating func next() {
+            switch self {
+            case .airTemp:
+                self = .relativeHumidity
+            case .relativeHumidity:
+                self = .notFocused
+            default:
+                self = .airTemp
+            }
+        }
     }
 }
 

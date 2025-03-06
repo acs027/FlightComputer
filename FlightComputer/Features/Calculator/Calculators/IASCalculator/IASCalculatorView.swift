@@ -12,6 +12,13 @@ struct IASCalculatorView: View {
     
     var body: some View {
         ScrollView {
+            Picker("IAS Calculator",selection: $vm.calculator) {
+                ForEach(IASCalculatorViewModel.Calculator.allCases, id:\.self) { calculator in
+                    Text(calculator.rawValue)
+                }
+            }
+            .pickerStyle(.segmented)
+
             calculators
         }
     }

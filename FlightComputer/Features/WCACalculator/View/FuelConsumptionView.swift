@@ -11,6 +11,18 @@ extension FuelConsumptionView {
     enum Focus {
         case flightTime
         case fuelPerHour
+        case notFocused
+        
+        mutating func next() {
+            switch self {
+            case .flightTime:
+                self = .fuelPerHour
+            case .fuelPerHour:
+                self = .notFocused
+            case .notFocused:
+                return
+            }
+        }
     }
 }
 
@@ -35,13 +47,20 @@ struct FuelConsumptionView: View {
     }
     
     var flightTime: some View {
-        CustomTextFieldView(title: "Flight Time", value: $vm.fuelConsumptionCalc.flightTime, placeHolder: "Flight Time")
+//        CustomTextFieldView(title: "Flight Time", value: $vm.fuelConsumptionCalc.flightTime, placeHolder: "Flight Time")
+        TimeTextFieldView(title: "Flight Time", value: $vm.fuelConsumptionCalc.flightTime, placeHolder: "Flight Time")
             .focused($focused, equals: .flightTime)
+            .onSubmit {
+                focused?.next()
+            }
     }
     
     var fuelPerHour: some View {
         CustomTextFieldView(title: "Fuel per hour", value: $vm.fuelConsumptionCalc.fuelPerHour, placeHolder: "Fuel per hour")
             .focused($focused, equals: .fuelPerHour)
+            .onSubmit {
+                focused?.next()
+            }
     }
     
     var requiredFuel: some View {

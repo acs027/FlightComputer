@@ -11,7 +11,7 @@ struct FuelConsumptionCalculator {
     var flightTime: Double = 0
     var fuelPerHour: Double = 0
     var requiredFuel: Double {
-        return (flightTime / 60) * fuelPerHour
+        return (flightTime / 3600) * fuelPerHour
     }
     
 }

@@ -13,7 +13,8 @@ import Foundation
     
     var calculator: Calculator = .altimeter
     
-    enum Calculator {
-        case altimeter, pressure
+    enum Calculator: String, CaseIterable {
+        case altimeter = "With altimeter"
+        case pressure = "With pressure"
     }
 }

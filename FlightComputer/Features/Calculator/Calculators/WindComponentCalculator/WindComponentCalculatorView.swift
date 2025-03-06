@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WindComponentCalculatorView: View {
     @State var vm = WindComponentCalculatorViewModel()
+    @FocusState var focused: FocusField?
     
     var body: some View {
         ScrollView {
@@ -36,14 +37,26 @@ struct WindComponentCalculatorView: View {
     
     var windSpeed: some View {
         CustomTextFieldView(title: "Wind Speed", value: $vm.windComponentCalculator.windSpeed, placeHolder: "Wind Speed (knots)")
+            .focused($focused, equals: .windSpeed)
+            .onSubmit {
+                focused?.next()
+            }
     }
     
     var windDirection: some View {
         CustomTextFieldView(title: "Wind Direction", value: $vm.windComponentCalculator.windDirection, placeHolder: "Wind Direction (° from North)")
+            .focused($focused, equals: .windDirection)
+            .onSubmit {
+                focused?.next()
+            }
     }
     
     var runwayHeading: some View {
         CustomTextFieldView(title: "Runway Heading", value: $vm.windComponentCalculator.runwayHeading, placeHolder: "Runway Heading (°)")
+            .focused($focused, equals: .runwayHeading)
+            .onSubmit {
+                focused?.next()
+            }
     }
     
     var headWind: some View {
@@ -52,6 +65,25 @@ struct WindComponentCalculatorView: View {
     
     var crossWind: some View {
         CustomTextView(title: "Crosswind Component", value: vm.windComponentCalculator.crossWind)
+    }
+}
+
+extension WindComponentCalculatorView {
+    enum FocusField {
+        case windSpeed, windDirection, runwayHeading, notFocused
+        
+        mutating func next() {
+            switch self {
+            case .windSpeed:
+                self = .windDirection
+            case .windDirection:
+                self = .runwayHeading
+            case .runwayHeading:
+                self = .notFocused
+            default:
+                self = .windSpeed
+            }
+        }
     }
 }
 

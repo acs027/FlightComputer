@@ -11,6 +11,7 @@ import SwiftUI
 
 struct MachSpeedCalculatorView: View {
     @State var vm = MachSpeedCalculatorViewModel()
+    @FocusState var focused: FocusField?
     
     var body: some View {
         ScrollView {
@@ -27,7 +28,7 @@ struct MachSpeedCalculatorView: View {
     var altitude: some View {
         VStack {
            
-            CustomTextFieldView(title: "Altitude", value: $vm.calculator.altitude, placeHolder: "Altitude (ft or m)", unit: vm.calculator.altitudeUnit.symbol)
+            CustomTextFieldView(title: "Altitude", value: $vm.calculator.altitude, placeHolder: "Altitude", unit: vm.calculator.altitudeUnit.symbol)
             Picker("Altitude Unit", selection: $vm.calculator.altitudeUnit) {
                 ForEach(Distance.allCases, id: \.symbol) {
                     unit in
@@ -37,11 +38,15 @@ struct MachSpeedCalculatorView: View {
             .pickerStyle(.segmented)
             .padding(.horizontal)
         }
+        .focused($focused, equals: .altitude)
+        .onSubmit {
+            focused?.next()
+        }
     }
 
     var standardTemperature: some View {
         VStack {
-            CustomTextFieldView(title: "Standard Temperature", value: $vm.calculator.standardTemperature, placeHolder: "Standard Temp (°C)", unit: vm.calculator.standardTemperatureUnit.symbol)
+            CustomTextFieldView(title: "Standard Temperature", value: $vm.calculator.standardTemperature, placeHolder: "Standard Temperature", unit: vm.calculator.standardTemperatureUnit.symbol)
             Picker("Standart Temperature", selection: $vm.calculator.standardTemperatureUnit) {
                 ForEach(Temperature.allCases, id: \.symbol) {
                     unit in
@@ -50,6 +55,10 @@ struct MachSpeedCalculatorView: View {
             }
             .pickerStyle(.segmented)
             .padding(.horizontal)
+        }
+        .focused($focused, equals: .standartTemp)
+        .onSubmit {
+            focused?.next()
         }
     }
 
@@ -65,7 +74,6 @@ struct MachSpeedCalculatorView: View {
 //            .pickerStyle(.segmented)
 //            .padding(.horizontal)
         }
-        
     }
     
     var speed: some View {
@@ -80,11 +88,34 @@ struct MachSpeedCalculatorView: View {
             .pickerStyle(.segmented)
             .padding(.horizontal)
         }
+        .focused($focused, equals: .speed)
+        .onSubmit {
+            focused?.next()
+        }
     }
 
 
     var machNumber: some View {
         CustomTextView(title: "Mach Number", value: vm.calculator.machNumber)
+    }
+}
+
+extension MachSpeedCalculatorView {
+    enum FocusField {
+        case altitude, standartTemp, speed, notFocused
+
+        mutating func next() {
+            switch self {
+            case .altitude:
+                self = .standartTemp
+            case .standartTemp:
+                self = .speed
+            case .speed:
+                self = .notFocused
+            default:
+                self = .altitude
+            }
+        }
     }
 }
 

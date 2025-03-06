@@ -13,6 +13,22 @@ extension WindCorrectionCalculatorView {
         case windSpeedTextField
         case courseTextField
         case trueAirSpeedTextField
+        case notFocused
+        
+        mutating func next() {
+            switch self {
+            case .windDirectionTextField:
+                self = .windSpeedTextField
+            case .windSpeedTextField:
+                self = .courseTextField
+            case .courseTextField:
+                self = .trueAirSpeedTextField
+            case .trueAirSpeedTextField:
+                self = .notFocused
+            case .notFocused:
+                return
+            }
+        }
     }
 }
 
@@ -57,19 +73,31 @@ struct WindCorrectionCalculatorView: View {
     var windDirectionTextField: some View {
         CustomTextFieldView(title: "Wind Direction", value: $vm.wCACalculator.windDirection, placeHolder: "Enter wind direction")
             .focused($focused, equals: .windDirectionTextField)
+            .onSubmit {
+                focused?.next()
+            }
     }
     
     var windSpeedTextField: some View {
         CustomTextFieldView(title: "Wind Speed", value: $vm.wCACalculator.windSpeed, placeHolder: "Enter wind speed")
             .focused($focused, equals: .windSpeedTextField)
+            .onSubmit {
+                focused?.next()
+            }
     }
     var courseTextField: some View {
         CustomTextFieldView(title: "Course", value: $vm.wCACalculator.trueCourse, placeHolder: "Enter the course")
             .focused($focused, equals: .courseTextField)
+            .onSubmit {
+                focused?.next()
+            }
     }
     var trueAirSpeedTextField: some View {
         CustomTextFieldView(title: "True Air Speed", value: $vm.wCACalculator.trueAirSpeed, placeHolder: "Enter TAS")
             .focused($focused, equals: .trueAirSpeedTextField)
+            .onSubmit {
+                focused?.next()
+            }
     }
     
     var windCorrectionAngle: some View {

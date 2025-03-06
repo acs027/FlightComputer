@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SpeedOfSoundCalculatorView: View {
     @State var vm = SpeedOfSoundCalculatorViewModel()
+    @FocusState var focused: FocusField?
     
     var body: some View {
         ScrollView {
@@ -35,7 +36,7 @@ struct SpeedOfSoundCalculatorView: View {
     
     var altitude: some View {
         VStack {
-            CustomTextFieldView(title: "Altitude", value: $vm.speedOfSoundCalculator.altitude, placeHolder: "Altitude (ft or m)")
+            CustomTextFieldView(title: "Altitude", value: $vm.speedOfSoundCalculator.altitude, placeHolder: "Altitude")
             Picker("Altimeter Unit", selection: $vm.speedOfSoundCalculator.altitudeUnit) {
                 ForEach(Distance.allCases, id: \.self) {
                     unit in
@@ -45,11 +46,15 @@ struct SpeedOfSoundCalculatorView: View {
             .pickerStyle(.segmented)
             .padding(.horizontal)
         }
+        .focused($focused, equals: .altitude)
+        .onSubmit {
+            focused?.next()
+        }
     }
     
     var standardTemperature: some View {
         VStack {
-            CustomTextFieldView(title: "Standard Temperature", value: $vm.speedOfSoundCalculator.standardTemperature, placeHolder: "Temperature (°C)", unit: vm.speedOfSoundCalculator.standardTemperatureUnit.symbol)
+            CustomTextFieldView(title: "Standard Temperature", value: $vm.speedOfSoundCalculator.standardTemperature, placeHolder: "Temperature", unit: vm.speedOfSoundCalculator.standardTemperatureUnit.symbol)
             Picker("Standart Temperature Unit", selection: $vm.speedOfSoundCalculator.standardTemperatureUnit) {
                 ForEach(Temperature.allCases, id: \.self) {
                     unit in
@@ -58,6 +63,10 @@ struct SpeedOfSoundCalculatorView: View {
             }
             .pickerStyle(.segmented)
             .padding(.horizontal)
+        }
+        .focused($focused, equals: .standartTemp)
+        .onSubmit {
+            focused?.next()
         }
     }
     
@@ -72,6 +81,23 @@ struct SpeedOfSoundCalculatorView: View {
             }
             .pickerStyle(.segmented)
             .padding(.horizontal)
+        }
+    }
+}
+
+extension SpeedOfSoundCalculatorView {
+    enum FocusField {
+        case altitude, standartTemp, notFocused
+        
+        mutating func next() {
+            switch self {
+            case .altitude:
+                self = .standartTemp
+            case .standartTemp:
+                self = .notFocused
+            default:
+                self = .altitude
+            }
         }
     }
 }

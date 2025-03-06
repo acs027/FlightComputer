@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RelativeHumidityCalculatorView: View {
     @State var vm = RelativeHumidityCalculatorViewModel()
+    @FocusState var focused: FocusField?
     
     var body: some View {
         ScrollView {
@@ -34,7 +35,7 @@ struct RelativeHumidityCalculatorView: View {
 
     var airTemp: some View {
         VStack {
-            CustomTextFieldView(title: "Air Temperature", value: $vm.calculator.airTemp, placeHolder: "Air Temperature (°C)", unit: vm.calculator.tempUnit.symbol)
+            CustomTextFieldView(title: "Air Temperature", value: $vm.calculator.airTemp, placeHolder: "Air Temperature", unit: vm.calculator.tempUnit.symbol)
             Picker("Air Temperature Unit", selection: $vm.calculator.tempUnit) {
                 ForEach(Temperature.allCases, id: \.self) {
                     unit in
@@ -44,14 +45,39 @@ struct RelativeHumidityCalculatorView: View {
             .pickerStyle(.segmented)
             .padding(.horizontal)
         }
+        .focused($focused, equals: .airTemp)
+        .onSubmit {
+            focused?.next()
+        }
     }
 
     var dewpoint: some View {
-        CustomTextFieldView(title: "Dewpoint", value: $vm.calculator.dewpoint, placeHolder: "Dewpoint (°C)", unit: vm.calculator.tempUnit.symbol)
+        CustomTextFieldView(title: "Dewpoint", value: $vm.calculator.dewpoint, placeHolder: "Dewpoint", unit: vm.calculator.tempUnit.symbol)
+            .focused($focused, equals: .dewpoint)
+            .onSubmit {
+                focused?.next()
+            }
     }
 
     var relativeHumidity: some View {
         CustomTextView(title: "Relative Humidity", value: vm.calculator.relativeHumidity)
+    }
+}
+
+extension RelativeHumidityCalculatorView {
+    enum FocusField {
+        case airTemp, dewpoint, notFocused
+        
+        mutating func next() {
+            switch self {
+            case .airTemp:
+                self = .dewpoint
+            case .dewpoint:
+                self = .notFocused
+            default:
+                self = .airTemp
+            }
+        }
     }
 }
 

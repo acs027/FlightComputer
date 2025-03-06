@@ -23,7 +23,7 @@ struct WindSideView: View {
     
     @State var markOffset: CGFloat = 0
     private var markValue: CGFloat { -markOffset / vm.unitHeight }
-    var markDegree: Double { vm.wCACalculator.windDirection - rotation.degrees }
+    var markDegree: Double { (vm.wCACalculator.windDirection - rotation.degrees + 360).truncatingRemainder(dividingBy: 360) }
     
     @State var pan: CGOffset = .zero
     @GestureState var gesturePan: CGOffset = .zero
@@ -131,8 +131,8 @@ struct WindSideView: View {
     var lineOnRotor: some View {
         Group {
             Rectangle()
-                .frame(width: 3, height: 50)
-                .offset(y: markOffset - 25)
+                .frame(width: 1, height: abs(markOffset))
+                .offset(y: markOffset / 2)
                 .rotationEffect(Angle(degrees: markDegree))
         }
         .offset(y: verticalOffset)
@@ -282,9 +282,10 @@ struct WindSideView: View {
     
     //MARK: Functions
     private func centerView() {
-        pan = .zero
-//        scale = 1
-        print(UIScreen.main.bounds.height)
+        print(markDegree)
+        let offset = cos(Angle(degrees: markDegree).radians) * markOffset
+        pan.height = -verticalOffset
+        pan.width = -offset
     }
     
     private func handleStepChange(newValue: WCACalculationSteps) {
