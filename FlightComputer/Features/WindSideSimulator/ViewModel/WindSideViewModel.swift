@@ -10,9 +10,12 @@ import Foundation
 
 @Observable class WindSideViewModel {
     var wCACalculator = WindCorrectionAngleCalculator()
+    var step: WCACalculationSteps = .windDirection
+    var isControllerShowing = false
+    var isValuesShowing = false
     var referenceHeight: Double = 0
     var unitHeight: Double {
-        let height = referenceHeight * 0.83
+        let height = referenceHeight * 0.83475
         return height / 220
     }
     
@@ -111,6 +114,31 @@ import Foundation
             wCACalculator.trueAirSpeed = speedValue + (wCACalculator.headWind?.rounded() ?? 0)
         case .result:
             print("result")
+        }
+    }
+    
+    func speedValue(verticalOffset: Double) -> Double {
+        170 - verticalOffset / unitHeight
+    }
+    
+    func markDegree(rotation degrees: Double) -> Double {
+        (wCACalculator.windDirection - degrees + 360).truncatingRemainder(dividingBy: 360)
+    }
+    
+    func markValue(markOffset: Double) -> Double {
+        -markOffset / unitHeight
+    }
+    
+    func angleLineOffset(angle radian: Double) -> (x: Double, y: Double) {
+        let y = (40 * unitHeight) * (1 - cos(radian))
+        let x = sin(radian) * 40 * unitHeight
+        return (x,y)
+    }
+    
+    func handleStepChange(newValue: WCACalculationSteps) {
+        if newValue == .result {
+            isValuesShowing = true
+            isControllerShowing = false
         }
     }
 }
