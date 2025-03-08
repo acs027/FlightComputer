@@ -17,7 +17,7 @@ extension WindSideView {
                 windSideRotor
                 markOnRotor
                 lineOnRotor
-                lineOnAngle
+//                lineOnAngle
             }
             // Adding Headwind speed to True Air Speed
 //            .offset(y: (vm.wCACalculator.headWind ?? 0) * vm.unitHeight)
@@ -33,15 +33,9 @@ extension WindSideView {
                 .resizable()
                 .scaledToFit()
                 .frame(width: geometry.size.width)
-                .preference(key: HeightSizeKey.self, value: geometry.size.height)
-        }
-        .onPreferenceChange(HeightSizeKey.self) { newValue in
-            DispatchQueue.main.async{
-                let threshold: CGFloat = 1.0
-                if abs(vm.referenceHeight - newValue) > threshold {
-                    vm.referenceHeight = newValue
+                .onAppear {
+                    vm.referenceHeight = UIScreen.main.bounds.height
                 }
-            }
         }
     }
     
@@ -80,28 +74,21 @@ extension WindSideView {
         .offset(y: verticalOffset)
     }
     
-    var lineOnAngle: some View {
-        Group {
-            Rectangle()
-                .frame(width: 3, height: abs(260 * vm.unitHeight))
-                .rotationEffect(lineAngle, anchor: .bottom)
-                .offset(
-                    x: vm.angleLineOffset(angle: lineAngle.radians).x,
-                    y: vm.angleLineOffset(angle: lineAngle.radians).y
-                )
-                .mask {
-                    Circle()
-                        .frame(width: vm.unitHeight * 104)
-                }
-        }
-        .rotationEffect(-rotation)
-        .offset(y: verticalOffset)
-    }
-    
-    struct HeightSizeKey: PreferenceKey {
-        static var defaultValue: CGFloat = 0
-        static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-            value = nextValue()
-        }
-    }
+//    var lineOnAngle: some View {
+//        Group {
+//            Rectangle()
+//                .frame(width: 3, height: abs(260 * vm.unitHeight))
+//                .rotationEffect(lineAngle, anchor: .bottom)
+//                .offset(
+//                    x: vm.angleLineOffset(angle: lineAngle.radians).x,
+//                    y: vm.angleLineOffset(angle: lineAngle.radians).y
+//                )
+//                .mask {
+//                    Circle()
+//                        .frame(width: vm.unitHeight * 104)
+//                }
+//        }
+//        .rotationEffect(-rotation)
+//        .offset(y: verticalOffset)
+//    }
 }

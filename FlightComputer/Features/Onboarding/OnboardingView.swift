@@ -12,8 +12,8 @@ struct OnboardingView: View {
     @Environment(\.dismiss) var dismiss
     
     private let pages: [OnboardingPage] = [
-        OnboardingPage(image: "airplane", title: "Welcome to E6B Flight Computer", description: "Your go-to tool for aviation calculations."),
-        OnboardingPage(image: "speedometer", title: "Accurate Calculations", description: "Compute wind correction, fuel burn, and more."),
+        OnboardingPage(image: "airplane", title: "Welcome to E6B Flight Computer", description: "Tool for aviation calculations."),
+        OnboardingPage(image: "speedometer", title: "Calculations", description: "Compute wind correction angle, ground speed, and more."),
         OnboardingPage(image: "gear", title: "Easy to Use", description: "Designed for pilots, with intuitive controls.")
     ]
     

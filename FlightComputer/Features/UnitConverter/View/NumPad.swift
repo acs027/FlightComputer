@@ -40,15 +40,9 @@ struct NumPad: View {
         }
         .padding()
         .onChange(of: inputText) { oldValue, newValue in
-//            if let doubleValue = Double(newValue), !newValue.hasSuffix(".") {
-//                self.value = doubleValue
-//            } else if newValue.isEmpty {
-//                self.value = 0
-//            }
             if let doubleValue = Double(newValue) {
                 self.value = doubleValue
             }
-            print(newValue)
         }
     }
 

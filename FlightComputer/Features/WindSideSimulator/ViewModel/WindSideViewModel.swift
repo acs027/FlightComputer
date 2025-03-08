@@ -105,7 +105,6 @@ import Foundation
         switch step {
         case .windDirection:
             wCACalculator.windDirection = angle
-            print(wCACalculator.windDirection)
         case .windVelocity:
             wCACalculator.windSpeed = markValue
         case .trueCourse:
@@ -113,7 +112,7 @@ import Foundation
         case .trueAirSpeed:
             wCACalculator.trueAirSpeed = speedValue + (wCACalculator.headWind?.rounded() ?? 0)
         case .result:
-            print("result")
+            return
         }
     }
     

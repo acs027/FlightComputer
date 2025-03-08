@@ -33,30 +33,11 @@ struct ComputerView: View {
                         .onEnded({ value in
                             let totalRotation = (rotation + value.rotation).degrees.truncatingRemainder(dividingBy: 360)
                             rotation = Angle(degrees: totalRotation)
-                            print(rotation)
                         })
                 )
         }
         .scaleEffect(scale * gestureScale)
         .offset(pan + gesturePan)
-//        .simultaneousGesture(
-//            MagnifyGesture()
-//                .updating($gestureScale) { value, state, _ in
-//                    state = value.magnification
-//                }
-//                .onEnded({ value in
-//                    scale *= value.magnification
-//                })
-//        )
-//        .simultaneousGesture(
-//            DragGesture()
-//                .updating($gesturePan) { value, state, _ in
-//                    state = value.translation
-//                }
-//                .onEnded({ value in
-//                    pan += value.translation
-//                })
-//        )
         .padding()
     }
 }

@@ -95,7 +95,6 @@ extension WindSideView {
     
     //MARK: Functions
     func centerView() {
-        print(vm.markDegree(rotation: rotation.degrees))
         let offset = cos(Angle(degrees: vm.markDegree(rotation: rotation.degrees)).radians) * markOffset
         pan.height = -verticalOffset
         pan.width = -offset

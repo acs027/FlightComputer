@@ -11,7 +11,7 @@ struct WindSideView: View {
     @State var vm = WindSideViewModel()
     @State var rotation: Angle = Angle(degrees: 0)
     
-    var lineAngle: Angle = Angle(degrees: 10)
+//    var lineAngle: Angle = Angle(degrees: 10)
     
     @State var scale: CGFloat = 1
     @GestureState var gestureScale: CGFloat = 1

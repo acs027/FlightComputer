@@ -9,11 +9,11 @@ import SwiftUI
 
 @main
 struct FlightComputerApp: App {
-    @State var isOnboardingShowing = true
+    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = true
     var body: some Scene {
         WindowGroup {
             MainTabView()
-                .fullScreenCover(isPresented: $isOnboardingShowing) {
+                .fullScreenCover(isPresented: $hasSeenOnboarding) {
                     OnboardingView()
                 }
         }
