@@ -13,7 +13,10 @@ extension WindSideView {
         VStack {
             HStack {
                 Spacer()
-                centerButton
+                VStack(spacing: 30) {
+                    toggleProModeButton
+                    centerButton
+                }
             }
             .padding()
             Spacer()
@@ -27,16 +30,32 @@ extension WindSideView {
         .padding()
     }
     
+    var toggleProModeButton: some View {
+        Button {
+            vm.mode.toggle()
+        } label: {
+            Text(vm.mode.rawValue)
+                .frame(width: 50, height: 50)
+                .background(
+                    Circle()
+                        .tint(Constants.centerButtonBgColor)
+                        
+                )
+        }
+    }
+    
     var centerButton: some View {
         Button {
             centerView()
         } label: {
             Image(systemName: "scope")
                 .font(.largeTitle)
+                .frame(width: 50, height: 50)
                 .background(
                     Circle()
                         .tint(Constants.centerButtonBgColor)
                 )
+                
         }
     }
     
@@ -89,6 +108,20 @@ extension WindSideView {
                 .background(
                     RoundedRectangle(cornerRadius: 15)
                         .foregroundStyle(Constants.backButtonColor)
+                )
+        }
+    }
+    
+    var newButton: some View {
+        Button {
+            vm.step.next()
+        } label: {
+            Text("New")
+                .foregroundStyle(Constants.buttonTextColor)
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 15)
+                        .foregroundStyle(Constants.nextButtonColor)
                 )
         }
     }

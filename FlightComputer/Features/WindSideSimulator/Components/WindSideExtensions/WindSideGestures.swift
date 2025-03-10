@@ -28,5 +28,18 @@ extension WindSideView {
                 scale *= value.magnification
             })
     }
+    
+    var trueIndexGesture: some Gesture {
+        DragGesture()
+            .updating($gestureTrueIndex) { value, state, _ in
+                state = value.translation.height
+            }
+            .onEnded(
+                {
+                    value in
+                    verticalOffset += value.translation.height
+                }
+            )
+    }
 }
 

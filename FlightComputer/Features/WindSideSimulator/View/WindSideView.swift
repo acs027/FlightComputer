@@ -12,11 +12,13 @@ struct WindSideView: View {
     @State var rotation: Angle = Angle(degrees: 0)
     
 //    var lineAngle: Angle = Angle(degrees: 10)
-    
+    @State var height: Double = 0
     @State var scale: CGFloat = 1
     @GestureState var gestureScale: CGFloat = 1
     var totalScale: CGFloat { scale * gestureScale }
     
+    
+    @GestureState var gestureTrueIndex: CGFloat = 0
     @State var verticalOffset: CGFloat = 0
     
     @State var markOffset: CGFloat = 0
@@ -30,8 +32,7 @@ struct WindSideView: View {
         ZStack(alignment: .center) {
             windSideComponents
             controllerButtons
-            values.opacity(vm.isValuesShowing ? 1 : 0)
-                .padding()
+            values
         }
         .background(Constants.bgColor)
         .simultaneousGesture(
@@ -44,10 +45,13 @@ struct WindSideView: View {
             controllerView
                 .padding()
                 .presentationBackground(Constants.sheetBg)
-                .presentationDetents([.medium, .fraction(0.3)])
+                .presentationDetents([.medium, .fraction(0.4)])
         }
         .onChange(of: vm.step) { oldValue, newValue in
             vm.handleStepChange(newValue: newValue)
+        }
+        .onChange(of: vm.mode) { oldValue, newValue in
+            verticalOffset = vm.calculateVerticalOffset(value: vm.wCACalculator.trueAirSpeed)
         }
     }
     
@@ -62,8 +66,6 @@ struct WindSideView: View {
         static let sheetBg: Color = Color(.systemGroupedBackground)
         static let centerButtonBgColor: Color = Color(.systemBackground)
     }
-    
-   
 }
 
 #Preview {

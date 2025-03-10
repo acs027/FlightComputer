@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum WCACalculationSteps: String {
+enum WCACalculationSteps: String, CaseIterable {
     case windDirection = "Place Wind Direction under True Index"
     case windVelocity = "Mark Wind Velocity up from the center point"
     case trueCourse = "Place True Course under True Index."
@@ -43,4 +43,21 @@ enum WCACalculationSteps: String {
             self = .trueAirSpeed
         }
     }
+    
+    var abbreviation: String {
+        switch self {
+        case .windDirection:
+            "WD"
+        case .windVelocity:
+            "WS"
+        case .trueCourse:
+            "TC"
+        case .trueAirSpeed:
+            "TAS"
+        case .result:
+            ""
+        }
+    }
+    
+    
 }

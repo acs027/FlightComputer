@@ -13,7 +13,11 @@ struct WindSideTASSlider: View {
     let speedValue: CGFloat
     
     var calculatedSpeedValue: CGFloat? {
-        speedValue + (vm.wCACalculator.headWind ?? 0)
+        if vm.mode == .normal {
+            return speedValue + (vm.wCACalculator.headWind ?? 0)
+        } else {
+            return speedValue
+        }
     }
     
     var body: some View {

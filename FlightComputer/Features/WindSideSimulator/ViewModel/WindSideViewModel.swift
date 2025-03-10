@@ -7,15 +7,33 @@
 
 import Foundation
 
+enum Mode: String {
+    case normal = "N/A"
+    case tafa = "TAFA"
+    case pro = "PRO"
+    mutating func toggle() {
+        if self == .normal {
+            self = .tafa
+        } else {
+            self = .normal
+        }
+    }
+}
+
 
 @Observable class WindSideViewModel {
     var wCACalculator = WindCorrectionAngleCalculator()
     var step: WCACalculationSteps = .windDirection
+    var mode: Mode = .normal
+    
+    var isTrueIndexDragActive = false
+    
+    var isValuesWarningShowing = false
     var isControllerShowing = false
     var isValuesShowing = false
     var referenceHeight: Double = 0
     var unitHeight: Double {
-        let height = referenceHeight * 0.83475
+        let height = referenceHeight * 0.829
         return height / 220
     }
     
@@ -71,8 +89,15 @@ import Foundation
     }
     
     func calculateVerticalOffset(value: Double) -> Double {
-        let verticalOffset = (170 - value) * unitHeight
-        return verticalOffset
+//        let verticalOffset = (170 - value) * unitHeight
+        if value < 1 {
+            return 0
+        }
+        if mode == .normal {
+            return (170 - value + (wCACalculator.headWind ?? 0)) * unitHeight
+        } else {
+            return (170 - value) * unitHeight
+        }
     }
     
     func calculateMarkOffset(value: Double) -> Double {
@@ -104,13 +129,22 @@ import Foundation
     func setValue(for step: WCACalculationSteps, speedValue: Double, markValue: Double, angle: Double) {
         switch step {
         case .windDirection:
+            isValuesWarningShowing = true
             wCACalculator.windDirection = angle
         case .windVelocity:
+            isValuesWarningShowing = true
             wCACalculator.windSpeed = markValue
         case .trueCourse:
+            isValuesWarningShowing = true
             wCACalculator.trueCourse = angle
         case .trueAirSpeed:
-            wCACalculator.trueAirSpeed = speedValue + (wCACalculator.headWind?.rounded() ?? 0)
+//            wCACalculator.trueAirSpeed = speedValue
+            isValuesWarningShowing = false
+            if mode == .normal {
+                wCACalculator.trueAirSpeed = speedValue + (wCACalculator.headWind?.rounded() ?? 0)
+            } else {
+                wCACalculator.trueAirSpeed = speedValue
+            }
         case .result:
             return
         }
@@ -139,5 +173,22 @@ import Foundation
             isValuesShowing = true
             isControllerShowing = false
         }
+    }
+    
+    func verticalOffsetByMode(vertical offset: Double) -> Double {
+//        if mode == .normal {
+//            return offset + (wCACalculator.headWind ?? 0) * unitHeight
+//        } else {
+//            return offset
+//        }
+        offset
+    }
+    
+    func markOffsetByMode(mark offset: Double) -> Double {
+            if mode == .normal {
+                return offset
+            } else {
+                return -offset
+            }
     }
 }

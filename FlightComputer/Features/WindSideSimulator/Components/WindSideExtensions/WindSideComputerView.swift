@@ -19,6 +19,7 @@ extension WindSideView {
                 lineOnRotor
 //                lineOnAngle
             }
+//            .simultaneousGesture(trueIndexGesture)
             // Adding Headwind speed to True Air Speed
 //            .offset(y: (vm.wCACalculator.headWind ?? 0) * vm.unitHeight)
         }
@@ -33,8 +34,17 @@ extension WindSideView {
                 .resizable()
                 .scaledToFit()
                 .frame(width: geometry.size.width)
-                .onAppear {
-                    vm.referenceHeight = UIScreen.main.bounds.height
+                .onChange(of: geometry.size) { oldValue, newValue in
+                    vm.referenceHeight = geometry.size.height
+                    if vm.wCACalculator.trueAirSpeed > 0 {
+                        let value = vm.wCACalculator.trueAirSpeed
+                        print(value)
+                        verticalOffset = vm.calculateVerticalOffset(value: value)
+                    }
+                    if markOffset != 0 {
+                        print("\(markOffset)  markoffset")
+                        markOffset = vm.calculateMarkOffset(value: vm.wCACalculator.windSpeed)
+                    }
                 }
         }
     }
@@ -43,14 +53,17 @@ extension WindSideView {
         Image("windsiderotorouter")
             .resizable()
             .scaledToFit()
-            .offset(y: verticalOffset)
+            .offset(y: vm.verticalOffsetByMode(vertical: verticalOffset))
     }
     
     var windSideRotor: some View {
         Image("windsiderotor")
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .offset(x: sin(-rotation.radians) * verticalOffset , y: cos(-rotation.radians) * verticalOffset)
+            .offset(
+                x: sin(-rotation.radians) * vm.verticalOffsetByMode(vertical: verticalOffset) ,
+                    y: cos(-rotation.radians) * vm.verticalOffsetByMode(vertical: verticalOffset)
+            )
             .rotationEffect(-rotation)
     }
     
@@ -58,21 +71,22 @@ extension WindSideView {
         Group {
             Circle()
                 .frame(width: 10)
-                .offset(y: markOffset)
+                .offset(y: vm.markOffsetByMode(mark: markOffset))
                 .rotationEffect(Angle(degrees: vm.markDegree(rotation: rotation.degrees)))
         }
-        .offset(y: verticalOffset)
+        .offset(y: vm.verticalOffsetByMode(vertical: verticalOffset))
     }
     
     var lineOnRotor: some View {
         Group {
             Rectangle()
                 .frame(width: 1, height: abs(markOffset))
-                .offset(y: markOffset / 2)
+                .offset(y: vm.markOffsetByMode(mark: markOffset) / 2)
                 .rotationEffect(Angle(degrees: vm.markDegree(rotation: rotation.degrees)))
         }
-        .offset(y: verticalOffset)
+        .offset(y: vm.verticalOffsetByMode(vertical: verticalOffset))
     }
+    
     
 //    var lineOnAngle: some View {
 //        Group {
