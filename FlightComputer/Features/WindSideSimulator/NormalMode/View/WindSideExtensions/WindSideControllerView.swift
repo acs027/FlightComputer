@@ -14,9 +14,12 @@ extension WindSideView {
         VStack {
             stepButtons
             switch vm.step {
-            case .trueCourse, .windDirection: WindSideAngleSlider(vm: vm, rotation: $rotation, step: vm.step)
-            case .windVelocity: WindSideWindSpeedSlider(vm: vm, markOffset: $markOffset, markValue: vm.markValue(markOffset: markOffset))
-            case .trueAirSpeed: WindSideTASSlider(vm: vm, verticalOffset: $verticalOffset, speedValue: vm.speedValue(verticalOffset: verticalOffset))
+            case .trueCourse, .windDirection:
+                WindSideAngleSlider(isAngleInRange: vm.isAngleInRange, rotation: $rotation, step: vm.step)
+            case .windVelocity:
+                WindSideWindSpeedSlider(vm: vm, markOffset: $markOffset, markValue: vm.markValue(markOffset: markOffset))
+            case .trueAirSpeed:
+                WindSideTASSlider(vm: vm, verticalOffset: $verticalOffset, speedValue: vm.speedValue(verticalOffset: verticalOffset))
             case .result: EmptyView()
             }
             

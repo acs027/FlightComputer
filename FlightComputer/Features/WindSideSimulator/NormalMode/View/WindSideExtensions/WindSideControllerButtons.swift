@@ -16,9 +16,9 @@ extension WindSideView {
                 VStack(spacing: 30) {
                     toggleProModeButton
                     centerButton
+                    correctionSpeedDownButton
                 }
             }
-            .padding()
             Spacer()
             HStack {
                 setValuesButton
@@ -27,36 +27,21 @@ extension WindSideView {
             .foregroundStyle(Constants.mainButtonColor)
             .frame(height: 50)
         }
-        .padding()
+        .padding(.horizontal, 20)
+    }
+    
+    var correctionSpeedDownButton: some View {
+        CircleButton(function: downMethodCorrection, tint: .white, title: "Correction")
+        .opacity(vm.mode == .tafa ? 1 : 0)
+
     }
     
     var toggleProModeButton: some View {
-        Button {
-            vm.mode.toggle()
-        } label: {
-            Text(vm.mode.rawValue)
-                .frame(width: 50, height: 50)
-                .background(
-                    Circle()
-                        .tint(Constants.centerButtonBgColor)
-                        
-                )
-        }
+        CircleButton(function: toggleMethod, tint: Constants.centerButtonBgColor, title: vm.mode.rawValue)
     }
     
     var centerButton: some View {
-        Button {
-            centerView()
-        } label: {
-            Image(systemName: "scope")
-                .font(.largeTitle)
-                .frame(width: 50, height: 50)
-                .background(
-                    Circle()
-                        .tint(Constants.centerButtonBgColor)
-                )
-                
-        }
+        CircleButton(function: centerView, tint: Constants.centerButtonBgColor, imageSystemName: "scope", title: "Center")
     }
     
     var setValuesButton: some View {
@@ -64,6 +49,7 @@ extension WindSideView {
             vm.isControllerShowing.toggle()
         } label: {
             UnevenRoundedRectangle(topLeadingRadius: 15, bottomLeadingRadius: 15)
+                .frame(maxWidth: 200)
                 .overlay {
                     Text("Set Values")
                         .foregroundStyle(Constants.buttonTextColor)
@@ -76,6 +62,7 @@ extension WindSideView {
             vm.isValuesShowing.toggle()
         } label: {
             UnevenRoundedRectangle(bottomTrailingRadius: 15, topTrailingRadius: 15)
+                .frame(maxWidth: 200)
                 .overlay {
                     Text("Toggle Values")
                         .foregroundStyle(Constants.buttonTextColor)
@@ -114,6 +101,7 @@ extension WindSideView {
     
     var newButton: some View {
         Button {
+            new()
             vm.step.next()
         } label: {
             Text("New")
@@ -131,5 +119,17 @@ extension WindSideView {
         let offset = cos(Angle(degrees: vm.markDegree(rotation: rotation.degrees)).radians) * markOffset
         pan.height = -verticalOffset
         pan.width = -offset
+    }
+    
+    func new() {
+        vm.new()
+        rotation = .zero
+        verticalOffset = .zero
+        markOffset = 0
+        
+    }
+    
+    func toggleMethod() {
+        vm.mode.toggle()
     }
 }

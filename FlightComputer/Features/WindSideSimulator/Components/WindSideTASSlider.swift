@@ -7,18 +7,11 @@
 
 import SwiftUI
 
-struct WindSideTASSlider: View {
-    let vm: WindSideViewModel
+struct WindSideTASSlider<ViewModel: WindSideViewModelProtocol>: View {
+    let vm: ViewModel
     @Binding var verticalOffset: CGFloat
     let speedValue: CGFloat
-    
-    var calculatedSpeedValue: CGFloat? {
-        if vm.mode == .normal {
-            return speedValue + (vm.wCACalculator.headWind ?? 0)
-        } else {
-            return speedValue
-        }
-    }
+    var title: String = "True Air Speed"
     
     var body: some View {
         verticalSlider
@@ -30,7 +23,7 @@ struct WindSideTASSlider: View {
                 .rotationEffect(.degrees(180))
             Stepper {
                 HStack {
-                    Text("True Air Speed: ")
+                    Text("\(title): ")
                     TextField("Enter a number", text: verticalFormattedBinding)
                 }
             } onIncrement: {
@@ -43,7 +36,7 @@ struct WindSideTASSlider: View {
     
     private var verticalFormattedBinding: Binding<String> {
         Binding(
-            get: { String(format: "%.0f", (calculatedSpeedValue ?? 0)) },
+            get: { String(format: "%.0f", (speedValue)) },
             set: { newValue in
                 if let value = Double(newValue),
                    vm.isVerticalOffsetInRange(value: value){

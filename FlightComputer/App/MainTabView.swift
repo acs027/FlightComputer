@@ -56,7 +56,7 @@ struct MainTabView: View {
     }
     var windSideView: some View {
         NavigationStack {
-            WindSideView()
+            WindSideSimulatorView()
         }
         .tabItem {
             Label(Tab.windCalculator.rawValue,

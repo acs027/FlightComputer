@@ -28,6 +28,7 @@ struct IllustrationView: View {
             bottomLeadingInfos
             bottomTrailingInfos
         }
+        .frame(maxWidth: 400, maxHeight: 400)
     }
     
     //MARK: - Constants

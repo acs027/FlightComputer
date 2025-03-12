@@ -11,8 +11,6 @@ struct RelativeHumidityCalculator {
     var airTemp: Double = 0  // Air temperature in °C
     var dewpoint: Double = 0  // Dewpoint in °C
 
-//    var airTempUnit = Temperature.celsius
-//    var dewpointUnit = Temperature.celsius
     var tempUnit = Temperature.celsius
 
     var relativeHumidity: Double {

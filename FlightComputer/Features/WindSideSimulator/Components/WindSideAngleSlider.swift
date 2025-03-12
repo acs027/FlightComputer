@@ -8,9 +8,19 @@
 import SwiftUI
 
 struct WindSideAngleSlider: View {
-    let vm: WindSideViewModel
+    let isAngleInRange: (_ value: Double) -> Bool
     @Binding var rotation: Angle
     let step: WCACalculationSteps
+    var title: String {
+        switch step {
+        case .windDirection:
+            "Wind Direction:"
+        case .trueCourse:
+            "True Course:"
+        default:
+            "Degree:"
+        }
+    }
     
     var body: some View {
         angleSlider
@@ -21,7 +31,7 @@ struct WindSideAngleSlider: View {
             
             Stepper(value: $rotation.degrees, in: 0...360, step: 1) {
                 HStack {
-                    Text(step == .windDirection ? "Wind Direction:" : "True Course:")
+                    Text(title)
                     TextField("Enter a number", text: angleFormattedBinding)
                 }
             }
@@ -32,7 +42,7 @@ struct WindSideAngleSlider: View {
         Binding(
             get: { String(format: "%.0f°", rotation.degrees) },
             set: { newValue in
-                if let value = Double(newValue), vm.isAngleInRange(value: value) {
+                if let value = Double(newValue), isAngleInRange(value) {
                     rotation.degrees = value
                 }
             }
@@ -44,5 +54,5 @@ struct WindSideAngleSlider: View {
     @Previewable @State var vm = WindSideViewModel()
     @Previewable @State var rotation: Angle = .degrees(0)
     @Previewable var step: WCACalculationSteps = .trueCourse
-    WindSideAngleSlider(vm: vm, rotation: $rotation, step: step)
+    WindSideAngleSlider(isAngleInRange: vm.isAngleInRange, rotation: $rotation, step: step)
 }

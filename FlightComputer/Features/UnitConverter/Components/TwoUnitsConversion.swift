@@ -30,22 +30,8 @@ struct TwoUnitsConversion<U: UnitType>: View {
         }
     }
     
-//    var textField: some View {
-//        HStack {
-//            TextField("Value", value: $value, formatter: FormatterUtils.sharedNumberFormatter)
-//                .modifier(CustomTextFieldModifier())
-//                .frame(maxWidth: .infinity, alignment: .leading)
-//            Text("\(mainUnit.symbol)")
-//                .padding()
-//                .lineLimit(1)
-//                .minimumScaleFactor(0.5)
-//        }
-//        .modifier(CustomTextFieldBgStyle())
-//    }
-    
     var textField: some View {
         HStack {
-//            Text(FormatterUtils.sharedNumberFormatter.string(from: value as NSNumber) ?? "")
             Text(inputText)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .modifier(CustomTextFieldModifier())

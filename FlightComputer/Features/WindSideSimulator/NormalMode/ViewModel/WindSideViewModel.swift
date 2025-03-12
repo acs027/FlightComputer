@@ -21,7 +21,7 @@ enum Mode: String {
 }
 
 
-@Observable class WindSideViewModel {
+@Observable class WindSideViewModel: WindSideViewModelProtocol {
     var wCACalculator = WindCorrectionAngleCalculator()
     var step: WCACalculationSteps = .windDirection
     var mode: Mode = .normal
@@ -31,7 +31,7 @@ enum Mode: String {
     var isValuesWarningShowing = false
     var isControllerShowing = false
     var isValuesShowing = false
-    var referenceHeight: Double = 0
+    var referenceHeight: Double = 10
     var unitHeight: Double {
         let height = referenceHeight * 0.829
         return height / 220
@@ -151,7 +151,13 @@ enum Mode: String {
     }
     
     func speedValue(verticalOffset: Double) -> Double {
-        170 - verticalOffset / unitHeight
+//        170 - verticalOffset / unitHeight
+        let speedValue = 170 - verticalOffset / unitHeight
+        if mode == .normal {
+            return speedValue + (wCACalculator.headWind ?? 0)
+        } else {
+            return speedValue
+        }
     }
     
     func markDegree(rotation degrees: Double) -> Double {
@@ -176,11 +182,6 @@ enum Mode: String {
     }
     
     func verticalOffsetByMode(vertical offset: Double) -> Double {
-//        if mode == .normal {
-//            return offset + (wCACalculator.headWind ?? 0) * unitHeight
-//        } else {
-//            return offset
-//        }
         offset
     }
     
@@ -191,4 +192,9 @@ enum Mode: String {
                 return -offset
             }
     }
+    
+    func new() {
+        wCACalculator = WindCorrectionAngleCalculator()
+    }
+    
 }

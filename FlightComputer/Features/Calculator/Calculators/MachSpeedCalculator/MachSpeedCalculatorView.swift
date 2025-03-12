@@ -65,14 +65,6 @@ struct MachSpeedCalculatorView: View {
     var machSpeed: some View {
         VStack {
             CustomTextView(title: "Mach Speed", value: vm.calculator.speedOfSoundAtAltitude, unit: vm.calculator.machSpeedUnit.symbol)
-//            Picker("Mach Speed Unit", selection: $vm.calculator.machSpeedUnit) {
-//                ForEach(Speed.allCases, id: \.self) {
-//                    unit in
-//                    Text(unit.symbol).tag(unit)
-//                }
-//            }
-//            .pickerStyle(.segmented)
-//            .padding(.horizontal)
         }
     }
     

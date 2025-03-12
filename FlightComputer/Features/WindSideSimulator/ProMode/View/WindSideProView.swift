@@ -1,57 +1,61 @@
 //
-//  WindSideView.swift
+//  WindSideProView.swift
 //  FlightComputer
 //
-//  Created by ali cihan on 15.02.2025.
+//  Created by ali cihan on 11.03.2025.
 //
 
 import SwiftUI
 
-struct WindSideView: View {
-    @State var vm = WindSideViewModel()
-    @State var rotation: Angle = Angle(degrees: 0)
+struct WindSideProView: View {
+    @State var vm = WindSideProViewModel()
+
+    @State var lineAngle: Angle = Angle(degrees: 10)
     
-//    var lineAngle: Angle = Angle(degrees: 10)
-    @State var height: Double = 0
     @State var scale: CGFloat = 1
-    @GestureState var gestureScale: CGFloat = 1
+    @State var gestureScale: CGFloat = 1
     var totalScale: CGFloat { scale * gestureScale }
     
+    //Wheel and mark rotation angle
+    @State var rotation: Angle = Angle(degrees: 0)
     
-    @GestureState var gestureTrueIndex: CGFloat = 0
+    //Wheel offset
     @State var verticalOffset: CGFloat = 0
     
+    //Wind speed mark
+    @State var windDirection: Angle = Angle(degrees: 0)
+    var windMarkDegree: Double {
+        vm.calculateWindMarkDegree(windDirection: windDirection.degrees, rotation: rotation.degrees)
+    }
     @State var markOffset: CGFloat = 0
     
     @State var pan: CGOffset = .zero
-    @GestureState var gesturePan: CGOffset = .zero
+    @State var gesturePan: CGOffset = .zero
     var totalPan: CGOffset { pan + gesturePan }
     
     //MARK: - Body
     var body: some View {
         ZStack(alignment: .center) {
             windSideComponents
-            controllerButtons
-            values
+            panelControlButtons
         }
+        .safeAreaInset(edge: .bottom, content: {
+            Color.clear
+                .frame(height: 25)
+        })
         .background(Constants.bgColor)
+//        .animation(.easeInOut, value: verticalOffset)
         .simultaneousGesture(
-            panGesture
+            PanGesture(gesturePan: $gesturePan, pan: $pan)
         )
         .simultaneousGesture(
-            magnifyGesture
+            MagnifyGestureHandler(gestureScale: $gestureScale, scale: $scale)
         )
         .sheet(isPresented: $vm.isControllerShowing) {
             controllerView
                 .padding()
                 .presentationBackground(Constants.sheetBg)
                 .presentationDetents([.medium, .fraction(0.4)])
-        }
-        .onChange(of: vm.step) { oldValue, newValue in
-            vm.handleStepChange(newValue: newValue)
-        }
-        .onChange(of: vm.mode) { oldValue, newValue in
-            verticalOffset = vm.calculateVerticalOffset(value: vm.wCACalculator.trueAirSpeed)
         }
     }
     
@@ -69,5 +73,5 @@ struct WindSideView: View {
 }
 
 #Preview {
-    WindSideView()
+    WindSideProView()
 }

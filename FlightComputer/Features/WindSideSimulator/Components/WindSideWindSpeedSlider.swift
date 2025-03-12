@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct WindSideWindSpeedSlider: View {
-    let vm: WindSideViewModel
+struct WindSideWindSpeedSlider<ViewModel: WindSideViewModelProtocol>: View {
+    let vm: ViewModel
     @Binding var markOffset: CGFloat
     let markValue: CGFloat
     
