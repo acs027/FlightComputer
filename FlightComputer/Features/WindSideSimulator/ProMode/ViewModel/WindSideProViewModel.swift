@@ -138,8 +138,8 @@ class WindSideProViewModel: WindSideViewModelProtocol {
     }
     
     func angleLineOffset(angle radian: Double) -> (x: Double, y: Double) {
-        let y = (37.5 * unitHeight) * (1 - cos(radian))
-        let x = sin(radian) * (37.5 * unitHeight)
+        let y = (40 * unitHeight) * (1 - cos(radian))
+        let x = sin(radian) * (40 * unitHeight)
         return (x,y)
     }
     

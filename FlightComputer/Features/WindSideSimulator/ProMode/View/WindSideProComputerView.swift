@@ -94,7 +94,7 @@ extension WindSideProView {
         Rectangle()
             .frame(width: 3, height: abs(260 * vm.unitHeight))
             .opacity(0)
-            .offset(y: -vm.unitHeight * 2.5)
+//            .offset(y: -vm.unitHeight * 2.5)
             .foregroundStyle(.blue)
             .overlay {
                 lineOnAngle
@@ -112,7 +112,7 @@ extension WindSideProView {
         Rectangle()
             .frame(width: 3, height: abs(260 * vm.unitHeight))
             .opacity(0)
-            .offset(y: -vm.unitHeight * 2.5)
+//            .offset(y: -vm.unitHeight * 2.5)
             .foregroundStyle(.blue)
             .overlay {
                 lineOnAngle
@@ -137,7 +137,7 @@ extension WindSideProView {
     private var lineOnAngle: some View {
         Rectangle()
             .frame(width: 2, height: abs(260 * vm.unitHeight))
-            .offset(y: -vm.unitHeight * 2.5)
+//            .offset(y: -vm.unitHeight * 2.5)
             .rotationEffect(lineAngle, anchor: .bottom)
             .offset(
                 x: vm.angleLineOffset(angle: lineAngle.radians).x,
