@@ -26,28 +26,22 @@ extension WindSideView {
     
     var windSideBackground: some View {
         GeometryReader { geometry in
-            Image("windsidebackground")
-                .resizable()
-                .scaledToFit()
-                .frame(width: geometry.size.width)
-                .onChange(of: geometry.size) { oldValue, newValue in
-                    vm.referenceHeight = newValue.height
-                    if vm.wCACalculator.trueAirSpeed > 0 {
-                        let value = vm.wCACalculator.trueAirSpeed
-                        debugPrint(value)
-                        verticalOffset = vm.calculateVerticalOffset(value: value)
+            ZStack {
+                Image("windsidebackground")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: geometry.size.width)
+                    .onChange(of: geometry.size) { oldValue, newValue in
+                        vm.geometryChangeHandler(newValue: newValue, oldValue: oldValue)
                     }
-                    if markOffset != 0 {
-                        debugPrint("\(markOffset)  markoffset")
-                        markOffset = vm.calculateMarkOffset(value: vm.wCACalculator.windSpeed)
+                    .onAppear {
+                        vm.backgroundOnAppearHandler(size: geometry.size)
                     }
-                }
-                .onAppear {
-                    let height = geometry.size.height
-                    if vm.referenceHeight != height {
-                        vm.referenceHeight = geometry.size.height
-                    }
-                }
+                Image("windsidehighspeedoverlay")
+                    .resizable()
+                    .scaledToFit()
+                    .opacity(vm.isHighSpeed ? 1 : 0)
+            }
             
         }
     }
@@ -56,50 +50,46 @@ extension WindSideView {
         Image("windsiderotorouter")
             .resizable()
             .scaledToFit()
-            .offset(y: vm.verticalOffsetByMode(vertical: verticalOffset))
+            .offset(y: vm.verticalOffset)
+            .overlay {
+                GeometryReader {
+                    geometry in
+                    Color.clear
+                        .onChange(of: geometry.size.width) { oldValue, newValue in
+                            vm.componentWidth = geometry.size.width
+                        }
+                        .onAppear{
+                            vm.componentWidth = geometry.size.width
+                        }
+                }
+            }
     }
     
     var windSideRotor: some View {
         Image("windsiderotor")
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .offset(
-                x: sin(-rotation.radians) * vm.verticalOffsetByMode(vertical: verticalOffset) ,
-                y: cos(-rotation.radians) * vm.verticalOffsetByMode(vertical: verticalOffset)
-            )
-            .rotationEffect(-rotation)
+            .rotationEffect(Angle(degrees: -vm.rotation), anchor: UnitPoint(x: 0.5, y: 0.5))
+            .offset(y: vm.verticalOffset)
     }
     
     var markOnRotor: some View {
         Group {
             Circle()
                 .frame(width: 10)
-                .offset(y: vm.markOffsetByMode(mark: markOffset))
-                .rotationEffect(Angle(degrees: vm.markDegree(rotation: rotation.degrees)))
+                .offset(y: -vm.windMarkOffset)
+                .rotationEffect(Angle(degrees: vm.windMarkDegree()))
         }
-        .offset(y: vm.verticalOffsetByMode(vertical: verticalOffset))
+        .offset(y: vm.verticalOffset)
     }
     
     var lineOnRotor: some View {
         Group {
             Rectangle()
-                .frame(width: 1, height: abs(markOffset))
-                .offset(y: vm.markOffsetByMode(mark: markOffset) / 2)
-                .rotationEffect(Angle(degrees: vm.markDegree(rotation: rotation.degrees)))
+                .frame(width: 1, height: abs(vm.windMarkOffset))
+                .offset(y: -vm.windMarkOffset / 2)
+                .rotationEffect(Angle(degrees: vm.windMarkDegree()))
         }
-        .offset(y: vm.verticalOffsetByMode(vertical: verticalOffset))
-    }
-    
-    
-    func downMethodCorrection() {
-        if let wca = vm.wCACalculator.windCorrectionAngle,
-           wca != 0,
-           !wca.isNaN
-        {
-            withAnimation {
-                rotation.degrees = (vm.wCACalculator.trueCourse + wca + 360).truncatingRemainder(dividingBy: 360)
-            }
-        }
-        
+        .offset(y: vm.verticalOffset )
     }
 }

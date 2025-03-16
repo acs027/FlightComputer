@@ -14,9 +14,11 @@ extension WindSideView {
             HStack {
                 Spacer()
                 VStack(spacing: 30) {
-                    toggleProModeButton
+                    Color.clear.frame(width: 50, height: 50)
+                    switchToTrackButton
+                    switchToHeadingButton
+                    switchToWindButton
                     centerButton
-                    correctionSpeedDownButton
                 }
             }
             Spacer()
@@ -27,21 +29,23 @@ extension WindSideView {
             .foregroundStyle(Constants.mainButtonColor)
             .frame(height: 50)
         }
-        .padding(.horizontal, 20)
+        .padding(20)
     }
     
-    var correctionSpeedDownButton: some View {
-        CircleButton(function: downMethodCorrection, tint: .white, title: "Correction")
-        .opacity(vm.mode == .tafa ? 1 : 0)
-
+    var switchToTrackButton: some View {
+        CircleButton(function: switchToTrack, tint: vm.calculationStepType == .driftTrack(.tas) ? Color.green : Constants.centerButtonBgColor, title: "TC")
+    }
+    var switchToHeadingButton: some View {
+        CircleButton(function: switchToHeading, tint: vm.calculationStepType == .driftHeading(.tas) ? Color.green : Constants.centerButtonBgColor, title: "H")
+    }
+    var switchToWindButton: some View {
+        CircleButton(function: switchToWind, tint: vm.calculationStepType == .windCalculator(.tas) ? Color.green : Constants.centerButtonBgColor, title: "W")
     }
     
-    var toggleProModeButton: some View {
-        CircleButton(function: toggleMethod, tint: Constants.centerButtonBgColor, title: vm.mode.rawValue)
-    }
+    
     
     var centerButton: some View {
-        CircleButton(function: centerView, tint: Constants.centerButtonBgColor, imageSystemName: "scope", title: "Center")
+        CircleButton(function: centerTheView, tint: Constants.centerButtonBgColor, imageSystemName: "scope", title: "Center")
     }
     
     var setValuesButton: some View {
@@ -72,8 +76,7 @@ extension WindSideView {
     
     var nextButton: some View {
         Button {
-            vm.setValue(for: vm.step, speedValue: vm.speedValue(verticalOffset: verticalOffset), markValue: vm.markValue(markOffset: markOffset), angle: rotation.degrees)
-            vm.step.next()
+            vm.nextButtonHandler()
         } label: {
             Text("Next")
                 .foregroundStyle(Constants.buttonTextColor)
@@ -87,7 +90,7 @@ extension WindSideView {
     
     var backButton: some View {
         Button {
-            vm.step.back()
+            vm.backButtonHandler()
         } label: {
             Text("Back")
                 .foregroundStyle(Constants.buttonTextColor)
@@ -101,8 +104,7 @@ extension WindSideView {
     
     var newButton: some View {
         Button {
-            new()
-            vm.step.next()
+            reset()
         } label: {
             Text("New")
                 .foregroundStyle(Constants.buttonTextColor)
@@ -114,22 +116,21 @@ extension WindSideView {
         }
     }
     
-    //MARK: Functions
-    func centerView() {
-        let offset = cos(Angle(degrees: vm.markDegree(rotation: rotation.degrees)).radians) * markOffset
-        pan.height = -verticalOffset
-        pan.width = -offset
+    func switchToTrack() {
+        vm.calculationStepType = .driftTrack(.tas)
     }
     
-    func new() {
-        vm.new()
-        rotation = .zero
-        verticalOffset = .zero
-        markOffset = 0
-        
+    func switchToHeading() {
+        vm.calculationStepType = .driftHeading(.tas)
     }
     
-    func toggleMethod() {
-        vm.mode.toggle()
+    func switchToWind() {
+        vm.calculationStepType = .windCalculator(.tas)
+    }
+    
+    func centerTheView() {
+        withAnimation {
+            pan.height = -vm.verticalOffset
+        }
     }
 }

@@ -17,21 +17,20 @@ struct WindSideSimulatorView: View {
             } else {
                 WindSideView()
             }
-            
             VStack {
                 HStack {
-                    switchModeButton
                     Spacer()
+                    switchModeButton
                 }
                 Spacer()
             }
-            .padding()
+            .padding(.horizontal, 20)
         }
         .frame(maxHeight: .infinity)
     }
     
     var switchModeButton: some View {
-        CircleButton(function: handleModeChange, tint: .white, title: isProMode ? "Pro" : "Normal")
+        CircleButton(function: handleModeChange, tint: Color(.tertiarySystemBackground), title: isProMode ? "Pro" : "N")
     }
     
     private func handleModeChange() {

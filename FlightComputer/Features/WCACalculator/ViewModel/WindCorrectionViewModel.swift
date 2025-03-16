@@ -14,7 +14,7 @@ import Foundation
     
     var circleRadius: Double = 0
     var maxSpeed: Double {
-        max(wCACalculator.trueAirSpeed, wCACalculator.windSpeed, wCACalculator.groundSpeed ?? 0, 1)
+        max(wCACalculator.trueAirSpeed, wCACalculator.windSpeed, wCACalculator.groundSpeed, 1)
     }
     
     var windArrowDegree: Double {
@@ -32,7 +32,7 @@ import Foundation
     }
     
     var courseArrowHeight: Double {
-        max(circleRadius * 0.5 * ((wCACalculator.groundSpeed ?? 1) / maxSpeed), 1)
+        max(circleRadius * 0.5 * ((wCACalculator.groundSpeed) / maxSpeed), 1)
     }
     
     var courseArrowOffset: Double {

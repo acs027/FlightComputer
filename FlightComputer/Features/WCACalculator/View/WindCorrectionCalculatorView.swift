@@ -101,14 +101,14 @@ struct WindCorrectionCalculatorView: View {
     }
     
     var windCorrectionAngle: some View {
-        CustomTextView(title: "Wind Correction Angle", value: vm.wCACalculator.windCorrectionAngle ?? 0)
+        CustomTextView(title: "Wind Correction Angle", value: vm.wCACalculator.windCorrectionAngle)
     }
     
     var heading: some View {
-        CustomTextView(title: "Heading", value: vm.wCACalculator.heading ?? 0)
+        CustomTextView(title: "Heading", value: vm.wCACalculator.heading)
     }
     var groundSpeed: some View {
-        CustomTextView(title: "Ground Speed", value: vm.wCACalculator.groundSpeed ?? 0)
+        CustomTextView(title: "Ground Speed", value: vm.wCACalculator.groundSpeed)
     }
 }
 

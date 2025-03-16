@@ -7,30 +7,29 @@
 
 import Foundation
 
-enum Mode: String {
-    case normal = "N/A"
-    case tafa = "TAFA"
-    case pro = "PRO"
-    mutating func toggle() {
-        if self == .normal {
-            self = .tafa
-        } else {
-            self = .normal
-        }
-    }
-}
-
-
-@Observable class WindSideViewModel: WindSideViewModelProtocol {
-    var wCACalculator = WindCorrectionAngleCalculator()
-    var step: WCACalculationSteps = .windDirection
-    var mode: Mode = .normal
+@Observable class WindSideViewModel {
+    var calculationService = CalculationService()
     
-    var isTrueIndexDragActive = false
+    var calculationStepType: CalculationStepType = .driftHeading(.tas)
     
-    var isValuesWarningShowing = false
+    var verticalOffset: CGFloat = .zero
+    var windMarkOffset: CGFloat = .zero
+    
+    var rotation: Double = 0
+    var windDirection: Double = 0
+    
+    var isHighSpeed: Bool = false
+    var isWindMarkRotationEnable: Bool = false
+    
     var isControllerShowing = false
     var isValuesShowing = false
+    
+    @ObservationIgnored var screenWidth: CGFloat = 1
+    @ObservationIgnored var componentWidth: CGFloat = 1
+    func scaleValueFitTheView() -> CGFloat  {
+        screenWidth / componentWidth
+    }
+    
     var referenceHeight: Double = 10
     var unitHeight: Double {
         let height = referenceHeight * 0.829
@@ -38,140 +37,27 @@ enum Mode: String {
     }
     
     var results: [(label: String, value: Double, type: ValueType)] {
-        [
-        ("WD", wCACalculator.windDirection, .angle),
-        ("WS", wCACalculator.windSpeed, .double),
-        ("TC", wCACalculator.trueCourse, .angle),
-        ("TAS", wCACalculator.trueAirSpeed, .double),
-        ("WCA", wCACalculator.windCorrectionAngle ?? 0, .angle),
-        ("GS", wCACalculator.groundSpeed ?? 0, .double)
-        ]
+        calculationService.results(type: calculationStepType)
     }
     
-    var verticalRange: ClosedRange<CGFloat> {
-        let highestPoint = unitHeight * 130
-        let lowestPoint = -unitHeight * 90
-        return lowestPoint...highestPoint
+    func rotationRadians() -> Double {
+        -rotation * .pi / 180
+    }
+
+    func windMarkDegree() -> Double {
+        if !isWindMarkRotationEnable { return 0 }
+        return (windDirection - rotation + 360).truncatingRemainder(dividingBy: 360)
     }
     
-    var markRange: ClosedRange<CGFloat> {
-        let highestPoint: CGFloat = .zero
-        let lowestPoint: CGFloat = -unitHeight * 50
-        return lowestPoint...highestPoint
+    func speedValue() -> Double {
+        print(verticalOffset)
+        let value = 170 - verticalOffset / unitHeight
+        return isHighSpeed ? value * 5 : value
     }
     
-    func verticalStepperIncrement(value: Double) -> Double {
-        if value > -unitHeight * 89 {
-            return value - unitHeight
-        }
-        return -unitHeight * 90
-    }
-    
-    func verticalStepperDecrement(value: Double) -> Double {
-        if value < unitHeight * 129 {
-            return value + unitHeight
-        }
-        return unitHeight * 130
-    }
-    
-    func markStepperIncrement(value: Double) -> Double {
-        if value > -unitHeight * 49 {
-            return value - unitHeight
-        }
-        return -unitHeight * 50
-    }
-    
-    func markStepperDecrement(value: Double) -> Double {
-        if value < -unitHeight {
-            return value + unitHeight
-        }
-        return 0
-    }
-    
-    func calculateVerticalOffset(value: Double) -> Double {
-//        let verticalOffset = (170 - value) * unitHeight
-        if value < 1 {
-            return 0
-        }
-        if mode == .normal {
-            return (170 - value + (wCACalculator.headWind ?? 0)) * unitHeight
-        } else {
-            return (170 - value) * unitHeight
-        }
-    }
-    
-    func calculateMarkOffset(value: Double) -> Double {
-        let markOffset = -value * unitHeight
-        return markOffset
-    }
-    
-    func isVerticalOffsetInRange(value: Double) -> Bool {
-        let highestPoint = unitHeight * 130
-        let lowestPoint = -unitHeight * 90
-        let range = lowestPoint...highestPoint
-        let convertedValue = (170 - value) * unitHeight
-        return range.contains(convertedValue)
-    }
-    
-    func isAngleInRange(value: Double) -> Bool {
-        let range: ClosedRange<Double> = 0...360
-        return range.contains(value)
-    }
-    
-    func isMarkInRange(value: Double) -> Bool {
-        let highestPoint: Double = 0
-        let lowestPoint = -unitHeight * 50
-        let range = lowestPoint...highestPoint
-        let convertedValue = -value * unitHeight
-        return range.contains(convertedValue)
-    }
-    
-    func setValue(for step: WCACalculationSteps, speedValue: Double, markValue: Double, angle: Double) {
-        switch step {
-        case .windDirection:
-            isValuesWarningShowing = true
-            wCACalculator.windDirection = angle
-        case .windVelocity:
-            isValuesWarningShowing = true
-            wCACalculator.windSpeed = markValue
-        case .trueCourse:
-            isValuesWarningShowing = true
-            wCACalculator.trueCourse = angle
-        case .trueAirSpeed:
-//            wCACalculator.trueAirSpeed = speedValue
-            isValuesWarningShowing = false
-            if mode == .normal {
-                wCACalculator.trueAirSpeed = speedValue + (wCACalculator.headWind?.rounded() ?? 0)
-            } else {
-                wCACalculator.trueAirSpeed = speedValue
-            }
-        case .result:
-            return
-        }
-    }
-    
-    func speedValue(verticalOffset: Double) -> Double {
-//        170 - verticalOffset / unitHeight
-        let speedValue = 170 - verticalOffset / unitHeight
-        if mode == .normal {
-            return speedValue + (wCACalculator.headWind ?? 0)
-        } else {
-            return speedValue
-        }
-    }
-    
-    func markDegree(rotation degrees: Double) -> Double {
-        (wCACalculator.windDirection - degrees + 360).truncatingRemainder(dividingBy: 360)
-    }
-    
-    func markValue(markOffset: Double) -> Double {
-        -markOffset / unitHeight
-    }
-    
-    func angleLineOffset(angle radian: Double) -> (x: Double, y: Double) {
-        let y = (40 * unitHeight) * (1 - cos(radian))
-        let x = sin(radian) * 40 * unitHeight
-        return (x,y)
+    func windSpeedValue() -> Double {
+        let value = -windMarkOffset / unitHeight
+        return isHighSpeed ? value * 5 : value
     }
     
     func handleStepChange(newValue: WCACalculationSteps) {
@@ -181,20 +67,110 @@ enum Mode: String {
         }
     }
     
-    func verticalOffsetByMode(vertical offset: Double) -> Double {
-        offset
+    func reset() {
+        rotation = 0
+        windDirection = 0
+        windMarkOffset = .zero
+        verticalOffset = .zero
+        isWindMarkRotationEnable = false
+        calculationStepType.reset()
+        calculationService = CalculationService()
     }
     
-    func markOffsetByMode(mark offset: Double) -> Double {
-            if mode == .normal {
-                return offset
-            } else {
-                return -offset
+    func nextButtonHandler() {
+        switch calculationStepType {
+        case .driftHeading(let driftHeadingStep):
+            calculationService.setValues(for: driftHeadingStep, speedValue: speedValue(), markValue: windSpeedValue(), angle: rotation)
+            valueSetterForDriftHeading(step: driftHeadingStep)
+        case .driftTrack(let driftTrackStep):
+            calculationService.setValues(for: driftTrackStep, speedValue: speedValue(), markValue: windSpeedValue(), angle: rotation)
+            valueSetterForDriftTrack(step: driftTrackStep)
+        case .windCalculator(let windCalculatorStep):
+            calculationService.setValues(for: windCalculatorStep, speedValue: speedValue(), markValue: windSpeedValue(), angle: rotation)
+            valueSetterForWindCalculator(step: windCalculatorStep)
+        }
+        calculationStepType.next()
+    }
+    
+    func backButtonHandler() {
+        switch calculationStepType {
+        case .driftHeading(let driftHeadingStep):
+            if driftHeadingStep == .windSpeed {
+                isWindMarkRotationEnable = false
+                windDirection = 0
             }
+        case .driftTrack(let driftTrackStep):
+            if driftTrackStep == .windSpeed {
+                isWindMarkRotationEnable = false
+                windDirection = 0
+            }
+        case .windCalculator(let windCalculatorStep):
+            return
+        }
+        calculationStepType.back()
     }
     
-    func new() {
-        wCACalculator = WindCorrectionAngleCalculator()
+    func valueSetterForDriftHeading(step: DriftHeadingStep) {
+        switch step {
+        case .windDirection:
+            windDirection = rotation
+            isWindMarkRotationEnable = true
+        default:
+            return
+        }
+    }
+    
+    func valueSetterForDriftTrack(step: DriftTrackStep) {
+        switch step {
+        case .windDirection:
+            windDirection = rotation
+            isWindMarkRotationEnable = true
+        default:
+            return
+        }
+    }
+    
+    func valueSetterForWindCalculator(step: WindCalculatorStep) {
+        switch step {
+        case .tas:
+            return
+        case .track:
+            return
+        case .heading:
+            return
+        case .groundSpeed:
+            return
+        case .result:
+            return
+        }
+    }
+    
+    func geometryChangeHandler(newValue: CGSize, oldValue: CGSize) {
+        if oldValue.height != newValue.height {
+            referenceHeight = newValue.height
+        }
+        if oldValue.width != newValue.width {
+            screenWidth = newValue.width
+        }
+        
+        if verticalOffset != 0 {
+            debugPrint(newValue)
+            verticalOffset *= newValue.height/oldValue.height
+        }
+        if windMarkOffset != 0 {
+            debugPrint("\(windMarkOffset)  markoffset")
+            windMarkOffset *= newValue.height/oldValue.height
+        }
+    }
+    
+    func backgroundOnAppearHandler(size: CGSize) {
+        let height = size.height
+        if screenWidth != size.width {
+            screenWidth = size.width
+        }
+        if referenceHeight != height {
+            referenceHeight = height
+        }
     }
     
 }

@@ -32,8 +32,10 @@ extension WindSideProView {
             HStack {
                 Spacer()
                 VStack(spacing: 30) {
+                    Color.clear.frame(width: 50, height: 50)
                     resetButton
                     centerButton
+                    highSpeedButton
                 }
                 
             }
@@ -57,7 +59,7 @@ extension WindSideProView {
                 }
             }
         }
-        .padding(.horizontal, 20)
+        .padding(20)
     }
     
     var rotationController: some View {
@@ -109,6 +111,10 @@ extension WindSideProView {
         }
     }
     
+    var highSpeedButton: some View {
+        CircleButton(function: toggleSpeed, tint: Constants.centerButtonBgColor, title: "Speed")
+    }
+    
     var centerButton: some View {
         CircleButton(function: centerView, tint: Constants.centerButtonBgColor, imageSystemName: "scope", title: "Center")
     }
@@ -119,19 +125,19 @@ extension WindSideProView {
     
     
     var trueIndexSlider: some View {
-        WindSideTASSlider(vm: vm, verticalOffset: $verticalOffset, speedValue: vm.speedValue(verticalOffset: verticalOffset))
+        WindSideTASSlider(verticalOffset: $vm.verticalOffset, unitHeight: vm.unitHeight, isHighSpeed: vm.isHighSpeed)
     }
     
     var angleSlider: some View {
-        WindSideAngleSlider(isAngleInRange: vm.isAngleInRange, rotation: $rotation, step: vm.step)
+        WindSideAngleSlider(rotation: $vm.rotationDegree)
     }
     
     var windSlider: some View {
-        WindSideWindSpeedSlider(vm: vm, markOffset: $markOffset, markValue: vm.markValue(markOffset: markOffset))
+        WindSideWindSpeedSlider(markOffset: $vm.windMarkOffset, unitHeight: vm.unitHeight, isHighSpeed: vm.isHighSpeed)
     }
     
     var lineSlider: some View {
-        WindSideProLineAngleSlider(isAngleInRange: vm.isLineAngleInRange, lineAngle: $lineAngle)
+        WindSideProLineAngleSlider(lineDegree: $vm.lineAngle)
     }
     
     var tideLineAngleButton: some View {
@@ -152,27 +158,31 @@ extension WindSideProView {
     
     //MARK: Functions
     func centerView() {
-        let offset = cos(Angle(degrees: vm.markDegree(rotation: rotation.degrees)).radians) * markOffset
-        pan.height = -verticalOffset
+        let offset = cos(Angle(degrees: vm.windMarkDegree()).radians) * vm.windMarkOffset
+        pan.height = -vm.verticalOffset
         pan.width = -offset
     }
     
     private func tideLineAngleButtonHandler() {
-        vm.lineAngleStartDegree = rotation.degrees
+        vm.lineAngleStartDegree = vm.rotationDegree
         vm.isLineRotationEnabled.toggle()
     }
     
     private func tideWindMarkButtonHandler() {
-        windDirection = rotation
+        vm.windDirection = vm.rotationDegree
         vm.isWindMarkRotationEnabled.toggle()
     }
     
     private func reset() {
-        windDirection = .zero
-        rotation = .zero
+        vm.windDirection = .zero
+        vm.rotationDegree = .zero
         vm.isWindMarkRotationEnabled = false
         vm.isLineRotationEnabled = false
         vm.lineAngleStartDegree = .zero
-        markOffset = .zero
+        vm.windMarkOffset = .zero
+    }
+    
+    func toggleSpeed() {
+        vm.isHighSpeed.toggle()
     }
 }

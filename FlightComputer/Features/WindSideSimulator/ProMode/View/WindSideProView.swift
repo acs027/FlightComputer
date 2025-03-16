@@ -10,24 +10,9 @@ import SwiftUI
 struct WindSideProView: View {
     @State var vm = WindSideProViewModel()
 
-    @State var lineAngle: Angle = Angle(degrees: 10)
-    
     @State var scale: CGFloat = 1
     @State var gestureScale: CGFloat = 1
     var totalScale: CGFloat { scale * gestureScale }
-    
-    //Wheel and mark rotation angle
-    @State var rotation: Angle = Angle(degrees: 0)
-    
-    //Wheel offset
-    @State var verticalOffset: CGFloat = 0
-    
-    //Wind speed mark
-    @State var windDirection: Angle = Angle(degrees: 0)
-    var windMarkDegree: Double {
-        vm.calculateWindMarkDegree(windDirection: windDirection.degrees, rotation: rotation.degrees)
-    }
-    @State var markOffset: CGFloat = 0
     
     @State var pan: CGOffset = .zero
     @State var gesturePan: CGOffset = .zero
@@ -39,12 +24,7 @@ struct WindSideProView: View {
             windSideComponents
             panelControlButtons
         }
-        .safeAreaInset(edge: .bottom, content: {
-            Color.clear
-                .frame(height: 25)
-        })
         .background(Constants.bgColor)
-//        .animation(.easeInOut, value: verticalOffset)
         .simultaneousGesture(
             PanGesture(gesturePan: $gesturePan, pan: $pan)
         )
@@ -57,6 +37,14 @@ struct WindSideProView: View {
                 .presentationBackground(Constants.sheetBg)
                 .presentationDetents([.medium, .fraction(0.4)])
         }
+        .onAppear {
+            DispatchQueue.main.async {
+                scale = vm.scaleValueFitTheView()
+            }
+        }
+        .onChange(of: vm.verticalOffset) { oldValue, newValue in
+            centerView()
+        }
     }
     
     //MARK: Constants
@@ -68,7 +56,13 @@ struct WindSideProView: View {
         static let nextButtonColor: AnyGradient = Color.green.gradient
         static let backButtonColor: AnyGradient = Color.red.gradient
         static let sheetBg: Color = Color(.systemGroupedBackground)
-        static let centerButtonBgColor: Color = Color(.systemBackground)
+        static let centerButtonBgColor: Color = Color(.tertiarySystemBackground)
+    }
+    
+    func centerTheView() {
+        withAnimation {
+            pan.height = -vm.verticalOffset
+        }
     }
 }
 

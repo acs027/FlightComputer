@@ -7,10 +7,14 @@
 
 import SwiftUI
 
-struct WindSideWindSpeedSlider<ViewModel: WindSideViewModelProtocol>: View {
-    let vm: ViewModel
+struct WindSideWindSpeedSlider: View {
     @Binding var markOffset: CGFloat
-    let markValue: CGFloat
+    let unitHeight: Double
+    let isHighSpeed: Bool
+    
+    var windSpeedValue: Double {
+        getWindSpeedValue()
+    }
     
     var body: some View {
         markSlider
@@ -18,7 +22,7 @@ struct WindSideWindSpeedSlider<ViewModel: WindSideViewModelProtocol>: View {
     //MARK: Sliders
     var markSlider: some View {
         VStack{
-            Slider(value: $markOffset, in: vm.markRange, step: vm.unitHeight)
+            Slider(value: $markOffset, in: windMarkRange(), step: unitHeight)
                 .rotationEffect(.degrees(180))
             Stepper {
                 HStack {
@@ -26,30 +30,76 @@ struct WindSideWindSpeedSlider<ViewModel: WindSideViewModelProtocol>: View {
                     TextField("Enter a number", text: markFormattedBinding)
                 }
             } onIncrement: {
-                markOffset = vm.markStepperIncrement(value: markOffset)
+                markOffset = windMarkStepperIncrement(value: markOffset)
             } onDecrement: {
-                markOffset = vm.markStepperDecrement(value: markOffset)
+                markOffset = windMarkStepperDecrement(value: markOffset)
             }
         }
     }
     
     private var markFormattedBinding: Binding<String> {
         Binding(
-            get: { String(format: "%.2f", abs(markValue)) },
+            get: { String(format: "%.2f", abs(windSpeedValue)) },
             set: { newValue in
                 if let value = Double(newValue),
-                   vm.isMarkInRange(value: value)
+                   isMarkInRange(value: value)
                 {
-                    markOffset = vm.calculateMarkOffset(value: value)
+                    markOffset = calculateWindMarkOffset(value: value)
                 }
             }
         )
     }
+    
+    func isMarkInRange(value: Double) -> Bool {
+        let range = windMarkRange()
+        let convertedValue = -value * unitHeight
+        return range.contains(convertedValue)
+    }
+    
+    
+    func windMarkRange() -> ClosedRange<CGFloat> {
+        let highestPoint: CGFloat = .zero
+        let lowestPoint: CGFloat = -unitHeight * 50
+        return lowestPoint...highestPoint
+    }
+    
+    func windMarkStepperIncrement(value: Double) -> Double {
+        if value > -unitHeight * 49 {
+            return value - unitHeight
+        }
+        return -unitHeight * 50
+    }
+    
+    func windMarkStepperDecrement(value: Double) -> Double {
+        if value < -unitHeight {
+            return value + unitHeight
+        }
+        return 0
+    }
+    
+    
+    func calculateWindMarkOffset(value: Double) -> Double {
+        var value = value
+        if isHighSpeed {
+            value /= 5
+        }
+        let markOffset = -value * unitHeight
+        return markOffset
+    }
+    
+    func getWindSpeedValue() -> Double {
+        var value = markOffset / unitHeight
+        if isHighSpeed {
+            value *= 5
+        }
+        return value
+    }
 }
 
 #Preview {
-    @Previewable @State var vm = WindSideViewModel()
     @Previewable @State var markOffset: CGFloat = .zero
+    @Previewable var unitHeight: Double = 20
     @Previewable var markValue: CGFloat = .zero
-    WindSideWindSpeedSlider(vm: vm, markOffset: $markOffset, markValue: markValue)
+    WindSideWindSpeedSlider(markOffset: $markOffset, unitHeight: unitHeight, isHighSpeed: false)
+    
 }

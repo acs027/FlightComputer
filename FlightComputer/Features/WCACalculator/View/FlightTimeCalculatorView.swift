@@ -39,7 +39,7 @@ struct FlightTimeCalculatorView: View {
             groundSpeed
             flightTime
         }
-        .onChange(of: vm.wCACalculator.groundSpeed ?? 0) { oldValue, newValue in
+        .onChange(of: vm.wCACalculator.groundSpeed) { oldValue, newValue in
             if newValue > 0 {
                 vm.flightTimeCalculator.groundSpeed = newValue
             }

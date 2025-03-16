@@ -8,28 +8,17 @@
 import SwiftUI
 
 struct WindSideAngleSlider: View {
-    let isAngleInRange: (_ value: Double) -> Bool
-    @Binding var rotation: Angle
-    let step: WCACalculationSteps
-    var title: String {
-        switch step {
-        case .windDirection:
-            "Wind Direction:"
-        case .trueCourse:
-            "True Course:"
-        default:
-            "Degree:"
-        }
-    }
+    @Binding var rotation: Double
+    var title: String = "Degree: "
     
     var body: some View {
         angleSlider
     }
     var angleSlider: some View {
         VStack {
-            Slider(value: $rotation.degrees, in: 0...360, step: 1)
+            Slider(value: $rotation, in: 0...360, step: 1)
             
-            Stepper(value: $rotation.degrees, in: 0...360, step: 1) {
+            Stepper(value: $rotation, in: 0...360, step: 1) {
                 HStack {
                     Text(title)
                     TextField("Enter a number", text: angleFormattedBinding)
@@ -40,19 +29,23 @@ struct WindSideAngleSlider: View {
     
     private var angleFormattedBinding: Binding<String> {
         Binding(
-            get: { String(format: "%.0f°", rotation.degrees) },
+            get: { String(format: "%.0f°", rotation) },
             set: { newValue in
-                if let value = Double(newValue), isAngleInRange(value) {
-                    rotation.degrees = value
+                if let value = Double(newValue), isAngleInRange(value: value) {
+                    rotation = value
                 }
             }
         )
     }
+    
+    func isAngleInRange(value: Double) -> Bool {
+        let range: ClosedRange<Double> = 0...360
+        return range.contains(value)
+    }
 }
 
 #Preview {
-    @Previewable @State var vm = WindSideViewModel()
-    @Previewable @State var rotation: Angle = .degrees(0)
+    @Previewable @State var rotation: Double = 0
     @Previewable var step: WCACalculationSteps = .trueCourse
-    WindSideAngleSlider(isAngleInRange: vm.isAngleInRange, rotation: $rotation, step: step)
+    WindSideAngleSlider(rotation: $rotation)
 }

@@ -28,25 +28,22 @@ extension WindSideProView {
     
     var windSideBackground: some View {
         GeometryReader { geometry in
-            Image("windsidebackground")
-                .resizable()
-                .scaledToFit()
-                .frame(width: geometry.size.width)
-                .onChange(of: geometry.size) { oldValue, newValue in
-                    vm.referenceHeight = newValue.height
-                    debugPrint(geometry.size.height)
-                    verticalOffset *= newValue.height/oldValue.height
-                    if markOffset != 0 {
-                        debugPrint("\(markOffset)  markoffset")
-                        markOffset *= newValue.height/oldValue.height
+            ZStack {
+                Image("windsidebackground")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: geometry.size.width)
+                    .onChange(of: geometry.size) { oldValue, newValue in
+                        vm.geometryChangeHandler(newValue: newValue, oldValue: oldValue)
                     }
-                }
-                .onAppear {
-                    let height = geometry.size.height
-                    if vm.referenceHeight != height {
-                        vm.referenceHeight = geometry.size.height
+                    .onAppear {
+                        vm.backgroundOnAppearHandler(size: geometry.size)
                     }
-                }
+                Image("windsidehighspeedoverlay")
+                    .resizable()
+                    .scaledToFit()
+                    .opacity(vm.isHighSpeed ? 1 : 0)
+            }
         }
     }
     
@@ -54,39 +51,52 @@ extension WindSideProView {
         Image("windsiderotorouter")
             .resizable()
             .scaledToFit()
-            .offset(y: vm.verticalOffsetByMode(vertical: verticalOffset))
+            .offset(y: vm.verticalOffset)
+            .overlay {
+                GeometryReader {
+                    geometry in
+                    Color.clear
+                        .onChange(of: geometry.size.width) { oldValue, newValue in
+                            vm.componentWidth = geometry.size.width
+                        }
+                        .onAppear{
+                            vm.componentWidth = geometry.size.width
+                        }
+                }
+            }
     }
     
     var windSideRotor: some View {
         Image("windsiderotor")
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .offset(
-                x: sin(-rotation.radians) * vm.verticalOffsetByMode(vertical: verticalOffset) ,
-                y: cos(-rotation.radians) * vm.verticalOffsetByMode(vertical: verticalOffset)
-            )
-            .rotationEffect(-rotation)
+//            .offset(
+//                x: sin(-Angle(degrees: vm.rotationDegree).radians) * vm.verticalOffset ,
+//                y: cos(-Angle(degrees: vm.rotationDegree).radians) * vm.verticalOffset
+//            )
+            .rotationEffect(-Angle(degrees: vm.rotationDegree), anchor: UnitPoint(x: 0.5, y: 0.5))
+            .offset(y: vm.verticalOffset)
     }
     
     var markOnRotor: some View {
         Group {
             Circle()
                 .frame(width: 10)
-                .offset(y: vm.markOffsetByMode(mark: markOffset))
+                .offset(y: vm.windMarkOffsetByMode(mark: vm.windMarkOffset))
             //                .rotationEffect(Angle(degrees: vm.markDegree(rotation: rotation.degrees)))
-                .rotationEffect(Angle(degrees: windMarkDegree))
+                .rotationEffect(Angle(degrees: vm.windMarkDegree()))
         }
-        .offset(y: vm.verticalOffsetByMode(vertical: verticalOffset))
+        .offset(y: vm.verticalOffset)
     }
     
     var lineOnRotor: some View {
         Group {
             Rectangle()
-                .frame(width: 1, height: abs(markOffset))
-                .offset(y: vm.markOffsetByMode(mark: markOffset) / 2)
-                .rotationEffect(Angle(degrees: windMarkDegree))
+                .frame(width: 1, height: abs(vm.windMarkOffset))
+                .offset(y: vm.windMarkOffsetByMode(mark: vm.windMarkOffset) / 2)
+                .rotationEffect(Angle(degrees: vm.windMarkDegree()))
         }
-        .offset(y: vm.verticalOffsetByMode(vertical: verticalOffset))
+        .offset(y: vm.verticalOffset)
     }
     
     
@@ -100,7 +110,7 @@ extension WindSideProView {
                 lineOnAngle
                     .foregroundStyle(.green)
             }
-            .rotationEffect(Angle(degrees: vm.calculateLineDegree(rotation: rotation.degrees)), anchor: UnitPoint(x: 0.5, y: (130 + verticalOffset / vm.unitHeight) / 260))
+            .rotationEffect(Angle(degrees: vm.lineDegree(rotation: vm.rotationDegree)), anchor: UnitPoint(x: 0.5, y: (130 + vm.verticalOffset / vm.unitHeight) / 260))
 //            .rotationEffect(-rotation, anchor: UnitPoint(x: 0.5, y: (130 + verticalOffset / vm.unitHeight) / 260))
             .mask {
                 lineOnAngleMask
@@ -128,20 +138,20 @@ extension WindSideProView {
         Circle()
             .frame(width: vm.unitHeight * 100)
             .offset(
-                x: sin(-rotation.radians) * vm.verticalOffsetByMode(vertical: verticalOffset),
-                y: cos(-rotation.radians) * vm.verticalOffsetByMode(vertical: verticalOffset)
+                x: sin(-Angle(degrees: vm.rotationDegree).radians) * vm.verticalOffset,
+                y: cos(-Angle(degrees: vm.rotationDegree).radians) * vm.verticalOffset
             )
-            .rotationEffect(-rotation)
+            .rotationEffect(-Angle(degrees: vm.rotationDegree))
     }
     
     private var lineOnAngle: some View {
         Rectangle()
             .frame(width: 2, height: abs(260 * vm.unitHeight))
 //            .offset(y: -vm.unitHeight * 2.5)
-            .rotationEffect(lineAngle, anchor: .bottom)
+            .rotationEffect(Angle(degrees: vm.lineAngle), anchor: .bottom)
             .offset(
-                x: vm.angleLineOffset(angle: lineAngle.radians).x,
-                y: vm.angleLineOffset(angle: lineAngle.radians).y
+                x: vm.angleLineOffset(angle: Angle(degrees: vm.lineAngle).radians).x,
+                y: vm.angleLineOffset(angle: Angle(degrees: vm.lineAngle).radians).y
             )
     }
 }

@@ -7,11 +7,15 @@
 
 import SwiftUI
 
-struct WindSideTASSlider<ViewModel: WindSideViewModelProtocol>: View {
-    let vm: ViewModel
+struct WindSideTASSlider: View {
     @Binding var verticalOffset: CGFloat
-    let speedValue: CGFloat
+    var unitHeight: Double
     var title: String = "True Air Speed"
+    let isHighSpeed: Bool
+    
+    var speedValue: Double {
+        getSpeedValue()
+    }
     
     var body: some View {
         verticalSlider
@@ -19,7 +23,7 @@ struct WindSideTASSlider<ViewModel: WindSideViewModelProtocol>: View {
     
     var verticalSlider: some View {
         VStack{
-            Slider(value: $verticalOffset, in: vm.verticalRange, step: vm.unitHeight)
+            Slider(value: $verticalOffset, in: verticalRange(), step: unitHeight)
                 .rotationEffect(.degrees(180))
             Stepper {
                 HStack {
@@ -27,9 +31,9 @@ struct WindSideTASSlider<ViewModel: WindSideViewModelProtocol>: View {
                     TextField("Enter a number", text: verticalFormattedBinding)
                 }
             } onIncrement: {
-                verticalOffset = vm.verticalStepperIncrement(value: verticalOffset)
+                verticalOffset = verticalStepperIncrement(value: verticalOffset)
             } onDecrement: {
-                verticalOffset = vm.verticalStepperDecrement(value: verticalOffset)
+                verticalOffset = verticalStepperDecrement(value: verticalOffset)
             }
         }
     }
@@ -39,17 +43,59 @@ struct WindSideTASSlider<ViewModel: WindSideViewModelProtocol>: View {
             get: { String(format: "%.0f", (speedValue)) },
             set: { newValue in
                 if let value = Double(newValue),
-                   vm.isVerticalOffsetInRange(value: value){
-                    verticalOffset = vm.calculateVerticalOffset(value: value)
+                   isVerticalOffsetInRange(value: value){
+                    verticalOffset = calculateVerticalOffset(value: value)
                 }
             }
         )
     }
+    
+    func isVerticalOffsetInRange(value: Double) -> Bool {
+        let range = verticalRange()
+        let convertedValue = (170 - value) * unitHeight
+        return range.contains(convertedValue)
+    }
+    
+    func verticalStepperIncrement(value: Double) -> Double {
+        if value > -unitHeight * 89 {
+            return value - unitHeight
+        }
+        return -unitHeight * 90
+    }
+    
+    func verticalStepperDecrement(value: Double) -> Double {
+        if value < unitHeight * 129 {
+            return value + unitHeight
+        }
+        return unitHeight * 130
+    }
+    
+    func verticalRange() -> ClosedRange<CGFloat> {
+        let highestPoint = unitHeight * 130
+        let lowestPoint = -unitHeight * 90
+        return lowestPoint...highestPoint
+    }
+    
+    func calculateVerticalOffset(value: Double) -> Double {
+        if value < 1 {
+            return 0
+        }
+        var value = value
+        if isHighSpeed {
+            value /= 5
+        }
+        let result = (170 - value) * unitHeight
+        return result
+    }
+    
+    func getSpeedValue() -> Double {
+        let value = 170 - verticalOffset / unitHeight
+        return isHighSpeed ? 5 * value : value
+    }
 }
 
 #Preview {
-    @Previewable @State var vm = WindSideViewModel()
     @Previewable @State var verticalOffset: CGFloat = .zero
-    @Previewable var speedValue: CGFloat = .zero
-    WindSideTASSlider(vm: vm, verticalOffset: $verticalOffset, speedValue: speedValue)
+    @Previewable var unitHeight: Double = 20
+    WindSideTASSlider(verticalOffset: $verticalOffset, unitHeight: unitHeight, isHighSpeed: false)
 }

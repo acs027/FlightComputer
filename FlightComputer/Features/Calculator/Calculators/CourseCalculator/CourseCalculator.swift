@@ -44,4 +44,11 @@ struct CourseCalculator {
     var groundSpeed: Double {
         return sqrt(pow(trueAirSpeed - headWind, 2) + pow(crossWind, 2))
     }
+    
+    mutating func reset() {
+        heading = 0
+        trueAirSpeed = 0
+        windDirection = 0
+        windSpeed = 0
+    }
 }

@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct WindSideProLineAngleSlider: View {
-    let isAngleInRange: (_ value: Double) -> Bool
-    @Binding var lineAngle: Angle
+    @Binding var lineDegree: Double
     let title: String = "Angle:"
     
     var body: some View {
@@ -17,9 +16,9 @@ struct WindSideProLineAngleSlider: View {
     }
     var angleSlider: some View {
         VStack {
-            Slider(value: $lineAngle.degrees, in: -50...50, step: 1)
+            Slider(value: $lineDegree, in: -50...50, step: 1)
             
-            Stepper(value: $lineAngle.degrees, in: -50...50, step: 1) {
+            Stepper(value: $lineDegree, in: -50...50, step: 1) {
                 HStack {
                     Text(title)
                     TextField("Enter a number", text: angleFormattedBinding)
@@ -30,13 +29,18 @@ struct WindSideProLineAngleSlider: View {
     
     private var angleFormattedBinding: Binding<String> {
         Binding(
-            get: { String(format: "%.0f°", lineAngle.degrees) },
+            get: { String(format: "%.0f°", lineDegree) },
             set: { newValue in
-                if let value = Double(newValue), isAngleInRange(value) {
-                    lineAngle.degrees = value
+                if let value = Double(newValue), isLineAngleInRange(value: value) {
+                    lineDegree = value
                 }
             }
         )
+    }
+    
+    func isLineAngleInRange(value: Double) -> Bool {
+        let range: ClosedRange<Double> = -50...50
+        return range.contains(value)
     }
 }
 

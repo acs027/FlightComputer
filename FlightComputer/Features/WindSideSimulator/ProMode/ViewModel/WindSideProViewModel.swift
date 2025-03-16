@@ -28,18 +28,27 @@ enum ProController: CaseIterable {
 }
 
 @Observable
-class WindSideProViewModel: WindSideViewModelProtocol {
-    var step: WCACalculationSteps = .result
-    var mode: Mode = .normal
+class WindSideProViewModel {
+    var lineAngle: Double = 5
+    var windMarkOffset: CGFloat = 0
+    var verticalOffset: CGFloat = 0
     
+    var rotationDegree: Double = 0
     var windDirection: Double = 0
+    var lineAngleStartDegree: Double = 0
     
+    
+    var isHighSpeed: Bool = false
     var isWindDirectionReverse: Bool = false
-    var isWindMarkRotationEnabled: Bool = false
-    
     var islineShowing: Bool = false
     var isLineRotationEnabled: Bool = false
-    var lineAngleStartDegree: Double = 0
+    var isWindMarkRotationEnabled: Bool = false
+    
+    @ObservationIgnored var screenWidth: CGFloat = 1
+    @ObservationIgnored var componentWidth: CGFloat = 1
+    func scaleValueFitTheView() -> CGFloat  {
+        screenWidth / componentWidth
+    }
     
     var controller: ProController = .vertical
     var isControllerShowing = false
@@ -50,91 +59,8 @@ class WindSideProViewModel: WindSideViewModelProtocol {
         return height / 220
     }
     
-    var verticalRange: ClosedRange<CGFloat> {
-        let highestPoint = unitHeight * 130
-        let lowestPoint = -unitHeight * 90
-        return lowestPoint...highestPoint
-    }
-    
-    var markRange: ClosedRange<CGFloat> {
-        let highestPoint: CGFloat = .zero
-        let lowestPoint: CGFloat = -unitHeight * 50
-        return lowestPoint...highestPoint
-    }
-    
-    func verticalStepperIncrement(value: Double) -> Double {
-        if value > -unitHeight * 89 {
-            return value - unitHeight
-        }
-        return -unitHeight * 90
-    }
-    
-    func verticalStepperDecrement(value: Double) -> Double {
-        if value < unitHeight * 129 {
-            return value + unitHeight
-        }
-        return unitHeight * 130
-    }
-    
-    func markStepperIncrement(value: Double) -> Double {
-        if value > -unitHeight * 49 {
-            return value - unitHeight
-        }
-        return -unitHeight * 50
-    }
-    
-    func markStepperDecrement(value: Double) -> Double {
-        if value < -unitHeight {
-            return value + unitHeight
-        }
-        return 0
-    }
-    
-    func calculateVerticalOffset(value: Double) -> Double {
-        (170 - value) * unitHeight
-    }
-    
-    func calculateMarkOffset(value: Double) -> Double {
-        let markOffset = -value * unitHeight
-        return markOffset
-    }
-    
-    func isVerticalOffsetInRange(value: Double) -> Bool {
-        let highestPoint = unitHeight * 130
-        let lowestPoint = -unitHeight * 90
-        let range = lowestPoint...highestPoint
-        let convertedValue = (170 - value) * unitHeight
-        return range.contains(convertedValue)
-    }
-    
-    func isAngleInRange(value: Double) -> Bool {
-        let range: ClosedRange<Double> = 0...360
-        return range.contains(value)
-    }
-    
-    func isLineAngleInRange(value: Double) -> Bool {
-        let range: ClosedRange<Double> = -50...50
-        return range.contains(value)
-    }
-    
-    func isMarkInRange(value: Double) -> Bool {
-        let highestPoint: Double = 0
-        let lowestPoint = -unitHeight * 50
-        let range = lowestPoint...highestPoint
-        let convertedValue = -value * unitHeight
-        return range.contains(convertedValue)
-    }
-    
-    func speedValue(verticalOffset: Double) -> Double {
-        170 - verticalOffset / unitHeight
-    }
-    
-    func markDegree(rotation degrees: Double) -> Double {
-        (windDirection - degrees + 360).truncatingRemainder(dividingBy: 360)
-    }
-    
-    func markValue(markOffset: Double) -> Double {
-        -markOffset / unitHeight
+    func windMarkDegree() -> Double {
+        (windDirection - rotationDegree + 360).truncatingRemainder(dividingBy: 360)
     }
     
     func angleLineOffset(angle radian: Double) -> (x: Double, y: Double) {
@@ -143,11 +69,7 @@ class WindSideProViewModel: WindSideViewModelProtocol {
         return (x,y)
     }
     
-    func verticalOffsetByMode(vertical offset: Double) -> Double {
-        offset
-    }
-    
-    func markOffsetByMode(mark offset: Double) -> Double {
+    func windMarkOffsetByMode(mark offset: Double) -> Double {
         if isWindDirectionReverse {
                 return -offset
             } else {
@@ -155,21 +77,41 @@ class WindSideProViewModel: WindSideViewModelProtocol {
             }
     }
     
-    func calculateWindMarkDegree(windDirection degree: Double, rotation rotDegree: Double) -> Double {
-        if isWindMarkRotationEnabled {
-            return (degree - rotDegree + 360).truncatingRemainder(dividingBy: 360)
-        } else {
-            return 0
-        }
-    }
-    
-    func calculateLineDegree(rotation degree: Double) -> Double {
+    func lineDegree(rotation degree: Double) -> Double {
         if isLineRotationEnabled {
             return -degree + lineAngleStartDegree
         } else {
             return 0
         }
-        
     }
+    
+    func geometryChangeHandler(newValue: CGSize, oldValue: CGSize) {
+        if oldValue.height != newValue.height {
+            referenceHeight = newValue.height
+        }
+        if oldValue.width != newValue.width {
+            screenWidth = newValue.width
+        }
+        
+        if verticalOffset != 0 {
+            debugPrint(newValue)
+            verticalOffset *= newValue.height/oldValue.height
+        }
+        if windMarkOffset != 0 {
+            debugPrint("\(windMarkOffset)  markoffset")
+            windMarkOffset *= newValue.height/oldValue.height
+        }
+    }
+    
+    func backgroundOnAppearHandler(size: CGSize) {
+        let height = size.height
+        if screenWidth != size.width {
+            screenWidth = size.width
+        }
+        if referenceHeight != height {
+            referenceHeight = height
+        }
+    }
+    
     
 }

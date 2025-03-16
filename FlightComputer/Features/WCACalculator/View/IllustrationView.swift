@@ -94,7 +94,7 @@ struct IllustrationView: View {
             Rectangle()
                 .frame(width: Constants.markSize, height: Constants.markSize)
             Text("WCA: ")
-            Text(String(format: "%.0f", vm.wCACalculator.windCorrectionAngle ?? 0))
+            Text(String(format: "%.0f", vm.wCACalculator.windCorrectionAngle))
         }
         .foregroundStyle(Constants.ArrowColor.four)
     }
@@ -114,7 +114,7 @@ struct IllustrationView: View {
             Rectangle()
                 .frame(width: Constants.markSize, height: Constants.markSize)
             Text("Heading: ")
-            Text(String(format: "%.0f", vm.wCACalculator.heading ?? 0))
+            Text(String(format: "%.0f", vm.wCACalculator.heading))
         }
         .foregroundStyle(Constants.ArrowColor.third)
     }
@@ -124,7 +124,7 @@ struct IllustrationView: View {
             Rectangle()
                 .frame(width: Constants.markSize, height: Constants.markSize)
             Text("GS: ")
-            Text("\(Int(vm.wCACalculator.groundSpeed ?? 0))")
+            Text("\(Int(vm.wCACalculator.groundSpeed))")
         }
         .foregroundStyle(Constants.ArrowColor.second)
     }
@@ -190,7 +190,7 @@ struct IllustrationView: View {
             .fill(Constants.ArrowColor.third)
             .frame(width: 40, height: vm.tasArrowHeight)
             .offset(y: vm.tasArrowOffset) // Move arrow up to align its base to the center
-            .rotationEffect(.degrees(vm.wCACalculator.heading ?? 0), anchor: .center)
+            .rotationEffect(.degrees(vm.wCACalculator.heading), anchor: .center)
     }
 }
 

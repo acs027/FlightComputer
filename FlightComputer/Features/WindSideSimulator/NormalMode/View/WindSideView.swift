@@ -9,20 +9,12 @@ import SwiftUI
 
 struct WindSideView: View {
     @State var vm = WindSideViewModel()
-    @State var rotation: Angle = Angle(degrees: 0)
     
-//    var lineAngle: Angle = Angle(degrees: 10)
     @State var height: Double = 0
     
     @State var scale: CGFloat = 1
     @State var gestureScale: CGFloat = 1
     var totalScale: CGFloat { scale * gestureScale }
-    
-    
-    @GestureState var gestureTrueIndex: CGFloat = 0
-    @State var verticalOffset: CGFloat = 0
-    
-    @State var markOffset: CGFloat = 0
     
     @State var pan: CGOffset = .zero
     @State var gesturePan: CGOffset = .zero
@@ -36,7 +28,6 @@ struct WindSideView: View {
             values
         }
         .background(Constants.bgColor)
-        .animation(.easeInOut, value: verticalOffset)
         .simultaneousGesture(
             PanGesture(gesturePan: $gesturePan, pan: $pan)
             
@@ -50,11 +41,22 @@ struct WindSideView: View {
                 .presentationBackground(Constants.sheetBg)
                 .presentationDetents([.medium, .fraction(0.4)])
         }
-        .onChange(of: vm.step) { oldValue, newValue in
-            vm.handleStepChange(newValue: newValue)
+        .onChange(of: vm.calculationStepType) { oldValue, newValue in
+            if oldValue != newValue {
+                reset()
+                scale = vm.scaleValueFitTheView()
+            }
         }
-        .onChange(of: vm.mode) { oldValue, newValue in
-            new()
+        .onChange(of: vm.verticalOffset) { oldValue, newValue in
+            centerTheView()
+        }
+        .onChange(of: vm.isHighSpeed) { oldValue, newValue in
+            reset()
+        }
+        .onAppear {
+            DispatchQueue.main.async {
+                scale = vm.scaleValueFitTheView()
+            }
         }
     }
     
@@ -67,7 +69,13 @@ struct WindSideView: View {
         static let nextButtonColor: AnyGradient = Color.green.gradient
         static let backButtonColor: AnyGradient = Color.red.gradient
         static let sheetBg: Color = Color(.systemGroupedBackground)
-        static let centerButtonBgColor: Color = Color(.systemBackground)
+        static let centerButtonBgColor: Color = Color(.tertiarySystemBackground)
+    }
+    
+    func reset() {
+        withAnimation {
+            vm.reset()
+        }
     }
 }
 

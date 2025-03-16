@@ -13,32 +13,33 @@ struct WindDirectionSpeedCalculator {
     var trueCourse: Double = 0  // True course in degrees (from true north)
     var groundSpeed: Double = 0  // Ground speed in knots
     
-    private var headWind: Double? {
+    private var headWind: Double {
         let ySpeed = groundSpeed * cos(trueCourse * .pi / 180) - trueAirSpeed * cos(heading * .pi / 180)
         return ySpeed
     }
     
-    private var crossWind: Double? {
+    private var crossWind: Double {
         let xSpeed = groundSpeed * sin(trueCourse * .pi / 180) - trueAirSpeed * sin(heading * .pi / 180)
         return xSpeed
     }
     
     // Computed property for wind speed
     var windSpeed: Double {
-        guard let headWind = headWind,
-              let crossWind = crossWind else { return 0 }
         let windSpeed = sqrt(pow(headWind, 2) + pow(crossWind, 2))
         return windSpeed
     }
     
     // Computed property for wind direction
     var windDirection: Double {
-        guard let headWind = headWind,
-              let crossWind = crossWind else { return 0 }
-        
-        
         // Wind correction angle (WCA) approximation
         let angle =  atan2(-crossWind , -headWind) * 180 / .pi
         return (angle + 360).truncatingRemainder(dividingBy: 360)
+    }
+    
+    mutating func reset() {
+        trueCourse = 0
+        trueAirSpeed = 0
+        heading = 0
+        groundSpeed = 0
     }
 }
