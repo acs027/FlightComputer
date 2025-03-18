@@ -19,12 +19,12 @@ struct WindSideSimulatorView: View {
             }
             VStack {
                 HStack {
-                    Spacer()
                     switchModeButton
+                    Spacer()
                 }
                 Spacer()
             }
-            .padding(.horizontal, 20)
+            .padding(20)
         }
         .frame(maxHeight: .infinity)
     }

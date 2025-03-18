@@ -13,10 +13,12 @@ import Foundation
     var calculationStepType: CalculationStepType = .driftHeading(.tas)
     
     var verticalOffset: CGFloat = .zero
-    var windMarkOffset: CGFloat = .zero
+    var windMarkOffset: CGSize = .zero
     
     var rotation: Double = 0
+
     var windDirection: Double = 0
+
     
     var isHighSpeed: Bool = false
     var isWindMarkRotationEnable: Bool = false
@@ -49,24 +51,18 @@ import Foundation
         return (windDirection - rotation + 360).truncatingRemainder(dividingBy: 360)
     }
     
+    //MARK: -Values
     func speedValue() -> Double {
-        print(verticalOffset)
         let value = 170 - verticalOffset / unitHeight
         return isHighSpeed ? value * 5 : value
     }
     
     func windSpeedValue() -> Double {
-        let value = -windMarkOffset / unitHeight
+        let value = -windMarkOffset.height / unitHeight
         return isHighSpeed ? value * 5 : value
     }
-    
-    func handleStepChange(newValue: WCACalculationSteps) {
-        if newValue == .result {
-            isValuesShowing = true
-            isControllerShowing = false
-        }
-    }
-    
+        
+    //MARK: -Reset function
     func reset() {
         rotation = 0
         windDirection = 0
@@ -77,6 +73,8 @@ import Foundation
         calculationService = CalculationService()
     }
     
+    
+    //MARK: -Next button handler
     func nextButtonHandler() {
         switch calculationStepType {
         case .driftHeading(let driftHeadingStep):
@@ -105,11 +103,16 @@ import Foundation
                 windDirection = 0
             }
         case .windCalculator(let windCalculatorStep):
-            return
+            if windCalculatorStep == .groundSpeed {
+                isWindMarkRotationEnable = false
+                windDirection = 0
+            }
         }
         calculationStepType.back()
     }
     
+    
+    //MARK: -Value Setters
     func valueSetterForDriftHeading(step: DriftHeadingStep) {
         switch step {
         case .windDirection:
@@ -125,6 +128,7 @@ import Foundation
         case .windDirection:
             windDirection = rotation
             isWindMarkRotationEnable = true
+            return
         default:
             return
         }
@@ -132,19 +136,16 @@ import Foundation
     
     func valueSetterForWindCalculator(step: WindCalculatorStep) {
         switch step {
-        case .tas:
-            return
-        case .track:
-            return
-        case .heading:
-            return
         case .groundSpeed:
+            windDirection = calculationService.windCalculator.heading
+            isWindMarkRotationEnable = true
             return
-        case .result:
+        default:
             return
         }
     }
     
+    //MARK: -Geometry Change Handlers
     func geometryChangeHandler(newValue: CGSize, oldValue: CGSize) {
         if oldValue.height != newValue.height {
             referenceHeight = newValue.height
@@ -157,9 +158,9 @@ import Foundation
             debugPrint(newValue)
             verticalOffset *= newValue.height/oldValue.height
         }
-        if windMarkOffset != 0 {
+        if windMarkOffset.height != 0 {
             debugPrint("\(windMarkOffset)  markoffset")
-            windMarkOffset *= newValue.height/oldValue.height
+            windMarkOffset.height *= newValue.height/oldValue.height
         }
     }
     

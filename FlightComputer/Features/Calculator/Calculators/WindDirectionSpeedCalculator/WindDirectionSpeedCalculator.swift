@@ -36,6 +36,10 @@ struct WindDirectionSpeedCalculator {
         return (angle + 360).truncatingRemainder(dividingBy: 360)
     }
     
+    var drift: Double {
+        heading - trueCourse
+    }
+    
     mutating func reset() {
         trueCourse = 0
         trueAirSpeed = 0

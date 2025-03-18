@@ -66,8 +66,8 @@ struct WindSideView: View {
         static let controllerViewFgColor: Color = .primary
         static let mainButtonColor: AnyGradient = Color.blue.gradient
         static let buttonTextColor: Color = Color(.tertiarySystemBackground)
-        static let nextButtonColor: AnyGradient = Color.green.gradient
-        static let backButtonColor: AnyGradient = Color.red.gradient
+        static let nextButtonColor: Color = Color.green
+        static let backButtonColor: Color = Color.red
         static let sheetBg: Color = Color(.systemGroupedBackground)
         static let centerButtonBgColor: Color = Color(.tertiarySystemBackground)
     }

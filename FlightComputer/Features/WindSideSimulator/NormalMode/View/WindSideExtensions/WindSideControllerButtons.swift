@@ -14,11 +14,15 @@ extension WindSideView {
             HStack {
                 Spacer()
                 VStack(spacing: 30) {
-                    Color.clear.frame(width: 50, height: 50)
-                    switchToTrackButton
-                    switchToHeadingButton
-                    switchToWindButton
-                    centerButton
+                    ExpandableButton(content: {
+                        VStack {
+                            switchToTrackButton
+                            switchToHeadingButton
+                            switchToWindButton
+                            centerButton
+                            highSpeedButton
+                        }
+                    })
                 }
             }
             Spacer()
@@ -30,6 +34,10 @@ extension WindSideView {
             .frame(height: 50)
         }
         .padding(20)
+    }
+    
+    var highSpeedButton: some View {
+        CircleButton(function: toggleSpeed, tint: Constants.centerButtonBgColor, title: "Speed")
     }
     
     var switchToTrackButton: some View {
@@ -53,67 +61,70 @@ extension WindSideView {
             vm.isControllerShowing.toggle()
         } label: {
             UnevenRoundedRectangle(topLeadingRadius: 15, bottomLeadingRadius: 15)
+                .fill(.primary)
                 .frame(maxWidth: 200)
                 .overlay {
-                    Text("Set Values")
-                        .foregroundStyle(Constants.buttonTextColor)
+                    ZStack {
+                        UnevenRoundedRectangle(topLeadingRadius: 15, bottomLeadingRadius: 15)
+                            .stroke(.secondary, lineWidth: 1.5)
+                            .shadow(color: .black, radius: 0.5)
+                        Text("Set Values")
+                            .foregroundStyle(Constants.buttonTextColor)
+                    }
                 }
         }
     }
     
     var toggleValuesButton: some View {
         Button {
-            vm.isValuesShowing.toggle()
+            withAnimation {
+                vm.isValuesShowing.toggle()
+            }
         } label: {
             UnevenRoundedRectangle(bottomTrailingRadius: 15, topTrailingRadius: 15)
+                .fill(.primary)
                 .frame(maxWidth: 200)
                 .overlay {
-                    Text("Toggle Values")
-                        .foregroundStyle(Constants.buttonTextColor)
+                    ZStack {
+                        UnevenRoundedRectangle(bottomTrailingRadius: 15, topTrailingRadius: 15)
+                            .stroke(.secondary, lineWidth: 1.5)
+                            .shadow(color: .black, radius: 0.5)
+                        Text("Toggle Values")
+                            .foregroundStyle(Constants.buttonTextColor)
+                    }
                 }
         }
     }
-    
+
+    // Next Button
     var nextButton: some View {
-        Button {
-            vm.nextButtonHandler()
-        } label: {
-            Text("Next")
-                .foregroundStyle(Constants.buttonTextColor)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 15)
-                        .foregroundStyle(Constants.nextButtonColor)
-                )
-        }
+        ControllerButton(function: vm.nextButtonHandler, color: ButtonConstants.buttonTextColor, fillColor: ButtonConstants.nextButtonColor, systemImage: "chevron.right", title: "Next")
     }
-    
+
+    // Back Button
     var backButton: some View {
-        Button {
-            vm.backButtonHandler()
-        } label: {
-            Text("Back")
-                .foregroundStyle(Constants.buttonTextColor)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 15)
-                        .foregroundStyle(Constants.backButtonColor)
-                )
-        }
+        ControllerButton(function: vm.backButtonHandler, color: ButtonConstants.buttonTextColor, fillColor: ButtonConstants.backButtonColor, systemImage: "chevron.left", title: "Back")
     }
-    
+
+    // New Button
     var newButton: some View {
-        Button {
-            reset()
-        } label: {
-            Text("New")
-                .foregroundStyle(Constants.buttonTextColor)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 15)
-                        .foregroundStyle(Constants.nextButtonColor)
-                )
-        }
+        ControllerButton(function: reset, color: ButtonConstants.buttonTextColor, fillColor: ButtonConstants.nextButtonColor, systemImage: "plus", title: "New")
+    }
+
+    // Updated Constants Example (assuming you want to keep your existing constants)
+    struct ButtonConstants {
+        // Original colors
+//        struct Button {
+            static let buttonTextColor = Color.white
+            static let nextButtonColor = Color.blue
+            static let backButtonColor = Color.red
+//        }
+        
+        
+        // Additional modern color suggestions
+        static let modernNextColor = Color(red: 0.2, green: 0.5, blue: 0.9)
+        static let modernBackColor = Color(red: 0.6, green: 0.2, blue: 0.2)
+        static let modernToggleColor = Color.gray.opacity(0.3)
     }
     
     func switchToTrack() {
@@ -133,4 +144,10 @@ extension WindSideView {
             pan.height = -vm.verticalOffset
         }
     }
+    
+    
+    func toggleSpeed() {
+        vm.isHighSpeed.toggle()
+    }
+    
 }

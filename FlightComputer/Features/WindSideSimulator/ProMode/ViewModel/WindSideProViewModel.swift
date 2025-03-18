@@ -60,7 +60,10 @@ class WindSideProViewModel {
     }
     
     func windMarkDegree() -> Double {
-        (windDirection - rotationDegree + 360).truncatingRemainder(dividingBy: 360)
+        if !isWindMarkRotationEnabled {
+            return 0
+        }
+        return (windDirection - rotationDegree + 360).truncatingRemainder(dividingBy: 360)
     }
     
     func angleLineOffset(angle radian: Double) -> (x: Double, y: Double) {

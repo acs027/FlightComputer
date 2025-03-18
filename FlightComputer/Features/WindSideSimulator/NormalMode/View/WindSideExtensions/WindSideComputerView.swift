@@ -18,6 +18,7 @@ extension WindSideView {
                 markOnRotor
                 lineOnRotor
             }
+            .offset(y: -vm.unitHeight * 0.5)
         }
         // Enables users to move and scale content for better inspection.
         .offset(totalPan)
@@ -76,8 +77,9 @@ extension WindSideView {
     var markOnRotor: some View {
         Group {
             Circle()
-                .frame(width: 10)
-                .offset(y: -vm.windMarkOffset)
+                .frame(width: 5)
+                .offset(x: vm.windMarkOffset.width)
+                .offset(y: -vm.windMarkOffset.height)
                 .rotationEffect(Angle(degrees: vm.windMarkDegree()))
         }
         .offset(y: vm.verticalOffset)
@@ -86,8 +88,8 @@ extension WindSideView {
     var lineOnRotor: some View {
         Group {
             Rectangle()
-                .frame(width: 1, height: abs(vm.windMarkOffset))
-                .offset(y: -vm.windMarkOffset / 2)
+                .frame(width: 1, height: abs(vm.windMarkOffset.height))
+                .offset(y: -vm.windMarkOffset.height / 2)
                 .rotationEffect(Angle(degrees: vm.windMarkDegree()))
         }
         .offset(y: vm.verticalOffset )

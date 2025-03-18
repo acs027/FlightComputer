@@ -127,7 +127,7 @@ enum DriftTrackStep: CalculationStep, CaseIterable {
 }
 
 enum WindCalculatorStep: CalculationStep, CaseIterable {
-    case tas, track, heading, groundSpeed, result
+    case tas, track, heading, groundSpeed, windValues,  result
     
     var title: String {
         switch self {
@@ -139,6 +139,8 @@ enum WindCalculatorStep: CalculationStep, CaseIterable {
             "Heading"
         case .groundSpeed:
             "Ground Speed"
+        case .windValues:
+            "WindSpeed / Direction"
         case .result:
             "Result"
         }

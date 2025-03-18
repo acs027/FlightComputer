@@ -32,12 +32,12 @@ extension WindSideProView {
             HStack {
                 Spacer()
                 VStack(spacing: 30) {
-                    Color.clear.frame(width: 50, height: 50)
-                    resetButton
-                    centerButton
-                    highSpeedButton
+                    ExpandableButton {
+                        resetButton
+                        centerButton
+                        highSpeedButton
+                    }
                 }
-                
             }
             Spacer()
             HStack {
@@ -120,7 +120,7 @@ extension WindSideProView {
     }
     
     var resetButton: some View {
-        CircleButton(function: reset, tint: .white, title: "Reset")
+        CircleButton(function: reset, tint: Constants.centerButtonBgColor, title: "Reset")
     }
     
     

@@ -38,9 +38,11 @@ extension WindSideView {
                 case .track:
                     rotationSlider(title: step.title)
                 case .heading:
-                    rotationSlider(title: step.title)
+                    rotationSlider(title: step.title, isLimited: true, track: vm.calculationService.windCalculator.trueCourse, tas: vm.speedValue())
                 case .groundSpeed:
-                    windSpeedSlider()
+                    WindSideGroundSpeedSlider(markOffset: $vm.windMarkOffset, verticalOffset: vm.verticalOffset, unitHeight: vm.unitHeight, isHighSpeed: vm.isHighSpeed, drift: vm.calculationService.windCalculator.drift, groundSpeed: vm.calculationService.setGroundSpeed)
+                case .windValues:
+                    rotationSlider(title: step.title)
                 case .result:
                     newButton
                 }
@@ -93,8 +95,8 @@ extension WindSideView {
         }
     }
     
-    func rotationSlider(title: String) -> some View {
-        WindSideAngleSlider(rotation: $vm.rotation, title: title)
+    func rotationSlider(title: String, isLimited: Bool = false, track: Double = 0, tas: Double = 0) -> some View {
+        WindSideAngleSlider(rotation: $vm.rotation, title: title, isLimited: isLimited, previousValue: track, trueAirSpeed: tas)
     }
     
     func verticalSlider(title: String) -> some View {
@@ -102,6 +104,6 @@ extension WindSideView {
     }
     
     func windSpeedSlider() -> some View {
-        WindSideWindSpeedSlider(markOffset: $vm.windMarkOffset, unitHeight: vm.unitHeight, isHighSpeed: vm.isHighSpeed)
+        WindSideWindSpeedSlider(markOffset: $vm.windMarkOffset.height, unitHeight: vm.unitHeight, isHighSpeed: vm.isHighSpeed)
     }
 }
