@@ -26,72 +26,22 @@ extension WindSideView {
     }
     
     var windSideBackground: some View {
-        GeometryReader { geometry in
-            ZStack {
-                Image("windsidebackground")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: geometry.size.width)
-                    .onChange(of: geometry.size) { oldValue, newValue in
-                        vm.geometryChangeHandler(newValue: newValue, oldValue: oldValue)
-                    }
-                    .onAppear {
-                        vm.backgroundOnAppearHandler(size: geometry.size)
-                    }
-                Image("windsidehighspeedoverlay")
-                    .resizable()
-                    .scaledToFit()
-                    .opacity(vm.isHighSpeed ? 1 : 0)
-            }
-            
-        }
+        WindBaseLayer(geometryChangeHandler: vm.geometryChangeHandler, backgroundOnAppearHandler: vm.backgroundOnAppearHandler, isHighSpeed: vm.isHighSpeed)
     }
     
     var windSideStator: some View {
-        Image("windsiderotorouter")
-            .resizable()
-            .scaledToFit()
-            .offset(y: vm.verticalOffset)
-            .overlay {
-                GeometryReader {
-                    geometry in
-                    Color.clear
-                        .onChange(of: geometry.size.width) { oldValue, newValue in
-                            vm.componentWidth = geometry.size.width
-                        }
-                        .onAppear{
-                            vm.componentWidth = geometry.size.width
-                        }
-                }
-            }
+        WindStatorDisc(verticalOffset: vm.verticalOffset, componentWidth: $vm.componentWidth)
     }
     
     var windSideRotor: some View {
-        Image("windsiderotor")
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .rotationEffect(Angle(degrees: -vm.rotation), anchor: UnitPoint(x: 0.5, y: 0.5))
-            .offset(y: vm.verticalOffset)
+        WindRotorDisc(rotation: vm.rotation, verticalOffset: vm.verticalOffset)
     }
     
     var markOnRotor: some View {
-        Group {
-            Circle()
-                .frame(width: 5)
-                .offset(x: vm.windMarkOffset.width)
-                .offset(y: -vm.windMarkOffset.height)
-                .rotationEffect(Angle(degrees: vm.windMarkDegree()))
-        }
-        .offset(y: vm.verticalOffset)
+        WindMarkOnRotor(verticalOffset: vm.verticalOffset, windMarkOffset: vm.windMarkOffset, windMarkDegree: vm.windMarkDegree)
     }
     
     var lineOnRotor: some View {
-        Group {
-            Rectangle()
-                .frame(width: 1, height: abs(vm.windMarkOffset.height))
-                .offset(y: -vm.windMarkOffset.height / 2)
-                .rotationEffect(Angle(degrees: vm.windMarkDegree()))
-        }
-        .offset(y: vm.verticalOffset )
+        LineToWindMarkOnRotor(verticalOffset: vm.verticalOffset, windMarkOffset: vm.windMarkOffset, windMarkDegree: vm.windMarkDegree)
     }
 }

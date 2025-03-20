@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 @Observable class WindSideViewModel {
     var calculationService = CalculationService()
     

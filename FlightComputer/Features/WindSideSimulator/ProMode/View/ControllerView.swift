@@ -54,7 +54,7 @@ extension WindSideProView {
                                 RoundedRectangle(cornerRadius: 15)
                                     .fill(.noteditabletextfieldbg)
                             )
-                            
+                        
                     }
                 }
             }
@@ -64,11 +64,6 @@ extension WindSideProView {
     
     var rotationController: some View {
         VStack {
-            HStack {
-                Text("Enable line rotation: ")
-                Spacer()
-                tideLineAngleButton
-            }
             HStack {
                 Text("Enable wind speed mark rotation: ")
                 Spacer()
@@ -101,13 +96,38 @@ extension WindSideProView {
                 Text("Show Line ")
                 Spacer()
                 toggleLineButton
+                
             }
             HStack {
                 Text("Enable line rotation :")
                 Spacer()
                 tideLineAngleButton
+                
             }
             lineSlider
+            HStack {
+                Button(action: addLine) {
+                    Text("Add Line")
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+                Spacer()
+                ForEach(vm.lineAngleInfos, id:\.id) { lineAngle in
+                    Text(String(format: "%.0f", (lineAngle.degree)) )
+                        .shadow(radius: 0.5)
+                        .frame(width: 40, height: 50)
+                        .background(
+                            RoundedRectangle(cornerRadius: 5)
+                                .stroke(lineWidth: 3)
+                                .foregroundStyle(.red)
+                        )
+                        .onTapGesture {
+                            vm.lineAngleInfos.removeAll(where: {$0.id == lineAngle.id})
+                        }
+                }  
+            }
         }
     }
     
@@ -133,7 +153,7 @@ extension WindSideProView {
     }
     
     var windSlider: some View {
-        WindSideWindSpeedSlider(markOffset: $vm.windMarkOffset, unitHeight: vm.unitHeight, isHighSpeed: vm.isHighSpeed)
+        WindSideWindSpeedSlider(markOffset: $vm.windMarkOffset.height, unitHeight: vm.unitHeight, isHighSpeed: vm.isHighSpeed)
     }
     
     var lineSlider: some View {
@@ -158,7 +178,7 @@ extension WindSideProView {
     
     //MARK: Functions
     func centerView() {
-        let offset = cos(Angle(degrees: vm.windMarkDegree()).radians) * vm.windMarkOffset
+        let offset = cos(Angle(degrees: vm.windMarkDegree()).radians) * vm.windMarkOffset.height
         pan.height = -vm.verticalOffset
         pan.width = -offset
     }
@@ -184,5 +204,9 @@ extension WindSideProView {
     
     func toggleSpeed() {
         vm.isHighSpeed.toggle()
+    }
+    
+    func addLine() {
+        vm.addLine()
     }
 }

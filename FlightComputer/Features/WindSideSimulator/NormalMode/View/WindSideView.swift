@@ -24,8 +24,10 @@ struct WindSideView: View {
     var body: some View {
         ZStack(alignment: .center) {
             windSideComponents
+            title
             controllerButtons
             values
+            
         }
         .background(Constants.bgColor)
         .simultaneousGesture(
@@ -58,6 +60,23 @@ struct WindSideView: View {
                 scale = vm.scaleValueFitTheView()
             }
         }
+    }
+    
+    var title: some View {
+        Text(vm.calculationStepType.title)
+            .font(.headline)
+            .bold()
+            .minimumScaleFactor(0.5)
+            .lineLimit(1)
+            .frame(maxWidth: 220)
+            .background(
+                RoundedRectangle(cornerRadius: 25)
+                    .fill(Color.textfieldbg)
+                    .frame(height: 50)
+            )
+            .frame(maxHeight: .infinity, alignment: .top)
+            .padding(.top, 20)
+            .padding(.top)
     }
     
     //MARK: Constants

@@ -19,7 +19,6 @@ struct CustomTextFieldView: View {
                 .font(.subheadline)
             HStack {
                 TextField(placeHolder, value: $value, format: .number)
-                    .keyboardType(.decimalPad)
                     .textFieldStyle(CustomTextFieldStyle())
                 if let unit = unit {
                     Text(unit)

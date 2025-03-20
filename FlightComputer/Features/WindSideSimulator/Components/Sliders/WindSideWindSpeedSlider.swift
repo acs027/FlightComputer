@@ -27,7 +27,7 @@ struct WindSideWindSpeedSlider: View {
             Stepper {
                 HStack {
                     Text("Wind speed: ")
-                    TextField("Enter a number", text: markFormattedBinding)
+                    TextField("Wind Speed", text: markFormattedBinding)
                 }
             } onIncrement: {
                 markOffset = windMarkStepperIncrement(value: markOffset)

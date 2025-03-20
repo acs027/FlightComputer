@@ -12,7 +12,10 @@ struct WindSideProLineAngleSlider: View {
     let title: String = "Angle:"
     
     var body: some View {
-        angleSlider
+        VStack {
+            angleSlider
+        }
+        
     }
     var angleSlider: some View {
         VStack {

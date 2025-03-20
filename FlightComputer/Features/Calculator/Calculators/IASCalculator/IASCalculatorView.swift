@@ -21,6 +21,7 @@ struct IASCalculatorView: View {
 
             calculators
         }
+        .navigationTitle("Indicated Air Speed")
     }
     
     @ViewBuilder

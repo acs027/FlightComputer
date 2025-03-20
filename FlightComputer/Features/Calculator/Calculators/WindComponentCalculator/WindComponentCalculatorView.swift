@@ -18,6 +18,15 @@ struct WindComponentCalculatorView: View {
                 computedResults
             }
         }
+        .navigationTitle("Wind Component")
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    focused = nil
+                }
+            }
+        }
     }
     
     var userInputs: some View {

@@ -7,41 +7,29 @@
 
 import Foundation
 
-enum ProController: CaseIterable {
-    case vertical
-    case rotation
-    case wind
-    case line
-    
-    var systemImage: String {
-        switch self {
-        case .vertical:
-            "arrow.up.and.line.horizontal.and.arrow.down"
-        case .rotation:
-            "arrow.trianglehead.2.clockwise.rotate.90"
-        case .wind:
-            "wind"
-        case .line:
-            "line.horizontal.3.decrease"
-        }
-    }
+struct LineAngleInfo {
+    let id: UUID = UUID()
+    var degree: Double
+    var rotation:Double
+    var isDynamic: Bool
 }
 
 @Observable
 class WindSideProViewModel {
-    var lineAngle: Double = 5
-    var windMarkOffset: CGFloat = 0
+    var windMarkOffset: CGSize = .zero
     var verticalOffset: CGFloat = 0
+    
+    var lineAngleInfos: [LineAngleInfo] = []
+    var lineAngle: Double = 5
+    var lineAngleStartDegree: Double = 0
+    var islineShowing: Bool = false
+    var isLineRotationEnabled: Bool = false
     
     var rotationDegree: Double = 0
     var windDirection: Double = 0
-    var lineAngleStartDegree: Double = 0
-    
     
     var isHighSpeed: Bool = false
     var isWindDirectionReverse: Bool = false
-    var islineShowing: Bool = false
-    var isLineRotationEnabled: Bool = false
     var isWindMarkRotationEnabled: Bool = false
     
     @ObservationIgnored var screenWidth: CGFloat = 1
@@ -72,17 +60,19 @@ class WindSideProViewModel {
         return (x,y)
     }
     
-    func windMarkOffsetByMode(mark offset: Double) -> Double {
+    func windMarkOffsetByMode() -> CGSize {
         if isWindDirectionReverse {
-                return -offset
+            var newWindMarkOffset = windMarkOffset
+            newWindMarkOffset.height = -windMarkOffset.height
+            return newWindMarkOffset
             } else {
-                return offset
+                return windMarkOffset
             }
     }
     
-    func lineDegree(rotation degree: Double) -> Double {
-        if isLineRotationEnabled {
-            return -degree + lineAngleStartDegree
+    func lineDegree(rotation degree: Double, startDegree: Double, isDynamic: Bool) -> Double {
+        if isDynamic {
+            return -degree + startDegree
         } else {
             return 0
         }
@@ -100,9 +90,9 @@ class WindSideProViewModel {
             debugPrint(newValue)
             verticalOffset *= newValue.height/oldValue.height
         }
-        if windMarkOffset != 0 {
+        if windMarkOffset.height != 0 {
             debugPrint("\(windMarkOffset)  markoffset")
-            windMarkOffset *= newValue.height/oldValue.height
+            windMarkOffset.height *= newValue.height/oldValue.height
         }
     }
     
@@ -116,5 +106,11 @@ class WindSideProViewModel {
         }
     }
     
-    
+    func addLine() {
+        if lineAngleInfos.count < 5 {
+            let line = LineAngleInfo(degree: lineAngle, rotation: rotationDegree, isDynamic: isLineRotationEnabled)
+            lineAngleInfos.append(line)
+        }
+        return
+    }
 }

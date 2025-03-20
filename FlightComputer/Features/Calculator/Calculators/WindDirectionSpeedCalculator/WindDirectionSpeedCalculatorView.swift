@@ -18,6 +18,15 @@ struct WindDirectionSpeedCalculatorView: View {
                 computedResults
             }
         }
+        .navigationTitle("Wind")
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    focused = nil
+                }
+            }
+        }
     }
     
     var userInputs: some View {

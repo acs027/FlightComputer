@@ -24,7 +24,7 @@ struct WindSideGroundSpeedSlider: View {
             }
             .onAppear {
                 if groundSpeedValue < 1 {
-                    groundSpeedValue = verticalOffset / unitHeight
+                    groundSpeedValue = abs(170 - verticalOffset / unitHeight)
                 }
             }
     }
@@ -37,7 +37,7 @@ struct WindSideGroundSpeedSlider: View {
             Stepper {
                 HStack {
                     Text("Ground speed: ")
-                    TextField("Enter a number", text: markFormattedBinding)
+                    TextField("Ground speed", text: markFormattedBinding)
                 }
             } onIncrement: {
                 groundSpeedValue = windMarkStepperIncrement(value: groundSpeedValue)
@@ -71,10 +71,7 @@ struct WindSideGroundSpeedSlider: View {
     }
     
     func windMarkRange() -> ClosedRange<CGFloat> {
-//        let aPoint: CGFloat = (170 - verticalOffset / unitHeight - 50) / cos(drift * .pi / 180)
         let aPoint: CGFloat = (170 - verticalOffset / unitHeight - 50)
-//        let aPoint: CGFloat = .zero
-//        let bPoint: CGFloat = (170 - verticalOffset / unitHeight + 50) / cos(drift * .pi / 180)
         let bPoint: CGFloat = (170 - verticalOffset / unitHeight + 50)
         let range = aPoint...bPoint
         return range
@@ -82,7 +79,7 @@ struct WindSideGroundSpeedSlider: View {
     
     func markOffsetCalculator() {
         markOffset.width = -groundSpeedValue * sin(drift * .pi / 180) * unitHeight
-        markOffset.height = -(170 - cos(drift * .pi / 180) * groundSpeedValue) * unitHeight
+        markOffset.height = -(170 - verticalOffset/unitHeight - cos(-drift * .pi / 180) * groundSpeedValue) * unitHeight
     }
 
     func windMarkStepperIncrement(value: Double) -> Double {
@@ -98,4 +95,8 @@ struct WindSideGroundSpeedSlider: View {
         }
         return windMarkRange().lowerBound
     }
+}
+
+#Preview {
+    WindSideSimulatorView()
 }

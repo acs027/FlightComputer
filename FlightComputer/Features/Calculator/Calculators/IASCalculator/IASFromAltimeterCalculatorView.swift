@@ -16,6 +16,14 @@ struct IASFromAltimeterCalculatorView: View {
             userInputs
             computedResults
         }
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    focused = nil
+                }
+            }
+        }
     }
 
     var userInputs: some View {

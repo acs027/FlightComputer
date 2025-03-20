@@ -18,6 +18,15 @@ struct SpeedOfSoundCalculatorView: View {
                 computedResults
             }
         }
+        .navigationTitle("Speed of sound")
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    focused = nil
+                }
+            }
+        }
     }
     
     var userInputs: some View {

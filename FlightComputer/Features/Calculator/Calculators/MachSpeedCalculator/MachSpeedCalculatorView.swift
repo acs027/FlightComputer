@@ -23,6 +23,15 @@ struct MachSpeedCalculatorView: View {
                 machNumber
             }
         }
+        .navigationTitle("Mach Speed Calculator")
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    focused = nil
+                }
+            }
+        }
     }
 
     var altitude: some View {

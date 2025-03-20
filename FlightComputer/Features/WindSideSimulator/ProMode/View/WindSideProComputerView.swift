@@ -27,131 +27,33 @@ extension WindSideProView {
     }
     
     var windSideBackground: some View {
-        GeometryReader { geometry in
-            ZStack {
-                Image("windsidebackground")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: geometry.size.width)
-                    .onChange(of: geometry.size) { oldValue, newValue in
-                        vm.geometryChangeHandler(newValue: newValue, oldValue: oldValue)
-                    }
-                    .onAppear {
-                        vm.backgroundOnAppearHandler(size: geometry.size)
-                    }
-                Image("windsidehighspeedoverlay")
-                    .resizable()
-                    .scaledToFit()
-                    .opacity(vm.isHighSpeed ? 1 : 0)
-            }
-        }
+        WindBaseLayer(geometryChangeHandler: vm.geometryChangeHandler, backgroundOnAppearHandler: vm.backgroundOnAppearHandler, isHighSpeed: vm.isHighSpeed)
     }
     
     var windSideStator: some View {
-        Image("windsiderotorouter")
-            .resizable()
-            .scaledToFit()
-            .offset(y: vm.verticalOffset)
-            .overlay {
-                GeometryReader {
-                    geometry in
-                    Color.clear
-                        .onChange(of: geometry.size.width) { oldValue, newValue in
-                            vm.componentWidth = geometry.size.width
-                        }
-                        .onAppear{
-                            vm.componentWidth = geometry.size.width
-                        }
-                }
-            }
+        WindStatorDisc(verticalOffset: vm.verticalOffset, componentWidth: $vm.componentWidth)
     }
     
     var windSideRotor: some View {
-        Image("windsiderotor")
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-//            .offset(
-//                x: sin(-Angle(degrees: vm.rotationDegree).radians) * vm.verticalOffset ,
-//                y: cos(-Angle(degrees: vm.rotationDegree).radians) * vm.verticalOffset
-//            )
-            .rotationEffect(-Angle(degrees: vm.rotationDegree), anchor: UnitPoint(x: 0.5, y: 0.5))
-            .offset(y: vm.verticalOffset)
+        WindRotorDisc(rotation: vm.rotationDegree, verticalOffset: vm.verticalOffset)
     }
     
     var markOnRotor: some View {
-        Group {
-            Circle()
-                .frame(width: 10)
-                .offset(y: vm.windMarkOffsetByMode(mark: vm.windMarkOffset))
-            //                .rotationEffect(Angle(degrees: vm.markDegree(rotation: rotation.degrees)))
-                .rotationEffect(Angle(degrees: vm.windMarkDegree()))
-        }
-        .offset(y: vm.verticalOffset)
+        WindMarkOnRotor(verticalOffset: vm.verticalOffset, windMarkOffset: vm.windMarkOffsetByMode(), windMarkDegree: vm.windMarkDegree)
     }
     
     var lineOnRotor: some View {
-        Group {
-            Rectangle()
-                .frame(width: 1, height: abs(vm.windMarkOffset))
-                .offset(y: vm.windMarkOffsetByMode(mark: vm.windMarkOffset) / 2)
-                .rotationEffect(Angle(degrees: vm.windMarkDegree()))
-        }
-        .offset(y: vm.verticalOffset)
+        LineToWindMarkOnRotor(verticalOffset: vm.verticalOffset, windMarkOffset: vm.windMarkOffsetByMode(), windMarkDegree: vm.windMarkDegree)
     }
     
     
     var dynamicLineOnAngle: some View {
-        Rectangle()
-            .frame(width: 3, height: abs(260 * vm.unitHeight))
-            .opacity(0)
-//            .offset(y: -vm.unitHeight * 2.5)
-            .foregroundStyle(.blue)
-            .overlay {
-                lineOnAngle
-                    .foregroundStyle(.green)
-            }
-            .rotationEffect(Angle(degrees: vm.lineDegree(rotation: vm.rotationDegree)), anchor: UnitPoint(x: 0.5, y: (130 + vm.verticalOffset / vm.unitHeight) / 260))
-//            .rotationEffect(-rotation, anchor: UnitPoint(x: 0.5, y: (130 + verticalOffset / vm.unitHeight) / 260))
-            .mask {
-                lineOnAngleMask
-            }
-            .opacity(vm.islineShowing ? 1 : 0)
+//        DynamicDriftAngleLine(vm: vm)
+        DriftAngleLine(vm: vm, isDynamic: true)
+//        DynamicDriftAngleLine(vm: vm)
     }
     
     var staticLineOnAngle: some View {
-        Rectangle()
-            .frame(width: 3, height: abs(260 * vm.unitHeight))
-            .opacity(0)
-//            .offset(y: -vm.unitHeight * 2.5)
-            .foregroundStyle(.blue)
-            .overlay {
-                lineOnAngle
-                    .foregroundStyle(.blue)
-            }
-            .mask {
-                lineOnAngleMask
-            }
-            .opacity(vm.islineShowing ? 1 : 0)
-    }
-    
-    private var lineOnAngleMask: some View {
-        Circle()
-            .frame(width: vm.unitHeight * 100)
-            .offset(
-                x: sin(-Angle(degrees: vm.rotationDegree).radians) * vm.verticalOffset,
-                y: cos(-Angle(degrees: vm.rotationDegree).radians) * vm.verticalOffset
-            )
-            .rotationEffect(-Angle(degrees: vm.rotationDegree))
-    }
-    
-    private var lineOnAngle: some View {
-        Rectangle()
-            .frame(width: 2, height: abs(260 * vm.unitHeight))
-//            .offset(y: -vm.unitHeight * 2.5)
-            .rotationEffect(Angle(degrees: vm.lineAngle), anchor: .bottom)
-            .offset(
-                x: vm.angleLineOffset(angle: Angle(degrees: vm.lineAngle).radians).x,
-                y: vm.angleLineOffset(angle: Angle(degrees: vm.lineAngle).radians).y
-            )
+        DriftAngleLine(vm: vm, isDynamic: false)
     }
 }

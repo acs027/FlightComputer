@@ -12,12 +12,23 @@ struct CourseCalculatorView: View {
     @FocusState var focused: FocusField?
     
     var body: some View {
-        ScrollView {
-            VStack {
-                userInputs
-                computedResults
+//        NavigationStack {
+            ScrollView {
+                VStack {
+                    userInputs
+                    computedResults
+                }
             }
-        }
+            .navigationTitle("Course")
+            .toolbar {
+                ToolbarItem(placement: .keyboard) {
+                    Button("Done") {
+                        focused = nil
+                    }
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                }
+            }
+//        }
     }
     
     var userInputs: some View {

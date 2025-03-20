@@ -20,6 +20,7 @@ struct TASCalculatorView: View {
             .pickerStyle(.segmented)
             calculators
         }
+        .navigationTitle("True Air Speed")
     }
     
     @ViewBuilder

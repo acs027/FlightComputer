@@ -24,7 +24,7 @@ struct WindSideAngleSlider: View {
             Stepper(value: $rotation, in: angleRange(), step: 1) {
                 HStack {
                     Text(title)
-                    TextField("Enter a number", text: angleFormattedBinding)
+                    TextField("Degree", text: angleFormattedBinding)
                 }
             }
         }
@@ -32,7 +32,7 @@ struct WindSideAngleSlider: View {
     
     private var angleFormattedBinding: Binding<String> {
         Binding(
-            get: { String(format: "%.0f°", (rotation + 360).truncatingRemainder(dividingBy: 360)) },
+            get: { String(format: "%.0f", (rotation + 360).truncatingRemainder(dividingBy: 360)) },
             set: { newValue in
                 if let value = Double(newValue), isAngleInRange(value: value) {
                     rotation = (value + 360).truncatingRemainder(dividingBy: 360)
@@ -65,6 +65,5 @@ struct WindSideAngleSlider: View {
 
 #Preview {
     @Previewable @State var rotation: Double = 0
-    @Previewable var step: WCACalculationSteps = .trueCourse
     WindSideAngleSlider(rotation: $rotation)
 }

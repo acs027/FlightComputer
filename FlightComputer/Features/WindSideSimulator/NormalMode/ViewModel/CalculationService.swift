@@ -53,7 +53,6 @@ class CalculationService {
         case .heading:
             windCalculator.heading = angle
         case .groundSpeed:
-//            windCalculator.groundSpeed = markValue
             return
         default:
             return
@@ -63,8 +62,6 @@ class CalculationService {
     func setGroundSpeed(value: Double) {
         windCalculator.groundSpeed = value
     }
-    
-    
     
     func results(type: CalculationStepType) -> [(label: String, value: Double, type: ValueType)] {
         switch type {

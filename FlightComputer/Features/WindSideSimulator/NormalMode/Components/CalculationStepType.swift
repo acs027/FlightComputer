@@ -17,6 +17,17 @@ enum CalculationStepType: Equatable {
     case driftTrack(DriftTrackStep)
     case windCalculator(WindCalculatorStep)
     
+    var title: String {
+        switch self {
+        case .driftHeading(_):
+            "Calculation with Heading"
+        case .driftTrack(_):
+            "Calculation with Track"
+        case .windCalculator(_):
+            "Wind Calculation"
+        }
+    }
+    
     mutating func next() {
             switch self {
             case .driftHeading(var step):

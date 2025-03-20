@@ -28,7 +28,7 @@ struct WindSideTASSlider: View {
             Stepper {
                 HStack {
                     Text("\(title): ")
-                    TextField("Enter a number", text: verticalFormattedBinding)
+                    TextField("True Air Speed", text: verticalFormattedBinding)
                 }
             } onIncrement: {
                 verticalOffset = verticalStepperIncrement(value: verticalOffset)

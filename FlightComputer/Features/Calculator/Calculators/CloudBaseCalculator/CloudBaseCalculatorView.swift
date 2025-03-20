@@ -18,6 +18,15 @@ struct CloudBaseCalculatorView: View {
                 userInputs
                 computedResults
         }
+        .navigationTitle("Cloud Base")
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    focused = nil
+                }
+            }
+        }
     }
     
     var userInputs: some View {

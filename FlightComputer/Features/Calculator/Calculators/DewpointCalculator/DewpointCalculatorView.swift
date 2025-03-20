@@ -20,6 +20,15 @@ struct DewpointCalculatorView: View {
                 computedResults
             }
         }
+        .navigationTitle("Dewpoint")
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    focused = nil
+                }
+            }
+        }
     }
 
     var userInputs: some View {

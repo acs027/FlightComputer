@@ -10,6 +10,7 @@ import SwiftUI
 enum Tab: String, CaseIterable {
     case unitConverter = "Unit Converter"
     case windCalculator = "WCA Simulator"
+    case slideRuleSide = "Flight Computer"
     case wcaCalculator = "WCA Calculator"
     case calculator = "Calculator"
     
@@ -23,19 +24,22 @@ enum Tab: String, CaseIterable {
             return "angle"
         case .calculator:
             return "plusminus"
+        default:
+            return "angle"
         }
     }
 }
 
 struct MainTabView: View {
-    @State private var selectedTab: Tab = .unitConverter
+    @State private var selectedTab: Tab = .slideRuleSide
     
     var body: some View {
         TabView(selection: $selectedTab) {
             Group {
-                unitConversionView
+                frontSideView
                 windSideView
                 wcaCalculator
+                unitConversionView
                 calculator
             }
             .toolbarBackground(.visible, for: .tabBar)
@@ -77,12 +81,24 @@ struct MainTabView: View {
     var calculator: some View {
         NavigationStack {
             CalculatorListView()
+                .navigationBarTitleDisplayMode(.inline)
         }
         .tabItem {
             Label(Tab.calculator.rawValue,
                   systemImage: Tab.calculator.systemImage)
         }
         .tag(Tab.calculator)
+    }
+    
+    var frontSideView: some View {
+        NavigationStack {
+            SlideRuleSideView()
+        }
+        .tabItem {
+            Label(Tab.windCalculator.rawValue,
+                  systemImage: Tab.windCalculator.systemImage)
+        }
+        .tag(Tab.windCalculator)
     }
 }
 
