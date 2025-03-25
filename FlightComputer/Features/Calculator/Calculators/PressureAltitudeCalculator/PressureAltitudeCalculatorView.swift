@@ -56,7 +56,7 @@ struct PressureAltitudeCalculatorView: View {
         }
         .focused($focused, equals: .altimeterSetting)
         .onSubmit {
-            focused?.next()
+            focused = focused?.next()
         }
     }
 
@@ -74,7 +74,7 @@ struct PressureAltitudeCalculatorView: View {
         }
         .focused($focused, equals: .fieldElevation)
         .onSubmit {
-            focused?.next()
+            focused = focused?.next()
         }
     }
 
@@ -85,17 +85,15 @@ struct PressureAltitudeCalculatorView: View {
 
 extension PressureAltitudeCalculatorView {
     enum FocusField {
-        case altimeterSetting, fieldElevation, notFocused
+        case altimeterSetting, fieldElevation
         
-        mutating func next() {
+        func next() -> FocusField? {
             switch self {
                 
             case .altimeterSetting:
-                self = .fieldElevation
+                return .fieldElevation
             case .fieldElevation:
-                self = .notFocused
-            default:
-                self = .altimeterSetting
+                return nil
             }
         }
     }

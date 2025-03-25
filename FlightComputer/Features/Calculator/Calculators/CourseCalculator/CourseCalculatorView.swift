@@ -52,7 +52,7 @@ struct CourseCalculatorView: View {
         CustomTextFieldView(title: "Heading", value: $vm.courseCalculator.heading, placeHolder: "Heading")
             .focused($focused, equals: .heading)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
             
     }
@@ -60,21 +60,21 @@ struct CourseCalculatorView: View {
         CustomTextFieldView(title: "True Air Speed", value: $vm.courseCalculator.trueAirSpeed, placeHolder: "TAS")
             .focused($focused, equals: .trueAirSpeed)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     var windDirection: some View {
         CustomTextFieldView(title: "Wind Direction", value: $vm.courseCalculator.windDirection, placeHolder: "Wind Direction")
             .focused($focused, equals: .windDirection)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     var windSpeed: some View {
         CustomTextFieldView(title: "Wind Speed", value: $vm.courseCalculator.windSpeed, placeHolder: "Wind speed")
             .focused($focused, equals: .windSpeed)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     var course: some View {
@@ -90,20 +90,18 @@ struct CourseCalculatorView: View {
 
 extension CourseCalculatorView {
     enum FocusField {
-        case heading, trueAirSpeed, windDirection, windSpeed, notFocused
+        case heading, trueAirSpeed, windDirection, windSpeed
         
-        mutating func next() {
+        func next() -> FocusField? {
             switch self {
             case .heading:
-                self = .trueAirSpeed
+                return .trueAirSpeed
             case .trueAirSpeed:
-                self = .windDirection
+                return .windDirection
             case .windDirection:
-                self = .windSpeed
+                return .windSpeed
             case .windSpeed:
-                self = .notFocused
-            default:
-                self = .heading
+                return nil
             }
         }
     }

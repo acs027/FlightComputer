@@ -57,7 +57,7 @@ struct SpeedOfSoundCalculatorView: View {
         }
         .focused($focused, equals: .altitude)
         .onSubmit {
-            focused?.next()
+            focused = focused?.next()
         }
     }
     
@@ -75,7 +75,7 @@ struct SpeedOfSoundCalculatorView: View {
         }
         .focused($focused, equals: .standartTemp)
         .onSubmit {
-            focused?.next()
+            focused = focused?.next()
         }
     }
     
@@ -96,16 +96,14 @@ struct SpeedOfSoundCalculatorView: View {
 
 extension SpeedOfSoundCalculatorView {
     enum FocusField {
-        case altitude, standartTemp, notFocused
+        case altitude, standartTemp
         
-        mutating func next() {
+        func next() ->FocusField? {
             switch self {
             case .altitude:
-                self = .standartTemp
+                return .standartTemp
             case .standartTemp:
-                self = .notFocused
-            default:
-                self = .altitude
+                return nil
             }
         }
     }

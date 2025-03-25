@@ -7,28 +7,9 @@
 
 import SwiftUI
 
-extension FuelConsumptionView {
-    enum Focus {
-        case flightTime
-        case fuelPerHour
-        case notFocused
-        
-        mutating func next() {
-            switch self {
-            case .flightTime:
-                self = .fuelPerHour
-            case .fuelPerHour:
-                self = .notFocused
-            case .notFocused:
-                return
-            }
-        }
-    }
-}
-
 struct FuelConsumptionView: View {
     @State var vm: WindCorrectionViewModel
-    @FocusState var focused: Focus?
+    @FocusState.Binding var focused: WindCorrectionCalculatorView.WCACalculatorFocus?
     
     var body: some View {
         VStack {
@@ -51,7 +32,7 @@ struct FuelConsumptionView: View {
         TimeTextFieldView(title: "Flight Time", value: $vm.fuelConsumptionCalc.flightTime, placeHolder: "Flight Time")
             .focused($focused, equals: .flightTime)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     
@@ -59,7 +40,7 @@ struct FuelConsumptionView: View {
         CustomTextFieldView(title: "Fuel per hour", value: $vm.fuelConsumptionCalc.fuelPerHour, placeHolder: "Fuel per hour")
             .focused($focused, equals: .fuelPerHour)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     
@@ -68,7 +49,7 @@ struct FuelConsumptionView: View {
     }
 }
 
-#Preview {
-    @Previewable @State var vm = WindCorrectionViewModel()
-    FuelConsumptionView(vm: vm)
-}
+//#Preview {
+//    @Previewable @State var vm = WindCorrectionViewModel()
+//    FuelConsumptionView(vm: vm)
+//}

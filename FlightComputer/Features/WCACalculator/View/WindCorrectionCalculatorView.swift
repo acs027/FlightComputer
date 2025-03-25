@@ -8,25 +8,34 @@
 import SwiftUI
 
 extension WindCorrectionCalculatorView {
-    enum WCAFocus {
+    enum WCACalculatorFocus: Hashable {
         case windDirectionTextField
         case windSpeedTextField
         case courseTextField
         case trueAirSpeedTextField
-        case notFocused
+        case distanceField
+        case groundSpeed
+        case flightTime
+        case fuelPerHour
         
-        mutating func next() {
+        func next() -> WCACalculatorFocus? {
             switch self {
             case .windDirectionTextField:
-                self = .windSpeedTextField
+                return .windSpeedTextField
             case .windSpeedTextField:
-                self = .courseTextField
+                return .courseTextField
             case .courseTextField:
-                self = .trueAirSpeedTextField
+                return .trueAirSpeedTextField
             case .trueAirSpeedTextField:
-                self = .notFocused
-            case .notFocused:
-                return
+                return nil
+            case .distanceField:
+                return .groundSpeed
+            case .groundSpeed:
+                return nil
+            case .flightTime:
+                return .fuelPerHour
+            case .fuelPerHour:
+                return nil
             }
         }
     }
@@ -34,7 +43,7 @@ extension WindCorrectionCalculatorView {
 
 struct WindCorrectionCalculatorView: View {
     @State var vm = WindCorrectionViewModel()
-    @FocusState var focused: WCAFocus?
+    @FocusState var focused: WCACalculatorFocus?
     
     let columns = [
 //            GridItem(.flexible()),
@@ -50,12 +59,23 @@ struct WindCorrectionCalculatorView: View {
             VStack(spacing: 10) {
                 IllustrationView(vm: vm)
                 wcaCalcComponents
-                FlightTimeCalculatorView(vm: vm)
-                FuelConsumptionView(vm: vm)
+                FlightTimeCalculatorView(vm: vm, focused: $focused)
+                FuelConsumptionView(vm: vm, focused: $focused)
             }
         }
         .scrollIndicators(.hidden)
         .background(Constants.bgColor)
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    focused = nil
+                }
+                Button("Next") {
+                    focused = focused?.next()
+                }
+            }
+        }
     }
     
     var wcaCalcComponents: some View {
@@ -74,7 +94,7 @@ struct WindCorrectionCalculatorView: View {
         CustomTextFieldView(title: "Wind Direction", value: $vm.wCACalculator.windDirection, placeHolder: "Enter wind direction")
             .focused($focused, equals: .windDirectionTextField)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     
@@ -82,21 +102,21 @@ struct WindCorrectionCalculatorView: View {
         CustomTextFieldView(title: "Wind Speed", value: $vm.wCACalculator.windSpeed, placeHolder: "Enter wind speed")
             .focused($focused, equals: .windSpeedTextField)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     var courseTextField: some View {
         CustomTextFieldView(title: "Course", value: $vm.wCACalculator.trueCourse, placeHolder: "Enter the course")
             .focused($focused, equals: .courseTextField)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     var trueAirSpeedTextField: some View {
         CustomTextFieldView(title: "True Air Speed", value: $vm.wCACalculator.trueAirSpeed, placeHolder: "Enter TAS")
             .focused($focused, equals: .trueAirSpeedTextField)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     

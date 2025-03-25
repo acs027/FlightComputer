@@ -49,7 +49,7 @@ struct WindDirectionSpeedCalculatorView: View {
         CustomTextFieldView(title: "Aircraft Heading", value: $vm.windDirectionSpeedCalculator.heading, placeHolder: "Heading (° from North)")
             .focused($focused, equals: .heading)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     
@@ -57,7 +57,7 @@ struct WindDirectionSpeedCalculatorView: View {
         CustomTextFieldView(title: "True Airspeed", value: $vm.windDirectionSpeedCalculator.trueAirSpeed, placeHolder: "TAS (knots)")
             .focused($focused, equals: .tas)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     
@@ -65,7 +65,7 @@ struct WindDirectionSpeedCalculatorView: View {
         CustomTextFieldView(title: "True Course", value: $vm.windDirectionSpeedCalculator.trueCourse, placeHolder: "Course (° from North)")
             .focused($focused, equals: .trueCourse)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     
@@ -73,7 +73,7 @@ struct WindDirectionSpeedCalculatorView: View {
         CustomTextFieldView(title: "Ground Speed", value: $vm.windDirectionSpeedCalculator.groundSpeed, placeHolder: "Ground Speed (knots)")
             .focused($focused, equals: .groundSpeed)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     
@@ -88,20 +88,18 @@ struct WindDirectionSpeedCalculatorView: View {
 
 extension WindDirectionSpeedCalculatorView {
     enum FocusField {
-        case heading, tas, trueCourse, groundSpeed, notFocused
+        case heading, tas, trueCourse, groundSpeed
         
-        mutating func next() {
+        func next() -> FocusField? {
             switch self {
             case .heading:
-                self = .tas
+                return .tas
             case .tas:
-                self = .trueCourse
+                return .trueCourse
             case .trueCourse:
-                self = .groundSpeed
+                return .groundSpeed
             case .groundSpeed:
-                self = .notFocused
-            default:
-                self = .heading
+                return nil
             }
         }
     }

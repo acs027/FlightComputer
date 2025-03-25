@@ -60,7 +60,7 @@ struct DensityAltitudeCalculatorView: View {
         }
         .focused($focused, equals: .pressureAltitude)
         .onSubmit {
-            focused?.next()
+            focused = focused?.next()
         }
     }
     
@@ -68,7 +68,7 @@ struct DensityAltitudeCalculatorView: View {
         CustomTextFieldView(title: "True Altitude", value: $vm.calculator.trueAltitude, placeHolder: "True Altitude", unit: vm.calculator.pressureAltitudeUnit.symbol)
             .focused($focused, equals: .trueAltitude)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
        
     }
@@ -87,7 +87,7 @@ struct DensityAltitudeCalculatorView: View {
         }
         .focused($focused, equals: .oat)
         .onSubmit {
-            focused?.next()
+            focused = focused?.next()
         }
     }
 
@@ -102,19 +102,17 @@ struct DensityAltitudeCalculatorView: View {
 
 extension DensityAltitudeCalculatorView {
     enum FocusField {
-        case pressureAltitude, trueAltitude, oat, notFocused
+        case pressureAltitude, trueAltitude, oat
         
-        mutating func next() {
+        func next() -> FocusField? {
             switch self {
                 
             case .pressureAltitude:
-                self = .trueAltitude
+                return .trueAltitude
             case .trueAltitude:
-                self = .oat
+                return .oat
             case .oat:
-                self = .notFocused
-            default:
-                self = .pressureAltitude
+                return nil
             }
         }
     }

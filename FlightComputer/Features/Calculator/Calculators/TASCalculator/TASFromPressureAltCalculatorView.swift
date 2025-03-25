@@ -46,7 +46,7 @@ struct TASFromPressureAltCalculatorView: View {
         CustomTextFieldView(title: "Pressure Altitude", value: $vm.tasFromPressureAltCalculator.pressureAltitude, placeHolder: "Altitude (m)")
             .focused($focused, equals: .pressureAltitude)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     
@@ -54,7 +54,7 @@ struct TASFromPressureAltCalculatorView: View {
         CustomTextFieldView(title: "Outside Air Temperature", value: $vm.tasFromPressureAltCalculator.outsideAirTemp, placeHolder: "Temperature (°C)")
             .focused($focused, equals: .oat)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     
@@ -62,7 +62,7 @@ struct TASFromPressureAltCalculatorView: View {
         CustomTextFieldView(title: "Indicated Air Speed", value: $vm.tasFromPressureAltCalculator.indicatedAirSpeed, placeHolder: "Indicated Air Speed (IAS) (knots)")
             .focused($focused, equals: .ias)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     
@@ -73,18 +73,16 @@ struct TASFromPressureAltCalculatorView: View {
 
 extension TASFromPressureAltCalculatorView {
     enum FocusField {
-        case pressureAltitude, oat, ias, notFocused
+        case pressureAltitude, oat, ias
         
-        mutating func next() {
+        func next() -> FocusField? {
             switch self {
             case .pressureAltitude:
-                self = .oat
+                return .oat
             case .oat:
-                self = .ias
+                return .ias
             case .ias:
-                self = .notFocused
-            default:
-                self = .pressureAltitude
+                return nil
             }
         }
     }

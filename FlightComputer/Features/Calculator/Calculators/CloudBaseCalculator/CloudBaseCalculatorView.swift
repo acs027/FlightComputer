@@ -57,7 +57,7 @@ struct CloudBaseCalculatorView: View {
         }
         .focused($focused, equals: .ambientTemp)
         .onSubmit {
-            focused?.next()
+            focused = focused?.next()
         }
     }
     
@@ -75,7 +75,7 @@ struct CloudBaseCalculatorView: View {
         }
         .focused($focused, equals: .ambientDewpoint)
         .onSubmit {
-            focused?.next()
+            focused = focused?.next()
         }
     }
     
@@ -93,7 +93,7 @@ struct CloudBaseCalculatorView: View {
         }
         .focused($focused, equals: .stationAltitude)
         .onSubmit {
-            focused?.next()
+            focused = focused?.next()
         }
     }
     
@@ -104,18 +104,16 @@ struct CloudBaseCalculatorView: View {
 
 extension CloudBaseCalculatorView {
     enum FocusField {
-        case ambientTemp, ambientDewpoint, stationAltitude, notFocused
+        case ambientTemp, ambientDewpoint, stationAltitude
         
-        mutating func next() {
+        func next() -> FocusField? {
             switch self {
             case .ambientTemp:
-                self = .ambientDewpoint
+                return .ambientDewpoint
             case .ambientDewpoint:
-                self = .stationAltitude
+                return .stationAltitude
             case .stationAltitude:
-                self = .notFocused
-            default:
-                self = .ambientTemp
+                return nil
             }
         }
     }

@@ -20,6 +20,7 @@ struct CustomTextFieldView: View {
             HStack {
                 TextField(placeHolder, value: $value, format: .number)
                     .textFieldStyle(CustomTextFieldStyle())
+                    
                 if let unit = unit {
                     Text(unit)
                 }

@@ -56,7 +56,7 @@ struct RelativeHumidityCalculatorView: View {
         }
         .focused($focused, equals: .airTemp)
         .onSubmit {
-            focused?.next()
+            focused = focused?.next()
         }
     }
 
@@ -64,7 +64,7 @@ struct RelativeHumidityCalculatorView: View {
         CustomTextFieldView(title: "Dewpoint", value: $vm.calculator.dewpoint, placeHolder: "Dewpoint", unit: vm.calculator.tempUnit.symbol)
             .focused($focused, equals: .dewpoint)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
 
@@ -75,16 +75,14 @@ struct RelativeHumidityCalculatorView: View {
 
 extension RelativeHumidityCalculatorView {
     enum FocusField {
-        case airTemp, dewpoint, notFocused
+        case airTemp, dewpoint
         
-        mutating func next() {
+        func next() -> FocusField? {
             switch self {
             case .airTemp:
-                self = .dewpoint
+                return .dewpoint
             case .dewpoint:
-                self = .notFocused
-            default:
-                self = .airTemp
+                return nil
             }
         }
     }

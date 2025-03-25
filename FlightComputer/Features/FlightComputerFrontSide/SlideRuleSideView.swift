@@ -59,12 +59,13 @@ struct SlideRuleSideView: View {
     }
     
     var slider: some View {
-        WindSideAngleSlider(rotation: $vm.rotationDegree)
+        FlightComputerSlider(rotation: $vm.rotationDegree)
+            .padding()
             .background(
                 RoundedRectangle(cornerRadius: 10)
                     .foregroundStyle(Constants.sheetBg)
             )
-            .padding()
+            .padding(5)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
     }
     

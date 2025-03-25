@@ -49,7 +49,7 @@ struct MachSpeedCalculatorView: View {
         }
         .focused($focused, equals: .altitude)
         .onSubmit {
-            focused?.next()
+            focused = focused?.next()
         }
     }
 
@@ -67,7 +67,7 @@ struct MachSpeedCalculatorView: View {
         }
         .focused($focused, equals: .standartTemp)
         .onSubmit {
-            focused?.next()
+            focused = focused?.next()
         }
     }
 
@@ -91,7 +91,7 @@ struct MachSpeedCalculatorView: View {
         }
         .focused($focused, equals: .speed)
         .onSubmit {
-            focused?.next()
+            focused = focused?.next()
         }
     }
 
@@ -103,18 +103,16 @@ struct MachSpeedCalculatorView: View {
 
 extension MachSpeedCalculatorView {
     enum FocusField {
-        case altitude, standartTemp, speed, notFocused
+        case altitude, standartTemp, speed
 
-        mutating func next() {
+        func next() -> FocusField? {
             switch self {
             case .altitude:
-                self = .standartTemp
+                return .standartTemp
             case .standartTemp:
-                self = .speed
+                return .speed
             case .speed:
-                self = .notFocused
-            default:
-                self = .altitude
+                return nil
             }
         }
     }

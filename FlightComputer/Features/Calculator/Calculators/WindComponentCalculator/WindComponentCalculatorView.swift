@@ -48,7 +48,7 @@ struct WindComponentCalculatorView: View {
         CustomTextFieldView(title: "Wind Speed", value: $vm.windComponentCalculator.windSpeed, placeHolder: "Wind Speed (knots)")
             .focused($focused, equals: .windSpeed)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     
@@ -56,7 +56,7 @@ struct WindComponentCalculatorView: View {
         CustomTextFieldView(title: "Wind Direction", value: $vm.windComponentCalculator.windDirection, placeHolder: "Wind Direction (° from North)")
             .focused($focused, equals: .windDirection)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     
@@ -64,7 +64,7 @@ struct WindComponentCalculatorView: View {
         CustomTextFieldView(title: "Runway Heading", value: $vm.windComponentCalculator.runwayHeading, placeHolder: "Runway Heading (°)")
             .focused($focused, equals: .runwayHeading)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     
@@ -79,18 +79,16 @@ struct WindComponentCalculatorView: View {
 
 extension WindComponentCalculatorView {
     enum FocusField {
-        case windSpeed, windDirection, runwayHeading, notFocused
+        case windSpeed, windDirection, runwayHeading
         
-        mutating func next() {
+        func next() -> FocusField? {
             switch self {
             case .windSpeed:
-                self = .windDirection
+                return .windDirection
             case .windDirection:
-                self = .runwayHeading
+                return .runwayHeading
             case .runwayHeading:
-                self = .notFocused
-            default:
-                self = .windSpeed
+                return nil
             }
         }
     }

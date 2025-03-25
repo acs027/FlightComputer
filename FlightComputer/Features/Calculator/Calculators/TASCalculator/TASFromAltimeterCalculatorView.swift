@@ -45,7 +45,7 @@ struct TASFromAltimeterCalculatorView: View {
         CustomTextFieldView(title: "Indicated Altitude", value: $vm.tasFromAltimeterCalculator.indicatedAltitude, placeHolder: "Altitude (ft or m)")
             .focused($focused, equals: .indicatedAltitude)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     
@@ -53,7 +53,7 @@ struct TASFromAltimeterCalculatorView: View {
         CustomTextFieldView(title: "Altimeter Setting", value: $vm.tasFromAltimeterCalculator.altimeterSetting, placeHolder: "Altimeter Setting (in/hg or hpa)")
             .focused($focused, equals: .altimeterSetting)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     
@@ -61,7 +61,7 @@ struct TASFromAltimeterCalculatorView: View {
         CustomTextFieldView(title: "Outside Air Temperature", value: $vm.tasFromAltimeterCalculator.outsideAirTemp, placeHolder: "Temperature (°C)")
             .focused($focused, equals: .oat)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     
@@ -69,7 +69,7 @@ struct TASFromAltimeterCalculatorView: View {
         CustomTextFieldView(title: "Indicated Air Speed", value: $vm.tasFromAltimeterCalculator.indicatedAirSpeed, placeHolder: "Indicated Air Speed (IAS) (knots)")
             .focused($focused, equals: .ias)
             .onSubmit {
-                focused?.next()
+                focused = focused?.next()
             }
     }
     
@@ -80,20 +80,18 @@ struct TASFromAltimeterCalculatorView: View {
 
 extension TASFromAltimeterCalculatorView {
     enum FocusField {
-        case indicatedAltitude, altimeterSetting, oat, ias, notFocused
+        case indicatedAltitude, altimeterSetting, oat, ias
         
-        mutating func next() {
+        func next() -> FocusField? {
             switch self {
             case .indicatedAltitude:
-                self = .altimeterSetting
+                return .altimeterSetting
             case .altimeterSetting:
-                self = .oat
+                return .oat
             case .oat:
-                self = .ias
+                return .ias
             case .ias:
-                self = .notFocused
-            default:
-                self = .indicatedAltitude
+                return nil
             }
         }
     }
