@@ -9,19 +9,14 @@ import SwiftUI
 
 struct OnboardingView: View {
     @State private var currentPage = 0
+    @State var vm = OnboardingViewModel()
     @Environment(\.dismiss) var dismiss
-    
-    private let pages: [OnboardingPage] = [
-        OnboardingPage(image: "airplane", title: "Welcome to E6B Flight Computer", description: "Tool for aviation calculations."),
-        OnboardingPage(image: "speedometer", title: "Calculations", description: "Compute wind correction angle, ground speed, and more."),
-        OnboardingPage(image: "gear", title: "Easy to Use", description: "Designed for pilots, with intuitive controls.")
-    ]
     
     var body: some View {
         VStack {
             TabView(selection: $currentPage) {
-                ForEach(0..<pages.count, id: \.self) { index in
-                    OnboardingPageView(page: pages[index])
+                ForEach(0..<vm.pages.count, id: \.self) { index in
+                    OnboardingPageView(page: vm.pages[index])
                         .tag(index)
                 }
             }
@@ -34,13 +29,13 @@ struct OnboardingView: View {
                 .padding()
             
             Button(action: {
-                if currentPage < pages.count - 1 {
+                if currentPage < vm.pages.count - 1 {
                     currentPage += 1
                 } else {
                     dismiss()
                 }
             }) {
-                Text(currentPage < pages.count - 1 ? "Next" : "Get Started")
+                Text(currentPage < vm.pages.count - 1 ? "Next" : "Get Started")
                     .font(.headline)
                     .frame(maxWidth: .infinity)
                     .padding()

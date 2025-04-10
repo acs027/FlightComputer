@@ -9,6 +9,8 @@ import SwiftUI
 
 struct CalculatorListView: View {
     @State var viewModel = CalculatorViewModel()
+    @EnvironmentObject var adManager: InterstitialAdManager
+    @Environment(\.dismiss) var dismiss
     let gridItems = [
         GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())
     ]
@@ -20,11 +22,12 @@ struct CalculatorListView: View {
                     NavigationLink {
                         calculator.calculatorView
                             .background(Color(.systemGroupedBackground))
+                            .onAppear {
+                                adManager.showAd()
+                            }
                     } label: {
                         calculatorLabel(calculator: calculator)
                     }
-
-                  
                 }
             }
         }

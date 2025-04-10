@@ -8,30 +8,31 @@
 import SwiftUI
 
 enum Tab: String, CaseIterable {
-    case unitConverter = "Unit Converter"
-    case windCalculator = "WCA Simulator"
-    case slideRuleSide = "Flight Computer"
-    case wcaCalculator = "WCA Calculator"
+    case unitConverter = "Converters"
+    case windSide = "Wind Side"
+    case frontSide = "Front Side"
+    case wcaCalculator = "Drift"
     case calculator = "Calculator"
     
     var systemImage: String {
         switch self {
         case .unitConverter:
             return "arrow.2.squarepath"
-        case .windCalculator:
+        case .windSide:
             return "wind"
+        case .frontSide:
+            return "circle.dashed.inset.filled"
         case .wcaCalculator:
             return "angle"
         case .calculator:
             return "plusminus"
-        default:
-            return "angle"
         }
     }
 }
 
 struct MainTabView: View {
-    @State private var selectedTab: Tab = .slideRuleSide
+    @State private var selectedTab: Tab = .frontSide
+    @EnvironmentObject var adManager: InterstitialAdManager
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -45,12 +46,16 @@ struct MainTabView: View {
             .toolbarBackground(.visible, for: .tabBar)
             .toolbarBackground(Color(.secondarySystemBackground), for: .tabBar)
             .toolbarColorScheme(.dark, for: .tabBar)
+            .onChange(of: selectedTab) { oldValue, newValue in
+                adManager.showAd()
+            }            
         }
     }
     
     var unitConversionView: some View {
         NavigationStack {
             UnitConversionGridView()
+                .navigationBarTitleDisplayMode(.inline)
         }
         .tabItem {
             Label(Tab.unitConverter.rawValue,
@@ -63,10 +68,10 @@ struct MainTabView: View {
             WindSideSimulatorView()
         }
         .tabItem {
-            Label(Tab.windCalculator.rawValue,
-                  systemImage: Tab.windCalculator.systemImage)
+            Label(Tab.windSide.rawValue,
+                  systemImage: Tab.windSide.systemImage)
         }
-        .tag(Tab.windCalculator)
+        .tag(Tab.windSide)
     }
     var wcaCalculator: some View {
         NavigationStack {
@@ -95,10 +100,10 @@ struct MainTabView: View {
             SlideRuleSideView()
         }
         .tabItem {
-            Label(Tab.windCalculator.rawValue,
-                  systemImage: Tab.windCalculator.systemImage)
+            Label(Tab.frontSide.rawValue,
+                  systemImage: Tab.frontSide.systemImage)
         }
-        .tag(Tab.windCalculator)
+        .tag(Tab.frontSide)
     }
 }
 

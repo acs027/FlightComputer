@@ -9,13 +9,24 @@ import SwiftUI
 
 @main
 struct FlightComputerApp: App {
-    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = true
+//    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = true
+    @State var hasSeenOnboarding: Bool = true
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @State var isAdsShowed: Bool = false
+    @State var adManager = InterstitialAdManager()
+    
     var body: some Scene {
         WindowGroup {
-            MainTabView()
-                .fullScreenCover(isPresented: $hasSeenOnboarding) {
-                    OnboardingView()
-                }
+            VStack {
+                    BannerContentView(navigationTitle: "Banner")
+                        .frame(width: 320, height: 50)
+                Spacer()
+                MainTabView()
+                    .environmentObject(adManager)
+            }
+            .fullScreenCover(isPresented: $hasSeenOnboarding) {
+                OnboardingView()
+            }
         }
     }
 }

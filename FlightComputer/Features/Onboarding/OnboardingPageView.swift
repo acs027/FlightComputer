@@ -19,6 +19,7 @@ struct OnboardingPageView: View {
                 .foregroundColor(.blue)
             Text(page.title)
                 .font(.title)
+                .multilineTextAlignment(.center)
                 .bold()
             Text(page.description)
                 .font(.body)

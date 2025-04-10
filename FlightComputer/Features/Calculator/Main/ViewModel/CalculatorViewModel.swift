@@ -8,9 +8,6 @@
 import Foundation
 
 @Observable class CalculatorViewModel {
-
-    
-  
 }
 
 enum Calculator: CaseIterable {
