@@ -17,30 +17,57 @@ struct TASFromAltimeterCalculator {
     var altimeterSettingUnit = Pressure.inchesOfMercury // Unit for altimeter setting
     var outsideAirTempUnit = Temperature.celsius // Unit for outside air temperature
     var indicatedAirSpeedUnit = Speed.knots // Unit for indicated airspeed
-
-    // Constants
-    private let seaLevelPressure = 1013.25 // Sea level pressure in hPa (1013.25 hPa = 29.92 inHg)
-    private let lapseRate = 0.0065 // Temperature lapse rate in K/m
-    private let seaLevelTemp = 288.15 // Standard temperature at sea level in Kelvin
-    
-    // Convert the altitude and pressure to pressure altitude
-    private var pressureAltitude: Double {
-        let altitudeInMeters = indicatedAltitudeUnit.convert(value: indicatedAltitude, to: .meters)
-        let pressureAltitudeInMeters = (29.92 - altimeterSetting) * 1000 + altitudeInMeters
-        return indicatedAltitudeUnit.convert(value: pressureAltitudeInMeters, to: .feet) // Convert back to feet if necessary
-    }
-    
-    // Convert indicated altitude to density altitude
-    private var densityAltitude: Double {
-        let isaTemp = 15.0 + (lapseRate * pressureAltitude) // ISA temperature at pressure altitude
-        let tempDifference = outsideAirTempUnit.toCelcius(value: outsideAirTemp) - isaTemp
-        return pressureAltitude + (118.8 * tempDifference)
-    }
-    
+        
     // Calculate True Air Speed (TAS)
     var trueAirSpeed: Double {
-        let temperatureAtAltitude = outsideAirTempUnit.convert(value: outsideAirTemp, to: .kelvin) // Convert to Kelvin
-        let correctionFactor = sqrt((seaLevelTemp / temperatureAtAltitude) * (seaLevelPressure / 1013.25))
-        return indicatedAirSpeedUnit.convert(value: indicatedAirSpeed, to: .knots) * correctionFactor
+        calculateTAS()
+    }
+    
+    var pressureAltitude: Double {
+        calculatePressureAltitude()
+    }
+    
+    var densityAltitude: Double {
+        calculateDensityAltitude()
+    }
+    
+    private func calculatePressure() -> Double {
+        let altitudeInMeters = indicatedAltitudeUnit.convert(value: indicatedAltitude, to: .meters)
+        if altitudeInMeters < 11000 {
+            return 101325 * pow(1 - 0.0000225577 * altitudeInMeters, 5.25588)
+        } else {
+            let result = 22632.1 * exp(-0.0001577 * (altitudeInMeters - 11000))
+            return result
+        }
+    }
+    
+    private func calculateAirDensity() -> Double {
+        let temp = outsideAirTempUnit.convert(value: outsideAirTemp, to: .kelvin)
+        let result = (calculatePressure() / (287.05 * temp))
+        return result
+    }
+    
+    private func calculateTAS() -> Double {
+        let result = indicatedAirSpeed / sqrt(calculateAirDensity() / 1.225)
+        return result
+    }
+    
+    private func calculatePressureAltitude() -> Double {
+        var calculator = PressureAltitudeCalculator()
+        calculator.fieldElevationUnit = indicatedAltitudeUnit
+        calculator.altimeterSettingUnit = altimeterSettingUnit
+        calculator.altimeterSetting = altimeterSetting
+        calculator.fieldElevation = indicatedAltitude
+        return calculator.pressureAltitude
+    }
+    
+    private func calculateDensityAltitude() -> Double {
+        var calculator = DensityAltitudeCalculator()
+        calculator.oatUnit = outsideAirTempUnit
+        calculator.pressureAltitudeUnit = indicatedAltitudeUnit
+        calculator.oat = outsideAirTemp
+        calculator.pressureAltitude = calculatePressureAltitude()
+        calculator.trueAltitude = indicatedAltitude
+        return calculator.densityAltitude
     }
 }

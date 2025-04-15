@@ -11,27 +11,33 @@ struct IASCalculatorView: View {
     @State var vm = IASCalculatorViewModel()
     
     var body: some View {
-        ScrollView {
-            Picker("IAS Calculator",selection: $vm.calculator) {
-                ForEach(IASCalculatorViewModel.Calculator.allCases, id:\.self) { calculator in
-                    Text(calculator.rawValue)
-                }
+        VStack {
+//            picker
+            ScrollView {
+                calculators
             }
-            .pickerStyle(.segmented)
-
-            calculators
         }
         .navigationTitle("Indicated Air Speed")
     }
     
+//    var picker: some View {
+//        Picker("IAS Calculator",selection: $vm.calculator) {
+//            ForEach(IASCalculatorViewModel.Calculator.allCases, id:\.self) { calculator in
+//                Text(calculator.rawValue)
+//            }
+//        }
+//        .pickerStyle(.segmented)
+//    }
+    
     @ViewBuilder
     var calculators: some View {
-        switch vm.calculator {
-        case .altimeter:
-            IASFromAltimeterCalculatorView(vm: vm)
-        case .pressure:
-            IASFromPressureAltCalculatorView(vm: vm)
-        }
+        IASFromPressureAltCalculatorView(vm: vm)
+//        switch vm.calculator {
+//        case .altimeter:
+//            IASFromAltimeterCalculatorView(vm: vm)
+//        case .pressure:
+//            IASFromPressureAltCalculatorView(vm: vm)
+//        }
     }
 }
 

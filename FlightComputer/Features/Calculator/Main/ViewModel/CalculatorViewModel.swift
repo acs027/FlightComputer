@@ -36,9 +36,9 @@ enum Calculator: CaseIterable {
         case .tas:
             return "TAS"
         case .windComponent:
-            return "Wind Component"
+            return "Wind Components"
         case .windDirectionSpeed:
-            return "Wind Direction & Speed"
+            return "Wind"
         }
     }
     

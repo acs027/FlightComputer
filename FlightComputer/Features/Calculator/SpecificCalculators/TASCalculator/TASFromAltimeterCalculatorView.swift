@@ -38,11 +38,13 @@ struct TASFromAltimeterCalculatorView: View {
     var computedResults: some View {
         VStack {
             trueAirSpeed
+            pressureAltitude
+            densityAltitude
         }
     }
     
     var indicatedAltitude: some View {
-        CustomTextFieldView(title: "Indicated Altitude", value: $vm.tasFromAltimeterCalculator.indicatedAltitude, placeHolder: "Altitude (ft or m)")
+        CustomTextFieldView(title: "Indicated Altitude", value: $vm.tasFromAltimeterCalculator.indicatedAltitude, placeHolder: "Altitude (ft or m)", unit: vm.tasFromAltimeterCalculator.indicatedAltitudeUnit.symbol)
             .focused($focused, equals: .indicatedAltitude)
             .onSubmit {
                 focused = focused?.next()
@@ -50,7 +52,7 @@ struct TASFromAltimeterCalculatorView: View {
     }
     
     var altimeterSetting: some View {
-        CustomTextFieldView(title: "Altimeter Setting", value: $vm.tasFromAltimeterCalculator.altimeterSetting, placeHolder: "Altimeter Setting (in/hg or hpa)")
+        CustomTextFieldView(title: "Altimeter Setting", value: $vm.tasFromAltimeterCalculator.altimeterSetting, placeHolder: "Altimeter Setting (in/hg or hpa)", unit: vm.tasFromAltimeterCalculator.altimeterSettingUnit.symbol)
             .focused($focused, equals: .altimeterSetting)
             .onSubmit {
                 focused = focused?.next()
@@ -58,7 +60,7 @@ struct TASFromAltimeterCalculatorView: View {
     }
     
     var outsideAirTemp: some View {
-        CustomTextFieldView(title: "Outside Air Temperature", value: $vm.tasFromAltimeterCalculator.outsideAirTemp, placeHolder: "Temperature (°C)")
+        CustomTextFieldView(title: "Outside Air Temperature", value: $vm.tasFromAltimeterCalculator.outsideAirTemp, placeHolder: "Temperature (°C)", unit: vm.tasFromAltimeterCalculator.outsideAirTempUnit.symbol)
             .focused($focused, equals: .oat)
             .onSubmit {
                 focused = focused?.next()
@@ -66,7 +68,7 @@ struct TASFromAltimeterCalculatorView: View {
     }
     
     var indicatedAirSpeed: some View {
-        CustomTextFieldView(title: "Indicated Air Speed", value: $vm.tasFromAltimeterCalculator.indicatedAirSpeed, placeHolder: "Indicated Air Speed (IAS) (knots)")
+        CustomTextFieldView(title: "Indicated Air Speed", value: $vm.tasFromAltimeterCalculator.indicatedAirSpeed, placeHolder: "Indicated Air Speed (IAS) (knots)", unit: vm.tasFromAltimeterCalculator.indicatedAirSpeedUnit.symbol)
             .focused($focused, equals: .ias)
             .onSubmit {
                 focused = focused?.next()
@@ -74,7 +76,15 @@ struct TASFromAltimeterCalculatorView: View {
     }
     
     var trueAirSpeed: some View {
-        CustomTextView(title: "True Air Speed", value: vm.tasFromAltimeterCalculator.trueAirSpeed)
+        CustomTextView(title: "True Air Speed", value: vm.tasFromAltimeterCalculator.trueAirSpeed, unit: vm.tasFromAltimeterCalculator.indicatedAirSpeedUnit.symbol)
+    }
+    
+    var pressureAltitude: some View {
+        CustomTextView(title: "Pressure Altitude", value: vm.tasFromAltimeterCalculator.pressureAltitude, unit: vm.tasFromAltimeterCalculator.indicatedAltitudeUnit.symbol)
+    }
+    
+    var densityAltitude: some View {
+        CustomTextView(title: "Density Altitude", value: vm.tasFromAltimeterCalculator.densityAltitude, unit: vm.tasFromAltimeterCalculator.indicatedAltitudeUnit.symbol)
     }
 }
 

@@ -43,7 +43,18 @@ struct TASFromPressureAltCalculatorView: View {
     }
     
     var pressureAltitude: some View {
-        CustomTextFieldView(title: "Pressure Altitude", value: $vm.tasFromPressureAltCalculator.pressureAltitude, placeHolder: "Altitude (m)")
+        VStack {
+            CustomTextFieldView(title: "Pressure Altitude", value: $vm.tasFromPressureAltCalculator.pressureAltitude, placeHolder: "Altitude (m)", unit: vm.tasFromPressureAltCalculator.pressureAltitudeUnit.symbol)
+            Picker("Altitude Unit", selection: $vm.tasFromPressureAltCalculator.pressureAltitudeUnit) {
+                ForEach(Distance.allCases, id: \.symbol) {
+                    unit in
+                    Text(unit.symbol).tag(unit)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+        }
+        
             .focused($focused, equals: .pressureAltitude)
             .onSubmit {
                 focused = focused?.next()
@@ -51,7 +62,18 @@ struct TASFromPressureAltCalculatorView: View {
     }
     
     var outsideAirTemp: some View {
-        CustomTextFieldView(title: "Outside Air Temperature", value: $vm.tasFromPressureAltCalculator.outsideAirTemp, placeHolder: "Temperature (°C)")
+        VStack {
+            CustomTextFieldView(title: "Outside Air Temperature", value: $vm.tasFromPressureAltCalculator.outsideAirTemp, placeHolder: "Temperature (°C)", unit: vm.tasFromPressureAltCalculator.outsideAirTempUnit.symbol)
+            Picker("Outside Air Temperature", selection: $vm.tasFromPressureAltCalculator.outsideAirTempUnit) {
+                ForEach(Temperature.allCases, id: \.symbol) {
+                    unit in
+                    Text(unit.symbol).tag(unit)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+        }
+        
             .focused($focused, equals: .oat)
             .onSubmit {
                 focused = focused?.next()

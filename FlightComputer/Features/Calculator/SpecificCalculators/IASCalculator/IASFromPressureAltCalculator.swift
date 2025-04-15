@@ -19,62 +19,29 @@ struct IASFromPressureAltCalculator {
     var temperatureUnit = Temperature.celsius
     var tasUnit = Speed.knots
     
-    // Constants
-    private let seaLevelPressure: Double = 1013.25 // Sea-level pressure in hPa
-    private let seaLevelTemp: Double = 288.15     // Standard temperature at sea level in Kelvin
-    private let lapseRate: Double = 0.0019812     // Temperature lapse rate in K/ft
-    private let gravitationalAccel: Double = 32.174 // Gravitational acceleration in ft/s²
-    private let molarMassAir: Double = 0.0289644   // Molar mass of air in kg/mol
-    private let gasConstant: Double = 8.3144598    // Universal gas constant in J/(mol·K)
-
-    // Convert Celsius to Kelvin
-    private func celsiusToKelvin(_ celsius: Double) -> Double {
-        return celsius + 273.15
-    }
-
-    // Convert meters to feet (if needed)
-    private func metersToFeet(_ meters: Double) -> Double {
-        return meters * 3.28084
-    }
-
-    // Convert True Air Speed to knots if needed
-    private func convertToKnots(_ tas: Double) -> Double {
-        return tasUnit.convert(value: tas, to: .knots)
-    }
-
-    // Calculate pressure at altitude using the barometric formula
-    private func pressureAtAltitude(_ altitudeFeet: Double, _ tempK: Double) -> Double {
-        let exponent = (gravitationalAccel * molarMassAir) / (gasConstant * lapseRate)
-        let pressureRatio = pow(1 - (lapseRate * altitudeFeet) / seaLevelTemp, exponent)
-        return seaLevelPressure * pressureRatio
-    }
-
-    // Calculate density ratio (σ)
-    private func densityRatio(_ pressure: Double, _ tempK: Double) -> Double {
-        return (pressure / seaLevelPressure) * (seaLevelTemp / tempK)
-    }
-
-    // Calculate Indicated Airspeed (IAS) from TAS and density ratio
-    private func indicatedAirspeed(_ tas: Double, _ densityRatio: Double) -> Double {
-        return tas * sqrt(densityRatio)
-    }
-
     // Main function to calculate IAS
     var indicatedAirSpeed: Double {
-        // Convert inputs to consistent units
-        let altitudeInFeet = altitudeUnit.convert(value: pressureAltitude, to: .feet)  // Convert altitude to feet
-        let tempK = celsiusToKelvin(temperatureUnit.toCelcius(value: outsideAirTemp))   // Convert temperature to Kelvin
-        let tasInKnots = convertToKnots(trueAirSpeed)  // Convert TAS to knots if needed
-
-        // Calculate pressure at altitude
-        let pressure = pressureAtAltitude(altitudeInFeet, tempK)
-
-        // Calculate density ratio
-        let sigma = densityRatio(pressure, tempK)
-
-        // Calculate IAS
-        let ias = indicatedAirspeed(tasInKnots, sigma)
-
-        return ias
+        calculateIAS()
+    }
+    
+    private func calculatePressure() -> Double {
+        let altitudeInMeters = altitudeUnit.convert(value: pressureAltitude, to: .meters)
+        if altitudeInMeters < 11000 {
+            return 101325 * pow(1 - 0.0000225577 * altitudeInMeters, 5.25588)
+        } else {
+            let result = 22632.1 * exp(-0.0001577 * (altitudeInMeters - 11000))
+            return result
+        }
+    }
+    
+    private func calculateAirDensity() -> Double {
+        let temp = temperatureUnit.convert(value: outsideAirTemp, to: .kelvin)
+        let result = (calculatePressure() / (287.05 * temp))
+        return result
+    }
+    
+    private func calculateIAS() -> Double {
+        let result = trueAirSpeed * sqrt(calculateAirDensity() / 1.225)
+        return result
     }
 }

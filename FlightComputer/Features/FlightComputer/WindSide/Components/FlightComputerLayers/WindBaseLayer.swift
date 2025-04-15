@@ -20,12 +20,9 @@ struct WindBaseLayer: View {
                     .scaledToFit()
                     .frame(width: geometry.size.width)
                     .onChange(of: geometry.size) { oldValue, newValue in
-//                        vm.geometryChangeHandler(newValue: newValue, oldValue: oldValue)
-                        debugPrint(newValue, oldValue)
                         geometryChangeHandler(newValue, oldValue)
                     }
                     .onAppear {
-                        debugPrint(geometry.size.height)
                         backgroundOnAppearHandler(geometry.size)
                     }
                 Image("windsidehighspeedoverlay")

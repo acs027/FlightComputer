@@ -24,7 +24,7 @@ struct NumPad: View {
     ]
     
     var body: some View {
-        LazyVGrid(columns: gridItems, spacing: 10) {
+        LazyVGrid(columns: gridItems, spacing: 5) {
             ForEach(numbers, id: \.self) { number in
                 Button(action: {
                     handleInput(number)
@@ -52,7 +52,7 @@ struct NumPad: View {
             return
         }
         else if value == "C" {
-            inputText = ""
+            inputText = "0"
             return
         }
         else if value == "⌫" {
@@ -66,7 +66,11 @@ struct NumPad: View {
                 inputText.append(value)
             }
         } else {
-            inputText.append(value)
+            if inputText == "0" {
+                inputText = value
+            } else {
+                inputText.append(value)
+            }
         }
     }
 }

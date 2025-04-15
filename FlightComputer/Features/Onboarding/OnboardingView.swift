@@ -14,36 +14,50 @@ struct OnboardingView: View {
     
     var body: some View {
         VStack {
-            TabView(selection: $currentPage) {
-                ForEach(0..<vm.pages.count, id: \.self) { index in
-                    OnboardingPageView(page: vm.pages[index])
-                        .tag(index)
-                }
+            pages
+            footnote
+            onboardingButton
+        }
+        .safeAreaInset(edge: .bottom) {
+            Color.clear
+                .frame(height: 20)
+        }
+    }
+    
+    var pages: some View {
+        TabView(selection: $currentPage) {
+            ForEach(0..<vm.pages.count, id: \.self) { index in
+                OnboardingPageView(page: vm.pages[index])
+                    .tag(index)
             }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
-            
-            Text("This app is for educational purposes only. Do not rely on the data for real-world applications.")
-                .font(.footnote)
-                .foregroundColor(.red)
-                .multilineTextAlignment(.center)
+        }
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+    }
+    
+    var footnote: some View {
+        Text("This app is for educational purposes only. Do not rely on the data for real-world applications.")
+            .font(.footnote)
+            .foregroundColor(.red)
+            .multilineTextAlignment(.center)
+            .padding()
+    }
+    
+    var onboardingButton: some View {
+        Button(action: {
+            if currentPage < vm.pages.count - 1 {
+                currentPage += 1
+            } else {
+                dismiss()
+            }
+        }) {
+            Text(currentPage < vm.pages.count - 1 ? "Next" : "Get Started")
+                .font(.headline)
+                .frame(maxWidth: .infinity)
                 .padding()
-            
-            Button(action: {
-                if currentPage < vm.pages.count - 1 {
-                    currentPage += 1
-                } else {
-                    dismiss()
-                }
-            }) {
-                Text(currentPage < vm.pages.count - 1 ? "Next" : "Get Started")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-                    .padding(.horizontal)
-            }
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(10)
+                .padding(.horizontal)
         }
     }
 }

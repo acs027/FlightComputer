@@ -39,7 +39,7 @@ struct TwoUnitsConversionView<U: UnitType>: View {
             Text("\(mainUnit.symbol)")
                 .padding()
                 .lineLimit(1)
-                .minimumScaleFactor(0.5)
+//                .minimumScaleFactor(0.5)
         }
         .modifier(CustomTextFieldBgStyle())
     }

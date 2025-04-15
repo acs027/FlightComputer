@@ -18,7 +18,6 @@ struct CustomTextStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
             .lineLimit(1)
-            .minimumScaleFactor(0.5)
             .padding(10)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(Constants.textBg)
@@ -43,7 +42,6 @@ struct CustomTextFieldModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .lineLimit(1)
-            .minimumScaleFactor(0.5)
             .padding(10)
             .background(Constants.textFieldBg)
             .cornerRadius(8)

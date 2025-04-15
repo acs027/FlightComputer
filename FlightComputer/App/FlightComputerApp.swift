@@ -14,13 +14,19 @@ struct FlightComputerApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @State var isAdsShowed: Bool = false
     @State var adManager = InterstitialAdManager()
+    @State var networkMonitor = NetworkMonitor()
     
     var body: some Scene {
         WindowGroup {
             VStack {
+                if networkMonitor.hasNetworkConnection {
                     BannerContentView(navigationTitle: "Banner")
                         .frame(width: 320, height: 50)
-                Spacer()
+                    Spacer()
+                } else {
+                    Color.clear
+                        .frame(width: 320, height: 50)
+                }
                 MainTabView()
                     .environmentObject(adManager)
             }

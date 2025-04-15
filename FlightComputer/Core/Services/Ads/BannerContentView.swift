@@ -61,11 +61,12 @@ private struct BannerViewContainer: UIViewRepresentable {
 
   // [START create_banner]
   class BannerCoordinator: NSObject, BannerViewDelegate {
-
+      private var isTest: Bool = true
+      private var adUnitID: String = ""
     private(set) lazy var bannerView: BannerView = {
       let banner = BannerView(adSize: parent.adSize)
       // [START load_ad]
-      banner.adUnitID = "ca-app-pub-3940256099942544/2435281174"
+        banner.adUnitID = adUnitID
       banner.load(Request())
       // [END load_ad]
       // [START set_delegate]
@@ -78,6 +79,13 @@ private struct BannerViewContainer: UIViewRepresentable {
 
     init(_ parent: BannerViewContainer) {
       self.parent = parent
+        if let adID = Bundle.main.object(forInfoDictionaryKey: "BannerAdUnitID") as? String,
+           !isTest{
+            self.adUnitID = adID
+        } else {
+            self.adUnitID = "ca-app-pub-3940256099942544/2435281174"
+        }
+        print(adUnitID)
     }
     // [END create_banner]
 

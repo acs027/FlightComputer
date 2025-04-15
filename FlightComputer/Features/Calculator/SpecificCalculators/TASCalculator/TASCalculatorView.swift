@@ -11,26 +11,33 @@ struct TASCalculatorView: View {
     @State var vm = TASCalculatorViewModel()
     
     var body: some View {
-        ScrollView {
-            Picker("TAS Calculator",selection: $vm.calculator) {
-                ForEach(TASCalculatorViewModel.Calculator.allCases, id:\.self) { calculator in
-                    Text(calculator.rawValue)
-                }
+        VStack{
+//            picker
+            ScrollView {
+                calculators
             }
-            .pickerStyle(.segmented)
-            calculators
         }
         .navigationTitle("True Air Speed")
     }
     
+//    var picker: some View {
+//        Picker("TAS Calculator",selection: $vm.calculator) {
+//            ForEach(TASCalculatorViewModel.Calculator.allCases, id:\.self) { calculator in
+//                Text(calculator.rawValue)
+//            }
+//        }
+//        .pickerStyle(.segmented)
+//    }
+    
     @ViewBuilder
     var calculators: some View {
-        switch vm.calculator {
-        case .altimeter:
-            TASFromAltimeterCalculatorView(vm: vm)
-        case .pressure:
-            TASFromPressureAltCalculatorView(vm: vm)
-        }
+        TASFromPressureAltCalculatorView(vm: vm)
+//        switch vm.calculator {
+//        case .altimeter:
+//            TASFromAltimeterCalculatorView(vm: vm)
+//        case .pressure:
+//            TASFromPressureAltCalculatorView(vm: vm)
+//        }
     }
 }
 

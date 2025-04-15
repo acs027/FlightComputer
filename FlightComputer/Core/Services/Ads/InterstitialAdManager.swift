@@ -10,9 +10,12 @@ import GoogleMobileAds
 
 class InterstitialAdManager: NSObject, FullScreenContentDelegate, ObservableObject {
   private var interstitialAd: InterstitialAd?
-    private let cooldown: TimeInterval = 60 // Seconds
+    private let cooldown: TimeInterval = 180 // Seconds
     private var lastAdDate: TimeInterval = Date.now.timeIntervalSinceReferenceDate
     private var timer: Timer?
+    private let isTest: Bool = true
+    
+    private var adUnitID: String = ""
     
     private var isCooldownOver: Bool {
         Date.now.timeIntervalSinceReferenceDate - lastAdDate > cooldown
@@ -21,6 +24,12 @@ class InterstitialAdManager: NSObject, FullScreenContentDelegate, ObservableObje
     override init() {
             super.init()
             startCooldownTimer()
+            if let adID = Bundle.main.object(forInfoDictionaryKey: "InterstitialAdUnitID") as? String,
+               !isTest{
+                self.adUnitID = adID
+            } else {
+                self.adUnitID = "ca-app-pub-3940256099942544/4411468910"
+            }
         }
 
     private func startCooldownTimer() {
@@ -38,9 +47,8 @@ class InterstitialAdManager: NSObject, FullScreenContentDelegate, ObservableObje
   func loadAd() async {
       if isCooldownOver {
         do {
-            print("loading")
           interstitialAd = try await InterstitialAd.load(
-            with: "ca-app-pub-3940256099942544/4411468910", request: Request())
+            with: self.adUnitID, request: Request())
           // [START set_the_delegate]
           interstitialAd?.fullScreenContentDelegate = self
           // [END set_the_delegate]
@@ -72,12 +80,12 @@ class InterstitialAdManager: NSObject, FullScreenContentDelegate, ObservableObje
 //    print("\(#function) called")
 //  }
 
-  func ad(
-    _ ad: FullScreenPresentingAd,
-    didFailToPresentFullScreenContentWithError error: Error
-  ) {
-    print("\(#function) called")
-  }
+//  func ad(
+//    _ ad: FullScreenPresentingAd,
+//    didFailToPresentFullScreenContentWithError error: Error
+//  ) {
+//    
+//  }
 
 //  func adWillPresentFullScreenContent(_ ad: FullScreenPresentingAd) {
 //    print("\(#function) called")

@@ -15,13 +15,15 @@ struct DensityAltitudeCalculator {
     var pressureAltitudeUnit = Distance.feet
     var oatUnit = Temperature.celsius
     
-    // ISA Temperature at the given pressure altitude
     var isaTemp: Double {
-        let seaLevelTempC = 15.0  // ISA sea-level temperature in °C
-        let lapseRate = -1.98 / 1000  // Lapse rate in °C per foot (-1.98°C per 1000 ft)
         let altitudeInMeters = pressureAltitudeUnit.convert(value: trueAltitude, to: .meters)
-        let isaTemp = seaLevelTempC + (lapseRate * altitudeInMeters / 0.3048)  // Convert feet to meters for calculation
-        return Temperature.celsius.convert(value: isaTemp, to: oatUnit)
+        var tempKelvin: Double = 0
+        if altitudeInMeters < 11000 {
+            tempKelvin = 288.15 - 0.00649 * altitudeInMeters
+        } else {
+            tempKelvin = -56.5
+        }
+        return Temperature.kelvin.convert(value: tempKelvin, to: oatUnit)
     }
 
     // Density Altitude Calculation

@@ -69,11 +69,11 @@ struct WindComponentCalculatorView: View {
     }
     
     var headWind: some View {
-        CustomTextView(title: "Headwind Component", value: vm.windComponentCalculator.headWind)
+        CustomTextView(title: (vm.windComponentCalculator.headWind < 0 ? "Tail Wind" : "Head Wind"), value: abs(vm.windComponentCalculator.headWind))
     }
     
     var crossWind: some View {
-        CustomTextView(title: "Crosswind Component", value: vm.windComponentCalculator.crossWind)
+        CustomTextView(title: "Cross Wind", value: vm.windComponentCalculator.crossWind)
     }
 }
 

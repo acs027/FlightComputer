@@ -87,11 +87,9 @@ class WindSideProViewModel {
         }
         
         if verticalOffset != 0 {
-            debugPrint(newValue)
             verticalOffset *= newValue.height/oldValue.height
         }
         if windMarkOffset.height != 0 {
-            debugPrint("\(windMarkOffset)  markoffset")
             windMarkOffset.height *= newValue.height/oldValue.height
         }
     }

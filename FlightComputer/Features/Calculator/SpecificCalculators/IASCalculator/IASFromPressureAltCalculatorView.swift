@@ -41,19 +41,40 @@ struct IASFromPressureAltCalculatorView: View {
     }
 
     var pressureAltitude: some View {
-        CustomTextFieldView(title: "Pressure Altitude", value: $vm.fromPressureAltCalculator.pressureAltitude, placeHolder: "Altitude (m)")
-            .focused($focused, equals: .pressureAltitude)
-            .onSubmit {
-                focused = focused?.next()
+        VStack {
+            CustomTextFieldView(title: "Pressure Altitude", value: $vm.fromPressureAltCalculator.pressureAltitude, placeHolder: "Altitude (m)", unit: vm.fromPressureAltCalculator.altitudeUnit.symbol)
+                .focused($focused, equals: .pressureAltitude)
+                .onSubmit {
+                    focused = focused?.next()
+                }
+            Picker("Altitude Unit", selection: $vm.fromPressureAltCalculator.altitudeUnit) {
+                ForEach(Distance.allCases, id: \.symbol) {
+                    unit in
+                    Text(unit.symbol).tag(unit)
+                }
             }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+        }
+       
     }
 
     var outsideAirTemp: some View {
-        CustomTextFieldView(title: "Outside Air Temperature", value: $vm.fromPressureAltCalculator.outsideAirTemp, placeHolder: "OAT (°C)")
-            .focused($focused, equals: .outsideAirTemp)
-            .onSubmit {
-                focused = focused?.next()
+        VStack {
+            CustomTextFieldView(title: "Outside Air Temperature", value: $vm.fromPressureAltCalculator.outsideAirTemp, placeHolder: "OAT (°C)", unit: vm.fromPressureAltCalculator.temperatureUnit.symbol)
+                .focused($focused, equals: .outsideAirTemp)
+                .onSubmit {
+                    focused = focused?.next()
+                }
+            Picker("Outside Air Temperature", selection: $vm.fromPressureAltCalculator.temperatureUnit) {
+                ForEach(Temperature.allCases, id: \.symbol) {
+                    unit in
+                    Text(unit.symbol).tag(unit)
+                }
             }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+        }
     }
 
     var trueAirSpeed: some View {

@@ -37,7 +37,7 @@ struct CourseCalculator {
     
     // True Course
     var trueCourse: Double {
-        return heading + windCorrectionAngle
+        return heading - windCorrectionAngle
     }
     
     // Ground Speed (GS)

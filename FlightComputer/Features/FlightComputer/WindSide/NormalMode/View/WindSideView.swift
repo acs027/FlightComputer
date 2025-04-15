@@ -53,7 +53,6 @@ struct WindSideView: View {
         }
         .onChange(of: vm.calculationStepType.isLastStep, { oldValue, newValue in
             if newValue {
-                print(newValue)
                 showResults()
             }
         })
@@ -106,7 +105,6 @@ struct WindSideView: View {
     }
     
     func showResults() {
-        print("show result")
         vm.isControllerShowing = false
         vm.isValuesShowing = true
     }
