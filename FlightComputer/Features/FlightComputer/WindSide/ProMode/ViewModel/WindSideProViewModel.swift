@@ -14,6 +14,17 @@ struct LineAngleInfo {
     var isDynamic: Bool
 }
 
+struct Dot {
+    let id: UUID = UUID()
+    var degree: Double
+    var location: CGPoint
+    var color: (CGFloat,CGFloat,CGFloat,CGFloat) = (1,1,1,1)
+    
+    mutating func color(r:CGFloat, g:CGFloat, b:CGFloat, a:CGFloat) {
+        color = (r,g,b,a)
+    }
+}
+
 @Observable
 class WindSideProViewModel {
     var windMarkOffset: CGSize = .zero
@@ -25,18 +36,18 @@ class WindSideProViewModel {
     var islineShowing: Bool = false
     var isLineRotationEnabled: Bool = false
     
+    var dots: [Dot] = []
+    
     var rotationDegree: Double = 0
     var windDirection: Double = 0
     
     var isHighSpeed: Bool = false
     var isWindDirectionReverse: Bool = false
     var isWindMarkRotationEnabled: Bool = false
+    var isEditableForDot: Bool = false
     
     @ObservationIgnored var screenWidth: CGFloat = 1
     @ObservationIgnored var componentWidth: CGFloat = 1
-    func scaleValueFitTheView() -> CGFloat  {
-        screenWidth / componentWidth
-    }
     
     var controller: ProController = .vertical
     var isControllerShowing = false
@@ -45,6 +56,10 @@ class WindSideProViewModel {
     var unitHeight: Double {
         let height = referenceHeight * 0.829
         return height / 220
+    }
+    
+    func scaleValueFitTheView() -> CGFloat  {
+        screenWidth / componentWidth
     }
     
     func windMarkDegree() -> Double {
@@ -121,5 +136,28 @@ class WindSideProViewModel {
         windMarkOffset = .zero
         lineAngleStartDegree = 0
         lineAngleInfos.removeAll()
+    }
+    
+    func setDotColor(dotID: UUID, r:CGFloat, g:CGFloat, b:CGFloat, a:CGFloat) {
+        if let index = dots.firstIndex(where: { $0.id == dotID }) {
+            dots[index].color(r: r, g: g, b: b, a: a)
+        }
+    }
+    
+    func putDot(at degree: Double, where location: CGPoint) {
+        if dots.count < 3 {
+            let dot = Dot(degree: degree, location: location)
+            dots.append(dot)
+        } else {
+            dots.removeFirst()
+            let dot = Dot(degree: degree, location: location)
+            dots.append(dot)
+        }
+    }
+    
+    func removeDot(dotID: UUID) {
+        if let index = dots.firstIndex(where: { $0.id == dotID }) {
+            dots.remove(at: index)
+        }
     }
 }

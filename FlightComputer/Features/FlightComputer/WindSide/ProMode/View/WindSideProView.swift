@@ -18,6 +18,8 @@ struct WindSideProView: View {
     @State var gesturePan: CGOffset = .zero
     var totalPan: CGOffset { pan + gesturePan }
     
+    @State var color: Color = .black
+    
     //MARK: - Body
     var body: some View {
         ZStack(alignment: .center) {
@@ -35,7 +37,7 @@ struct WindSideProView: View {
             controllerView
                 .padding()
                 .presentationBackground(Constants.sheetBg)
-                .presentationDetents([.medium, .fraction(0.4)])
+                .presentationDetents([.fraction(0.4), .medium, .large])
         }
         .onAppear {
             DispatchQueue.main.async {
@@ -62,6 +64,7 @@ struct WindSideProView: View {
     func centerTheView() {
         withAnimation {
             pan.height = -vm.verticalOffset
+            pan.width = .zero
         }
     }
 }

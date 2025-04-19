@@ -36,6 +36,20 @@ extension WindSideProView {
     
     var windSideRotor: some View {
         WindRotorDisc(rotation: vm.rotationDegree, verticalOffset: vm.verticalOffset)
+            .onTapGesture { location in
+                if vm.isEditableForDot {
+                    vm.putDot(at: vm.rotationDegree, where: location)
+                }
+            }
+            .overlay {
+                ForEach(vm.dots, id:\.id) { dot in
+                    Circle()
+                        .foregroundStyle(Color(UIColor(red: dot.color.0, green: dot.color.1, blue: dot.color.2, alpha: dot.color.3)))
+                        .frame(width: 5)
+                        .position(dot.location)
+                        .rotationEffect(Angle(degrees: dot.degree - vm.rotationDegree))
+                }
+            }
     }
     
     var markOnRotor: some View {

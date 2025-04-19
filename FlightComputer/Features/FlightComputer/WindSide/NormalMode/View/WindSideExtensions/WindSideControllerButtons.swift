@@ -140,6 +140,7 @@ extension WindSideView {
     func centerTheView() {
         withAnimation {
             pan.height = -vm.verticalOffset
+            pan.width = .zero
         }
     }
     

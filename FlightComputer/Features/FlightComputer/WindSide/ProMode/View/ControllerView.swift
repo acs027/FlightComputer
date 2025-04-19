@@ -87,6 +87,14 @@ extension WindSideProView {
                 reverseWindDirectionButton
             }
             windSlider
+            HStack {
+                toggleEditForDotButton
+                Spacer()
+            }
+            HStack {
+                Spacer()
+                dotsMenu
+            }
         }
     }
     
@@ -174,6 +182,32 @@ extension WindSideProView {
     
     var toggleLineButton: some View {
         ProSideButton(condition: $vm.islineShowing)
+    }
+    
+    var toggleEditForDotButton: some View {
+        HStack {
+            Text("Enable dot placement:")
+            ProSideButton(condition: $vm.isEditableForDot)
+        }
+    }
+    
+    var dotsMenu: some View {
+        HStack(spacing: 15) {
+            ForEach(vm.dots, id:\.id) { dot in
+                HStack(spacing: 15) {
+                    DotColorPicker(dot: dot) { r,g,b,a in
+                        vm.setDotColor(dotID: dot.id, r: r, g: g, b: b, a: a)
+                    }
+                    Button {
+                        vm.removeDot(dotID: dot.id)
+                    } label: {
+                        Image(systemName: "trash.slash.square.fill")
+                            .font(.largeTitle)
+                            .foregroundStyle(.red)
+                    }
+                }
+            }
+        }
     }
     
     //MARK: Functions

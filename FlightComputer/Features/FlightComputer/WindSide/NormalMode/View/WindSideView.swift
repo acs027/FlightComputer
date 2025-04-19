@@ -42,7 +42,7 @@ struct WindSideView: View {
             controllerView
                 .padding()
                 .presentationBackground(Constants.sheetBg)
-                .presentationDetents([.medium, .fraction(0.4)])
+                .presentationDetents([.fraction(0.4), .medium, .large])
         }
         .onChange(of: vm.calculationStepType) { oldValue, newValue in
             if oldValue != newValue {
