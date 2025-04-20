@@ -46,7 +46,7 @@ struct DotColorPicker: View {
                         var alpha: CGFloat = 0
                         color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
                         function(red, green, blue, alpha)
-                        showPicker = false // Dismiss after picking
+//                        showPicker = false // Dismiss after picking
                     },
                     onCancel: {
                         showPicker = false
@@ -61,14 +61,23 @@ struct UIKitColorPicker: UIViewControllerRepresentable {
     var onColorSelected: (UIColor) -> Void
     var onCancel: () -> Void
 
-    func makeUIViewController(context: Context) -> UIColorPickerViewController {
+    func makeUIViewController(context: Context) -> UINavigationController {
         let picker = UIColorPickerViewController()
         picker.selectedColor = initialColor
         picker.delegate = context.coordinator
-        return picker
+
+        // Add Done button to dismiss
+        picker.navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .done,
+            target: context.coordinator,
+            action: #selector(context.coordinator.didTapDone)
+        )
+
+        let navController = UINavigationController(rootViewController: picker)
+        return navController
     }
 
-    func updateUIViewController(_ uiViewController: UIColorPickerViewController, context: Context) {}
+    func updateUIViewController(_ uiViewController: UINavigationController, context: Context) {}
 
     func makeCoordinator() -> Coordinator {
         Coordinator(onColorSelected: onColorSelected, onCancel: onCancel)
@@ -83,12 +92,16 @@ struct UIKitColorPicker: UIViewControllerRepresentable {
             self.onCancel = onCancel
         }
 
-        func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
-            onCancel()
-        }
-
         func colorPickerViewControllerDidSelectColor(_ viewController: UIColorPickerViewController) {
             onColorSelected(viewController.selectedColor)
+        }
+
+        func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
+            // Optional: Only call onCancel if you want to handle cancellation here
+        }
+
+        @objc func didTapDone() {
+            onCancel() // You can rename this to onDismiss if clearer
         }
     }
 }
