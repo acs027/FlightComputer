@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="iPad13_0rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="EHf-IW-A2E">
+            <objects>
+                <viewController id="01J-lp-oVM" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                        <rect key="frame" x="0.0" y="0.0" width="1032" height="1376"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchscreenbg" translatesAutoresizingMaskIntoConstraints="NO" id="bFo-Nv-SlG">
+                                <rect key="frame" x="0.0" y="0.0" width="1032" height="1376"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
+                                </accessibility>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circleicon" translatesAutoresizingMaskIntoConstraints="NO" id="Vax-BK-cDD">
+                                <rect key="frame" x="25" y="197" width="982" height="982"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Vax-BK-cDD" secondAttribute="height" multiplier="1:1" id="bQX-9i-iRQ"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="E6B FLIGHT PRO" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qo1-UI-K6l">
+                                <rect key="frame" x="378.5" y="1229" width="275" height="42"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="35"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="bFo-Nv-SlG" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="3jx-eA-pgu"/>
+                            <constraint firstItem="bFo-Nv-SlG" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" id="EOq-yU-EjA"/>
+                            <constraint firstAttribute="trailing" secondItem="Vax-BK-cDD" secondAttribute="trailing" constant="25" id="ESN-RL-kc8"/>
+                            <constraint firstAttribute="bottom" secondItem="bFo-Nv-SlG" secondAttribute="bottom" id="KWe-2g-Uve"/>
+                            <constraint firstItem="Vax-BK-cDD" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Ze5-6b-2t3" secondAttribute="topMargin" constant="100" id="VCL-U9-Ab3"/>
+                            <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="Vax-BK-cDD" secondAttribute="bottom" constant="100" id="Ys6-i3-CYE"/>
+                            <constraint firstItem="Vax-BK-cDD" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="25" id="aRe-qa-ED0"/>
+                            <constraint firstItem="qo1-UI-K6l" firstAttribute="top" secondItem="Vax-BK-cDD" secondAttribute="bottom" constant="50" id="fXt-Kb-Eal"/>
+                            <constraint firstItem="qo1-UI-K6l" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="o3A-xO-Uwi"/>
+                            <constraint firstItem="bFo-Nv-SlG" firstAttribute="trailing" secondItem="Bcu-3y-fUS" secondAttribute="trailing" id="qYL-We-P0B"/>
+                            <constraint firstItem="Vax-BK-cDD" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="qbn-mF-PxC"/>
+                            <constraint firstItem="Vax-BK-cDD" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="zwY-BA-bhF"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="52.671755725190835" y="374.64788732394368"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="circleicon" width="851" height="851"/>
+        <image name="launchscreenbg" width="1920" height="1920"/>
+    </resources>
+</document>

@@ -51,8 +51,14 @@ extension WindSideProView {
                             .frame(width: 30, height: 30)
                             .padding()
                             .background(
-                                RoundedRectangle(cornerRadius: 15)
-                                    .fill(.noteditabletextfieldbg)
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .fill(.noteditabletextfieldbg)
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .stroke(lineWidth: 1)
+                                }
+                                
+                                    
                             )
                         
                     }

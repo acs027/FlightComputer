@@ -85,7 +85,6 @@ private struct BannerViewContainer: UIViewRepresentable {
         } else {
             self.adUnitID = "ca-app-pub-3940256099942544/2435281174"
         }
-        print(adUnitID)
     }
     // [END create_banner]
 

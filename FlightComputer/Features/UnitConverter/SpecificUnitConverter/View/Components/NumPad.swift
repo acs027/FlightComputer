@@ -13,7 +13,7 @@ struct NumPad: View {
     let swapFunction: () -> Void
 
     let gridItems = [
-        GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())
+        GridItem(.flexible(minimum: 45, maximum: 150)), GridItem(.flexible(minimum: 45, maximum: 150)), GridItem(.flexible(minimum: 45, maximum: 150)), GridItem(.flexible(minimum: 45, maximum: 150))
     ]
 
     let numbers = [
@@ -31,7 +31,7 @@ struct NumPad: View {
                 }) {
                     Text(number)
                         .font(.title)
-                        .frame(width: 45, height: 45)
+                        .frame(minWidth: 45, maxWidth: 150, minHeight: 45, maxHeight: 150)
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(10)
                 }

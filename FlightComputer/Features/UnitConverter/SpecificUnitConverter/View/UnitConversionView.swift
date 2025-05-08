@@ -18,7 +18,7 @@ struct UnitConversionView: View {
     var body: some View {
         VStack {
             conversionView
-                .padding(5)
+                .padding()
             Spacer()
             NumPad(inputText: $viewModel.numPadInput, value: $viewModel.value, swapFunction: { swapUnits()})
         }

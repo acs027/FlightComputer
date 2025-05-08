@@ -13,7 +13,7 @@ class InterstitialAdManager: NSObject, FullScreenContentDelegate, ObservableObje
     private let cooldown: TimeInterval = 180 // Seconds
     private var lastAdDate: TimeInterval = Date.now.timeIntervalSinceReferenceDate
     private var timer: Timer?
-    private let isTest: Bool = true
+    private let isTest: Bool = false
     
     private var adUnitID: String = ""
     
@@ -27,6 +27,7 @@ class InterstitialAdManager: NSObject, FullScreenContentDelegate, ObservableObje
             if let adID = Bundle.main.object(forInfoDictionaryKey: "InterstitialAdUnitID") as? String,
                !isTest{
                 self.adUnitID = adID
+                print(self.adUnitID)
             } else {
                 self.adUnitID = "ca-app-pub-3940256099942544/4411468910"
             }
@@ -34,7 +35,7 @@ class InterstitialAdManager: NSObject, FullScreenContentDelegate, ObservableObje
 
     private func startCooldownTimer() {
         timer?.invalidate()  // Ensure only one timer runs at a time
-        timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [weak self] _ in
+        timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             if self.isCooldownOver && self.interstitialAd == nil {
                 Task {
@@ -54,7 +55,7 @@ class InterstitialAdManager: NSObject, FullScreenContentDelegate, ObservableObje
           // [END set_the_delegate]
             timer?.invalidate()
         } catch {
-          print("Failed to load interstitial ad with error: \(error.localizedDescription)")
+          debugPrint("Failed to load interstitial ad with error: \(error.localizedDescription)")
         }
     }
   }
@@ -63,7 +64,7 @@ class InterstitialAdManager: NSObject, FullScreenContentDelegate, ObservableObje
   // [START show_ad]
   func showAd() {
     guard let interstitialAd = interstitialAd else {
-      return print("Ad wasn't ready.")
+      return
     }
     interstitialAd.present(from: nil)
   }
