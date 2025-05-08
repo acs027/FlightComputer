@@ -349,7 +349,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.0.8;
+				CURRENT_PROJECT_VERSION = 1.0.9;
 				DEVELOPMENT_ASSET_PATHS = "\"FlightComputer/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = DDYV9BM2N2;
@@ -391,7 +391,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.0.8;
+				CURRENT_PROJECT_VERSION = 1.0.9;
 				DEVELOPMENT_ASSET_PATHS = "\"FlightComputer/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = DDYV9BM2N2;

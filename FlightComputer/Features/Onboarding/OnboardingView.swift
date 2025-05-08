@@ -64,7 +64,7 @@ struct OnboardingView: View {
     
     private var privacyPolicyButton: some View {
         Button {
-            if let url = URL(string: "https://gist.github.com/acs027/a3fb3840ad9847f0994bc716da1f4bd4") {
+            if let url = URL(string: "https://acs027.github.io/E6BFlightPro/privacy") {
                                     UIApplication.shared.open(url)
                                 }
         } label: {
