@@ -16,6 +16,7 @@ struct OnboardingView: View {
         VStack {
             pages
             footnote
+            privacyPolicyButton
             onboardingButton
         }
         .safeAreaInset(edge: .bottom) {
@@ -58,6 +59,16 @@ struct OnboardingView: View {
                 .foregroundColor(.white)
                 .cornerRadius(10)
                 .padding(.horizontal)
+        }
+    }
+    
+    private var privacyPolicyButton: some View {
+        Button {
+            if let url = URL(string: "https://gist.github.com/acs027/a3fb3840ad9847f0994bc716da1f4bd4") {
+                                    UIApplication.shared.open(url)
+                                }
+        } label: {
+            Text("Privacy Policy")
         }
     }
 }

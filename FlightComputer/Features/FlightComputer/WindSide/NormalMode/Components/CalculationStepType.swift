@@ -78,6 +78,7 @@ enum CalculationStepType: Equatable {
         }
     }
     
+    
     static func == (lhs: CalculationStepType, rhs: CalculationStepType) -> Bool {
             switch (lhs, rhs) {
             case (.driftHeading, .driftHeading):
@@ -162,7 +163,7 @@ enum WindCalculatorStep: CalculationStep, CaseIterable {
         case .groundSpeed:
             "Ground Speed"
         case .windValues:
-            "WindSpeed / Direction"
+            "Wind Direction"
         case .result:
             "Result"
         }

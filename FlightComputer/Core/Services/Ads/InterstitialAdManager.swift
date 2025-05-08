@@ -27,7 +27,6 @@ class InterstitialAdManager: NSObject, FullScreenContentDelegate, ObservableObje
             if let adID = Bundle.main.object(forInfoDictionaryKey: "InterstitialAdUnitID") as? String,
                !isTest{
                 self.adUnitID = adID
-                print(self.adUnitID)
             } else {
                 self.adUnitID = "ca-app-pub-3940256099942544/4411468910"
             }

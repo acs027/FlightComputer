@@ -43,5 +43,6 @@ extension WindSideView {
     
     var lineOnRotor: some View {
         LineToWindMarkOnRotor(verticalOffset: vm.verticalOffset, windMarkOffset: vm.windMarkOffset, windMarkDegree: vm.windMarkDegree)
+            .opacity(vm.isLineHidden() ? 0 : 1)
     }
 }

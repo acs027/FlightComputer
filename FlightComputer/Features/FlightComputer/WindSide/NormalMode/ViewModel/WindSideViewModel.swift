@@ -173,4 +173,12 @@ import Foundation
         }
     }
     
+    func isLineHidden() -> Bool {
+        if case .windCalculator  = calculationStepType {
+            return true
+        } else {
+            return false
+        }
+    }
+    
 }
