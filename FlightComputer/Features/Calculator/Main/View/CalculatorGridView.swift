@@ -36,24 +36,24 @@ struct CalculatorListView: View {
         .tint(.primary)
         .frame(maxHeight: .infinity, alignment: .top)
         .navigationTitle("Calculators")
-        .overlay {
-            ZStack(alignment: .bottom) {
-                Color.clear
-                privacyPolicyButton
-            }
-            .padding()
-        }
+//        .overlay {
+//            ZStack(alignment: .bottom) {
+//                Color.clear
+//                privacyPolicyButton
+//            }
+//            .padding()
+//        }
     }
     
-    private var privacyPolicyButton: some View {
-        Button {
-            if let url = URL(string: "https://acs027.github.io/E6BFlightPro/privacy") {
-                                    UIApplication.shared.open(url)
-                                }
-        } label: {
-            Text("Privacy Policy")
-        }
-    }
+//    private var privacyPolicyButton: some View {
+//        Button {
+//            if let url = URL(string: "https://acs027.github.io/E6BFlightPro/privacy") {
+//                                    UIApplication.shared.open(url)
+//                                }
+//        } label: {
+//            Text("Privacy Policy")
+//        }
+//    }
     
     func calculatorLabel(calculator: Calculator) -> some View {
         VStack {

@@ -33,24 +33,24 @@ struct UnitConversionGridView: View {
         .onChange(of: viewModel.selectedConversion) { oldValue, newValue in
             adManager.showAd()
         }
-        .overlay {
-            ZStack(alignment: .bottom) {
-                Color.clear
-                privacyPolicyButton
-            }
-            .padding()
-        }
+//        .overlay {
+//            ZStack(alignment: .bottom) {
+//                Color.clear
+//                privacyPolicyButton
+//            }
+//            .padding()
+//        }
     }
     
-    private var privacyPolicyButton: some View {
-        Button {
-            if let url = URL(string: "https://acs027.github.io/E6BFlightPro/privacy") {
-                                    UIApplication.shared.open(url)
-                                }
-        } label: {
-            Text("Privacy Policy")
-        }
-    }
+//    private var privacyPolicyButton: some View {
+//        Button {
+//            if let url = URL(string: "https://acs027.github.io/E6BFlightPro/privacy") {
+//                                    UIApplication.shared.open(url)
+//                                }
+//        } label: {
+//            Text("Privacy Policy")
+//        }
+//    }
     
     func unitTypeLabel(type: ConversionType) -> some View {
         VStack {

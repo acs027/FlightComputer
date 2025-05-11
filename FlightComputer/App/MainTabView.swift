@@ -48,14 +48,20 @@ struct MainTabView: View {
             .toolbarColorScheme(.dark, for: .tabBar)
             .onChange(of: selectedTab) { oldValue, newValue in
                 adManager.showAd()
-            }            
+            }
         }
     }
+    
     
     var unitConversionView: some View {
         NavigationStack {
             UnitConversionGridView()
                 .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        settingsMenu
+                    }
+                }
         }
         .tabItem {
             Label(Tab.unitConverter.rawValue,
@@ -87,6 +93,11 @@ struct MainTabView: View {
         NavigationStack {
             CalculatorListView()
                 .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        settingsMenu
+                    }
+                }
         }
         .tabItem {
             Label(Tab.calculator.rawValue,
@@ -104,6 +115,23 @@ struct MainTabView: View {
                   systemImage: Tab.frontSide.systemImage)
         }
         .tag(Tab.frontSide)
+    }
+    
+    var settingsMenu: some View {
+        Menu {
+            Button("Privacy Settings") {
+                Task {
+                    try await ConsentManager.shared.presentPrivacyOptionsForm()
+                }
+            }
+            Button("Privacy Policy") {
+                if let url = URL(string: "https://acs027.github.io/E6BFlightPro/privacy") {
+                    UIApplication.shared.open(url)
+                }
+            }
+        } label: {
+            Label("Settings", systemImage: "gear")
+        }
     }
 }
 
