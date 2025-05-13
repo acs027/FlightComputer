@@ -5,8 +5,8 @@
 ---
 
 <p align="center">
-    <img width="364" alt="Image" src="https://github.com/user-attachments/assets/62c800cf-64de-4aa9-9c6e-e13dc93d3193" alt="Dark mode" width="300"/>
-    <img width="364" alt="Image" src="https://github.com/user-attachments/assets/ad8edb58-2368-4841-8ae5-c01a0f5227c1" alt="Light mode" width="300"/>
+    <img width="364" alt="Image" src="https://github.com/user-attachments/assets/62c800cf-64de-4aa9-9c6e-e13dc93d3193" alt="front side" width="300"/>
+    <img width="364" alt="Image" src="https://github.com/user-attachments/assets/ad8edb58-2368-4841-8ae5-c01a0f5227c1" alt="wind side" height="739"/>
 </p>
 
 ## 🧭 Purpose
