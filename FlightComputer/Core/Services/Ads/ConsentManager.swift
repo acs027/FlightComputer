@@ -27,9 +27,9 @@ class ConsentManager: NSObject {
     let parameters = RequestParameters()
 
     // For testing purposes, you can use UMPDebugGeography to simulate a location.
-    let debugSettings = DebugSettings()
-      debugSettings.geography = DebugGeography.EEA
-    parameters.debugSettings = debugSettings
+//    let debugSettings = DebugSettings()
+//      debugSettings.geography = DebugGeography.EEA
+//    parameters.debugSettings = debugSettings
 
     // [START request_consent_info_update]
     // Requesting an update to consent information should be called on every app launch.
