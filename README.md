@@ -32,7 +32,8 @@ This app is more than a calculator — it’s a complete simulation of the physi
 ## 🛠️ Tech Stack
 
 - **SwiftUI** – Modern and responsive interface design  
-- **MVVM Architecture** – Clean separation of logic and views  
+- **MVVM Architecture** – Clean separation of logic and views
+- **AdMob** – Ad integration
 
 ---
 
