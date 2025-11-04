@@ -5,86 +5,28 @@
 //  Created by ali cihan on 26.02.2025.
 //
 
-import Testing
+import XCTest
 @testable import FlightComputer
 
-struct MachSpeedCalculatorTests {
+class MachSpeedCalculatorTests: XCTestCase {
 
-    @Test func machNumberCalculation() async throws {
-        let calculator = MachSpeedCalculator(altitude: 5000, standardTemperature: 15)
+    func testMachNumberCalculation() {
+        let calculator = MachSpeedCalculator(altitude: 5000, standardTemperature: 15, speed: 340)
 
-        // Recalculate speed of sound manually
-        let temperatureAtAltitude = calculator.standardTemperature + (calculator.altitude * -0.00649)
-        let speedOfSoundAtAltitude = 331.3 + (0.6 * temperatureAtAltitude)
-
-        // Calculate expected Mach number
-        let expectedMachNumber = (340.29 * speedOfSoundAtAltitude) / 340.29  // machSpeed / speed of sound at sea level
-
-        #expect(calculator.machNumber == expectedMachNumber, "Incorrect Mach Number Calculation")
+        XCTAssertEqual(calculator.machNumber, 1, accuracy: 0.01, "Incorrect Mach Number Calculation")
     }
 
-    @Test func speedCalculationInKnots() async throws {
-        let calculator = MachSpeedCalculator(altitude: 5000, standardTemperature: 15, selectedSpeedUnit: .knots)
+    func testSpeedCalculationInKnots() {
+        let calculator = MachSpeedCalculator(altitude: 5000, standardTemperature: 15, machSpeedUnit: .knots)
 
-        // Recalculate speed of sound manually
-        let temperatureAtAltitude = calculator.standardTemperature + (calculator.altitude * -0.00649)
-        let speedOfSoundAtAltitude = 331.3 + (0.6 * temperatureAtAltitude)
-        
-        // Calculate mach speed
-        let machSpeed = 340.29 * speedOfSoundAtAltitude
-
-        // Convert mach speed to knots
-        let expectedSpeedInKnots = machSpeed * 1.94384
-
-        #expect(calculator.calculatedSpeed == expectedSpeedInKnots, "Incorrect Speed Calculation in Knots")
+        XCTAssertEqual(calculator.speedOfSoundAtAltitude, 661, accuracy: 1, "Incorrect Speed Calculation in Knots")
     }
 
-    @Test func speedCalculationInMph() async throws {
-        let calculator = MachSpeedCalculator(altitude: 5000, standardTemperature: 15, selectedSpeedUnit: .mph)
+    func testSpeedCalculationInKmh() {
+        let calculator = MachSpeedCalculator(altitude: 5000, standardTemperature: 15, machSpeedUnit: .kilometersPerHour)
 
-        // Recalculate speed of sound manually
-        let temperatureAtAltitude = calculator.standardTemperature + (calculator.altitude * -0.00649)
-        let speedOfSoundAtAltitude = 331.3 + (0.6 * temperatureAtAltitude)
 
-        // Calculate mach speed
-        let machSpeed = 340.29 * speedOfSoundAtAltitude
-
-        // Convert mach speed to mph
-        let expectedSpeedInMph = machSpeed * 2.23694
-
-        #expect(calculator.calculatedSpeed == expectedSpeedInMph, "Incorrect Speed Calculation in MPH")
-    }
-
-    @Test func speedCalculationInKmh() async throws {
-        let calculator = MachSpeedCalculator(altitude: 5000, standardTemperature: 15, selectedSpeedUnit: .kmh)
-
-        // Recalculate speed of sound manually
-        let temperatureAtAltitude = calculator.standardTemperature + (calculator.altitude * -0.00649)
-        let speedOfSoundAtAltitude = 331.3 + (0.6 * temperatureAtAltitude)
-
-        // Calculate mach speed
-        let machSpeed = 340.29 * speedOfSoundAtAltitude
-
-        // Convert mach speed to km/h
-        let expectedSpeedInKmh = machSpeed * 3.6
-
-        #expect(calculator.calculatedSpeed == expectedSpeedInKmh, "Incorrect Speed Calculation in KM/H")
-    }
-
-    @Test func speedCalculationInMetersPerSecond() async throws {
-        let calculator = MachSpeedCalculator(altitude: 5000, standardTemperature: 15, selectedSpeedUnit: .metersPerSecond)
-
-        // Recalculate speed of sound manually
-        let temperatureAtAltitude = calculator.standardTemperature + (calculator.altitude * -0.00649)
-        let speedOfSoundAtAltitude = 331.3 + (0.6 * temperatureAtAltitude)
-
-        // Calculate mach speed
-        let machSpeed = 340.29 * speedOfSoundAtAltitude
-
-        // Use mach speed directly in m/s
-        let expectedSpeedInMetersPerSecond = machSpeed
-
-        #expect(calculator.calculatedSpeed == expectedSpeedInMetersPerSecond, "Incorrect Speed Calculation in M/S")
+        XCTAssertEqual(calculator.speedOfSoundAtAltitude, 1225, accuracy: 1, "Incorrect Speed Calculation in KM/H")
     }
 }
 

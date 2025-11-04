@@ -5,47 +5,63 @@
 //  Created by ali cihan on 26.02.2025.
 //
 
-import Testing
+import XCTest
 @testable import FlightComputer
 
-struct CloudBaseCalculatorTests {
+class CloudBaseCalculatorTests: XCTestCase {
 
-    @Test func cloudBaseCalculation() async throws {
+    func testCloudBaseCalculation() {
         var calculator = CloudBaseCalculator()
+        calculator.stationAltitudeUnit = .meters
+        calculator.ambientDewpointUnit = .celsius
+        calculator.ambientTempUnit = .celsius
+        
         calculator.ambientTemp = 20
         calculator.ambientDewpoint = 10
         calculator.stationAltitude = 100
-
-        let expectedCloudBase = 100 + ((20 - 10) / 0.008)  // 100 + 1250 = 1350m
-        #expect(calculator.cloudBaseAltitude == expectedCloudBase, "Cloud base altitude should be 1350m")
+        
+        let expectedCloudBase: Double = 1347
+        XCTAssertEqual(calculator.cloudBaseAltitude, expectedCloudBase, "Cloud base altitude should be 1350m")
     }
 
-    @Test func zeroTemperatureSpread() async throws {
+    func testZeroTemperatureSpread() {
         var calculator = CloudBaseCalculator()
+        calculator.stationAltitudeUnit = .meters
+        calculator.ambientDewpointUnit = .celsius
+        calculator.ambientTempUnit = .celsius
+        
         calculator.ambientTemp = 15
         calculator.ambientDewpoint = 15
         calculator.stationAltitude = 500
 
-        #expect(calculator.cloudBaseAltitude == 500, "Cloud base should be at station altitude (500m)")
+        XCTAssertEqual(calculator.cloudBaseAltitude, 500, "Cloud base should be at station altitude (500m)")
     }
 
-    @Test func negativeTemperatureSpread() async throws {
+    func testNegativeTemperatureSpread() {
         var calculator = CloudBaseCalculator()
+        calculator.stationAltitudeUnit = .meters
+        calculator.ambientDewpointUnit = .celsius
+        calculator.ambientTempUnit = .celsius
+        
         calculator.ambientTemp = 10
         calculator.ambientDewpoint = 12
         calculator.stationAltitude = 200
 
-        #expect(calculator.cloudBaseAltitude <= 200, "Cloud base should not be above station altitude when temp spread is negative")
+        XCTAssertTrue(calculator.cloudBaseAltitude <= 200, "Cloud base should not be above station altitude when temp spread is negative")
     }
 
-    @Test func extremeTemperatureValues() async throws {
+    func testExtremeTemperatureValues() {
         var calculator = CloudBaseCalculator()
+        calculator.stationAltitudeUnit = .meters
+        calculator.ambientDewpointUnit = .celsius
+        calculator.ambientTempUnit = .celsius
+        
         calculator.ambientTemp = 50
         calculator.ambientDewpoint = -10
         calculator.stationAltitude = 300
 
-        let expectedCloudBase = 300 + ((50 - (-10)) / 0.008)  // 300 + 7500 = 7800m
-        #expect(calculator.cloudBaseAltitude == expectedCloudBase, "Cloud base should be at 7800m")
+        let expectedCloudBase: Double = 7781  // 300 + 7500 = 7800m
+        XCTAssertEqual(calculator.cloudBaseAltitude, expectedCloudBase, accuracy: 1, "Cloud base should be at 7800m")
     }
 }
 

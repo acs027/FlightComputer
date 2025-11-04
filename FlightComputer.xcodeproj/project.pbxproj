@@ -54,6 +54,11 @@
 			path = FlightComputerTests;
 			sourceTree = "<group>";
 		};
+		08F085832EBA4A410025E6B4 /* .github */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = .github;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +85,7 @@
 		088142BE2D58CE7300D67650 = {
 			isa = PBXGroup;
 			children = (
+				08F085832EBA4A410025E6B4 /* .github */,
 				088142C92D58CE7300D67650 /* FlightComputer */,
 				088143602D5CEC2B00D67650 /* FlightComputerTests */,
 				08DA66FC2DCF0AEC009208CA /* Frameworks */,
@@ -122,6 +128,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				088142C92D58CE7300D67650 /* FlightComputer */,
+				08F085832EBA4A410025E6B4 /* .github */,
 			);
 			name = FlightComputer;
 			packageProductDependencies = (
@@ -452,6 +459,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.acs027.FlightComputerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -469,6 +477,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.acs027.FlightComputerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

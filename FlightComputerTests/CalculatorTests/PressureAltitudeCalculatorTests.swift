@@ -6,53 +6,53 @@
 //
 
 import Foundation
-import Testing
+import XCTest
 @testable import FlightComputer
 
-struct PressureAltitudeCalculatorTests {
+class PressureAltitudeCalculatorTests: XCTestCase {
 
-    @Test func standardPressureAltitude() async throws {
+    func testStandardPressureAltitude() {
         let calculator = PressureAltitudeCalculator(altimeterSetting: 29.92, fieldElevation: 500)
 
         // Standard pressure altitude should equal field elevation
         let expectedAltitude = 500.0
 
-        #expect(calculator.pressureAltitude == expectedAltitude, "Incorrect pressure altitude at standard pressure")
+        XCTAssertEqual(calculator.pressureAltitude, expectedAltitude, "Incorrect pressure altitude at standard pressure")
     }
 
-    @Test func lowPressureAltitude() async throws {
+    func testLowPressureAltitude() {
         let calculator = PressureAltitudeCalculator(altimeterSetting: 29.42, fieldElevation: 500)
 
         // Pressure altitude calculation: (29.92 - 29.42) * 1000 + 500
         let expectedAltitude = (29.92 - 29.42) * 1000 + 500  // 1000 feet increase
 
-        #expect(calculator.pressureAltitude == expectedAltitude, "Incorrect pressure altitude at low pressure")
+        XCTAssertEqual(calculator.pressureAltitude, expectedAltitude, "Incorrect pressure altitude at low pressure")
     }
 
-    @Test func highPressureAltitude() async throws {
+    func testHighPressureAltitude() {
         let calculator = PressureAltitudeCalculator(altimeterSetting: 30.42, fieldElevation: 500)
 
         // Pressure altitude calculation: (29.92 - 30.42) * 1000 + 500
         let expectedAltitude = (29.92 - 30.42) * 1000 + 500  // 1000 feet decrease
 
-        #expect(calculator.pressureAltitude == expectedAltitude, "Incorrect pressure altitude at high pressure")
+        XCTAssertEqual(calculator.pressureAltitude, expectedAltitude, "Incorrect pressure altitude at high pressure")
     }
 
-    @Test func seaLevelFieldElevation() async throws {
+    func testSeaLevelFieldElevation() {
         let calculator = PressureAltitudeCalculator(altimeterSetting: 29.92, fieldElevation: 0)
 
         // At sea level with standard pressure, pressure altitude should be 0
         let expectedAltitude = 0.0
 
-        #expect(calculator.pressureAltitude == expectedAltitude, "Incorrect pressure altitude at sea level")
+        XCTAssertEqual(calculator.pressureAltitude, expectedAltitude, "Incorrect pressure altitude at sea level")
     }
 
-    @Test func highFieldElevation() async throws {
+    func testHighFieldElevation() {
         let calculator = PressureAltitudeCalculator(altimeterSetting: 29.92, fieldElevation: 5000)
 
         // Field elevation is 5000 feet at standard pressure
         let expectedAltitude = 5000.0
 
-        #expect(calculator.pressureAltitude == expectedAltitude, "Incorrect pressure altitude at high field elevation")
+        XCTAssertEqual(calculator.pressureAltitude, expectedAltitude, "Incorrect pressure altitude at high field elevation")
     }
 }

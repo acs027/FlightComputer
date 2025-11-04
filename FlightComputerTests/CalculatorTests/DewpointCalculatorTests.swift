@@ -6,12 +6,12 @@
 //
 
 import Foundation
-import Testing
+import XCTest
 @testable import FlightComputer
 
-struct DewpointCalculatorTests {
+class DewpointCalculatorTests: XCTestCase {
 
-    @Test func validDewpointCalculation() async throws {
+    func testValidDewpointCalculation() {
         let calculator = DewpointCalculator(airTemp: 25, relativeHumidity: 60)
         
         let alpha = 17.27
@@ -19,28 +19,28 @@ struct DewpointCalculatorTests {
         let intermediateValue = (alpha * 25) / (beta + 25) + log(60 / 100)
         let expectedDewpoint = (beta * intermediateValue) / (alpha - intermediateValue)
 
-        #expect(calculator.dewpoint == expectedDewpoint, "Dewpoint should be correctly calculated")
+        XCTAssertEqual(calculator.dewpoint, expectedDewpoint, "Dewpoint should be correctly calculated")
     }
 
-    @Test func relativeHumidityZero() async throws {
+    func testRelativeHumidityZero() {
         let calculator = DewpointCalculator(airTemp: 20, relativeHumidity: 0)
         
-        #expect(calculator.dewpoint == nil, "Dewpoint should be nil when relative humidity is 0%")
+        XCTAssertEqual(calculator.dewpoint, nil, "Dewpoint should be nil when relative humidity is 0%")
     }
 
-    @Test func relativeHumidityAbove100() async throws {
+    func testRelativeHumidityAbove100() {
         let calculator = DewpointCalculator(airTemp: 15, relativeHumidity: 105)
         
-        #expect(calculator.dewpoint == nil, "Dewpoint should be nil when relative humidity is above 100%")
+        XCTAssertEqual(calculator.dewpoint, nil, "Dewpoint should be nil when relative humidity is above 100%")
     }
 
-    @Test func dewpointAt100PercentHumidity() async throws {
+    func testDewpointAt100PercentHumidity() async throws {
         let calculator = DewpointCalculator(airTemp: 10, relativeHumidity: 100)
         
-        #expect(calculator.dewpoint == 10, "Dewpoint should be equal to air temperature when RH is 100%")
+        XCTAssertEqual(calculator.dewpoint, 10, "Dewpoint should be equal to air temperature when RH is 100%")
     }
 
-    @Test func negativeTemperatureDewpoint() async throws {
+    func testNegativeTemperatureDewpoint() {
         let calculator = DewpointCalculator(airTemp: -5, relativeHumidity: 50)
         
         let alpha = 17.27
@@ -48,7 +48,7 @@ struct DewpointCalculatorTests {
         let intermediateValue = (alpha * -5) / (beta + -5) + log(50 / 100)
         let expectedDewpoint = (beta * intermediateValue) / (alpha - intermediateValue)
 
-        #expect(calculator.dewpoint == expectedDewpoint, "Dewpoint should be correctly calculated for negative temperatures")
+        XCTAssertEqual(calculator.dewpoint, expectedDewpoint, "Dewpoint should be correctly calculated for negative temperatures")
     }
 }
 

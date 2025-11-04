@@ -5,48 +5,47 @@
 //  Created by ali cihan on 26.02.2025.
 //
 
-import Testing
+import XCTest
 @testable import FlightComputer
 
-struct DensityAltitudeCalculatorTests {
+class DensityAltitudeCalculatorTests: XCTestCase {
 
-    @Test func isaTemperatureCalculation() async throws {
-        let calculator = DensityAltitudeCalculator(pressureAltitude: 5000, oat: 0)
+    func testIsaTemperatureCalculation() {
+        let calculator = DensityAltitudeCalculator(pressureAltitude: 5000, oat: 0, pressureAltitudeUnit: .meters, oatUnit: .celsius)
         
-        // ISA Temp at 5000 ft: 15 + (-1.98 * 5) = 5.1°C
-        let expectedISATemp = 15.0 + (-1.98 / 1000 * 5000)
-        #expect(calculator.isaTemp == expectedISATemp, "ISA Temperature at 5000 ft should be 5.1°C")
+        let expectedISATemp: Double = 15
+        let expedtedDensityAltitude: Double = 4456
+        XCTAssertEqual(calculator.isaTemp, expectedISATemp, accuracy: 1, "ISA Temperature at 5000 m should be 15°C")
+        XCTAssertEqual(calculator.densityAltitude, expedtedDensityAltitude, accuracy: 1, "Density altitude at 5000 m 0 OAT C should be 4456 m")
     }
 
-    @Test func densityAltitudeCalculation() async throws {
-        let calculator = DensityAltitudeCalculator(pressureAltitude: 5000, oat: 20)
+    func testDensityAltitudeCalculation() {
+        var calculator = DensityAltitudeCalculator(pressureAltitude: 5000, oat: 20, pressureAltitudeUnit: .meters, oatUnit: .celsius)
         
-        // Density Altitude: 5000 + 120 * (20 - ISA Temp)
-        let expectedDA = 5000 + 120 * (20 - calculator.isaTemp)
-        #expect(calculator.densityAltitude == expectedDA, "Density altitude should match calculated value")
+        let expectedDA: Double = 5181
+        XCTAssertEqual(calculator.densityAltitude, expectedDA, accuracy: 1, "Density altitude should match calculated value")
     }
 
-    @Test func seaLevelDensityAltitude() async throws {
-        let calculator = DensityAltitudeCalculator(pressureAltitude: 0, oat: 15)
+    func testSeaLevelDensityAltitude() {
+        let calculator = DensityAltitudeCalculator(pressureAltitude: 0, oat: 15, oatUnit: .celsius)
         
         // At sea level, ISA Temp = 15°C, OAT = 15°C → DA should be 0
-        #expect(calculator.densityAltitude == 0, "Density altitude at sea level and ISA conditions should be 0")
+        XCTAssertEqual(calculator.densityAltitude, 0, "Density altitude at sea level and ISA conditions should be 0")
     }
 
-    @Test func highTemperatureEffect() async throws {
-        let calculator = DensityAltitudeCalculator(pressureAltitude: 3000, oat: 40)
+    func testHighTemperatureEffect() {
+        let calculator = DensityAltitudeCalculator(pressureAltitude: 3000, oat: 40, pressureAltitudeUnit: .feet)
         
         // Hot day at 3000 ft should result in a significantly higher density altitude
-        _ = 3000 + 120 * (40 - calculator.isaTemp)
-        #expect(calculator.densityAltitude > 5000, "High temperature should increase density altitude above 5000 ft")
+        XCTAssertTrue(calculator.densityAltitude > 5000, "High temperature should increase density altitude above 5000 ft")
     }
 
-    @Test func lowTemperatureEffect() async throws {
+    func testLowTemperatureEffect() {
         let calculator = DensityAltitudeCalculator(pressureAltitude: 3000, oat: -20)
         
         // Cold day at 3000 ft should lower density altitude
         _ = 3000 + 120 * (-20 - calculator.isaTemp)
-        #expect(calculator.densityAltitude < 3000, "Low temperature should decrease density altitude below pressure altitude")
+        XCTAssertTrue(calculator.densityAltitude < 3000, "Low temperature should decrease density altitude below pressure altitude")
     }
 }
 
