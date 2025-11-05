@@ -43,9 +43,7 @@ struct MainTabView: View {
                 unitConversionView
                 calculator
             }
-            .toolbarBackground(.visible, for: .tabBar)
-            .toolbarBackground(Color(.secondarySystemBackground), for: .tabBar)
-            .toolbarColorScheme(.dark, for: .tabBar)
+            .tabBarStyleByOS()
             .onChange(of: selectedTab) { oldValue, newValue in
                 adManager.showAd()
             }
@@ -137,4 +135,17 @@ struct MainTabView: View {
 
 #Preview {
     MainTabView()
+}
+
+extension View {
+    @ViewBuilder
+    func tabBarStyleByOS() -> some View {
+        if #available(iOS 26.0, *) {
+               self
+           } else {
+               self
+                   .toolbarBackgroundVisibility(.visible, for: .tabBar)
+                   .toolbarColorScheme(.dark, for: .tabBar)
+           }
+    }
 }
