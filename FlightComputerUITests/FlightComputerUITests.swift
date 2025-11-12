@@ -30,6 +30,22 @@ final class FlightComputerUITests: XCTestCase {
 
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
+    
+    func testOnboardingAppearsFirstLaunch() throws {
+        
+        let app = XCUIApplication()
+        app.setSeenOnboarding(false)
+        app.launch()
+         // Assumes you have an onboarding screen shown only on first launch
+         let getStartedButton = app.buttons["Next"]
+         XCTAssertTrue(getStartedButton.exists, "Get Started button should appear on onboarding screen")
+
+//         getStartedButton.tap()
+//
+//         // After tapping, the main screen should appear
+//         let mainTitle = app.staticTexts["Flight Computer"]
+//         XCTAssertTrue(mainTitle.exists, "Main screen title should appear after onboarding")
+     }
 
     @MainActor
     func testLaunchPerformance() throws {
@@ -37,5 +53,11 @@ final class FlightComputerUITests: XCTestCase {
         measure(metrics: [XCTApplicationLaunchMetric()]) {
             XCUIApplication().launch()
         }
+    }
+}
+
+extension XCUIApplication {
+    func setSeenOnboarding(_ seenOnboarding: Bool = true) {
+        launchArguments += ["-hasSeenOnboarding", seenOnboarding ? "false" : "true" ]
     }
 }

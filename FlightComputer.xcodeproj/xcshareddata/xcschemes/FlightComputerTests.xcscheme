@@ -50,6 +50,17 @@
                ReferencedContainer = "container:FlightComputer.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "08F086E52EBA74CA0025E6B4"
+               BuildableName = "FlightComputerUITests.xctest"
+               BlueprintName = "FlightComputerUITests"
+               ReferencedContainer = "container:FlightComputer.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

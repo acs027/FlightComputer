@@ -21,6 +21,13 @@
 			remoteGlobalIDString = 088142C62D58CE7300D67650;
 			remoteInfo = FlightComputer;
 		};
+		08F086EC2EBA74CA0025E6B4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 088142BF2D58CE7300D67650 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 088142C62D58CE7300D67650;
+			remoteInfo = FlightComputer;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +35,7 @@
 		0881435F2D5CEC2A00D67650 /* FlightComputerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlightComputerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		08DA66FD2DCF0AED009208CA /* AppTrackingTransparency.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppTrackingTransparency.framework; path = System/Library/Frameworks/AppTrackingTransparency.framework; sourceTree = SDKROOT; };
 		08DA6D062DD3AD74009208CA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		08F086E62EBA74CA0025E6B4 /* FlightComputerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlightComputerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -59,6 +67,11 @@
 			path = .github;
 			sourceTree = "<group>";
 		};
+		08F086E72EBA74CA0025E6B4 /* FlightComputerUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FlightComputerUITests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +92,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		08F086E32EBA74CA0025E6B4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -88,6 +108,7 @@
 				08F085832EBA4A410025E6B4 /* .github */,
 				088142C92D58CE7300D67650 /* FlightComputer */,
 				088143602D5CEC2B00D67650 /* FlightComputerTests */,
+				08F086E72EBA74CA0025E6B4 /* FlightComputerUITests */,
 				08DA66FC2DCF0AEC009208CA /* Frameworks */,
 				088142C82D58CE7300D67650 /* Products */,
 				08DA6D062DD3AD74009208CA /* README.md */,
@@ -99,6 +120,7 @@
 			children = (
 				088142C72D58CE7300D67650 /* FlightComputer.app */,
 				0881435F2D5CEC2A00D67650 /* FlightComputerTests.xctest */,
+				08F086E62EBA74CA0025E6B4 /* FlightComputerUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -162,6 +184,29 @@
 			productReference = 0881435F2D5CEC2A00D67650 /* FlightComputerTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		08F086E52EBA74CA0025E6B4 /* FlightComputerUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 08F086F02EBA74CA0025E6B4 /* Build configuration list for PBXNativeTarget "FlightComputerUITests" */;
+			buildPhases = (
+				08F086E22EBA74CA0025E6B4 /* Sources */,
+				08F086E32EBA74CA0025E6B4 /* Frameworks */,
+				08F086E42EBA74CA0025E6B4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				08F086ED2EBA74CA0025E6B4 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				08F086E72EBA74CA0025E6B4 /* FlightComputerUITests */,
+			);
+			name = FlightComputerUITests;
+			packageProductDependencies = (
+			);
+			productName = FlightComputerUITests;
+			productReference = 08F086E62EBA74CA0025E6B4 /* FlightComputerUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -169,7 +214,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1620;
+				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
 					088142C62D58CE7300D67650 = {
@@ -177,6 +222,10 @@
 					};
 					0881435E2D5CEC2A00D67650 = {
 						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 088142C62D58CE7300D67650;
+					};
+					08F086E52EBA74CA0025E6B4 = {
+						CreatedOnToolsVersion = 26.0.1;
 						TestTargetID = 088142C62D58CE7300D67650;
 					};
 				};
@@ -201,6 +250,7 @@
 			targets = (
 				088142C62D58CE7300D67650 /* FlightComputer */,
 				0881435E2D5CEC2A00D67650 /* FlightComputerTests */,
+				08F086E52EBA74CA0025E6B4 /* FlightComputerUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -215,6 +265,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		0881435D2D5CEC2A00D67650 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		08F086E42EBA74CA0025E6B4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -238,6 +295,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		08F086E22EBA74CA0025E6B4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -245,6 +309,11 @@
 			isa = PBXTargetDependency;
 			target = 088142C62D58CE7300D67650 /* FlightComputer */;
 			targetProxy = 088143632D5CEC2B00D67650 /* PBXContainerItemProxy */;
+		};
+		08F086ED2EBA74CA0025E6B4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 088142C62D58CE7300D67650 /* FlightComputer */;
+			targetProxy = 08F086EC2EBA74CA0025E6B4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -384,10 +453,13 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FlightComputer/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Flight Pro";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This identifier will be used to deliver personalized ads to you.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -396,7 +468,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.acs027.FlightComputer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -426,10 +498,13 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FlightComputer/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Flight Pro";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This identifier will be used to deliver personalized ads to you.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -438,7 +513,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.acs027.FlightComputer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -488,6 +563,48 @@
 			};
 			name = Release;
 		};
+		08F086EE2EBA74CA0025E6B4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DDYV9BM2N2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.acsdev.FlightComputerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = FlightComputer;
+			};
+			name = Debug;
+		};
+		08F086EF2EBA74CA0025E6B4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DDYV9BM2N2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.acsdev.FlightComputerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = FlightComputer;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -514,6 +631,15 @@
 			buildConfigurations = (
 				088143662D5CEC2B00D67650 /* Debug */,
 				088143672D5CEC2B00D67650 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		08F086F02EBA74CA0025E6B4 /* Build configuration list for PBXNativeTarget "FlightComputerUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				08F086EE2EBA74CA0025E6B4 /* Debug */,
+				08F086EF2EBA74CA0025E6B4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

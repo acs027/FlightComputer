@@ -20,4 +20,19 @@ platform :ios do
   lane :tests do
     run_tests(scheme: "FlightComputerTests")
   end
+
+  lane :beta do
+    app_store_connect_api_key
+  
+    # 🧱 Build the app for distribution
+    build_app(
+      scheme: "FlightComputer",
+      export_options: {
+        signingStyle: "automatic"
+      }
+    )
+  
+    # 🚀 Upload the build to TestFlight
+    upload_to_testflight
+  end
 end
