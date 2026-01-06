@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WindSideView: View {
     @State var vm = WindSideViewModel()
-    @EnvironmentObject var adManager: InterstitialAdManager
+//    @EnvironmentObject var adManager: InterstitialAdManager
     
     @State var height: Double = 0
     
@@ -48,7 +48,7 @@ struct WindSideView: View {
             if oldValue != newValue {
                 reset()
                 scale = vm.scaleValueFitTheView()
-                adManager.showAd()
+//                adManager.showAd()
             }
         }
         .onChange(of: vm.calculationStepType.isLastStep, { oldValue, newValue in

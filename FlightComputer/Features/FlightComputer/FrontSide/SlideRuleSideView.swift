@@ -27,21 +27,25 @@ struct SlideRuleSideView: View {
             }
             .offset(totalPan)
             .scaleEffect(totalScale)
-            slider
         }
-        
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Constants.bgColor)
         .simultaneousGesture(
             PanGesture(gesturePan: $gesturePan, pan: $pan)
         )
         .simultaneousGesture(
             MagnifyGestureHandler(gestureScale: $gestureScale, scale: $scale)
         )
+    
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Constants.bgColor)
         .onAppear {
             DispatchQueue.main.async {
                 scale = vm.scaleValueFitTheView()
             }
+        }
+        .safeAreaInset(edge: .bottom) {
+            slider
+                .background(.ultraThinMaterial)
+                .zIndex(99)
         }
     }
     
@@ -66,7 +70,7 @@ struct SlideRuleSideView: View {
                     .foregroundStyle(Constants.sheetBg)
             )
             .padding(5)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+//            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
     }
     
     //MARK: Constants

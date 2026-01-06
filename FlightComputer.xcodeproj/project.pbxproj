@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		08C013A82D92C1B700E1F01C /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 08C013A72D92C1B700E1F01C /* GoogleMobileAds */; };
-		08DA66F92DCE8A12009208CA /* GoogleUserMessagingPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = 08DA66F82DCE8A12009208CA /* GoogleUserMessagingPlatform */; };
-		08DA66FE2DCF0AED009208CA /* AppTrackingTransparency.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08DA66FD2DCF0AED009208CA /* AppTrackingTransparency.framework */; };
 		08DA6D072DD3AD74009208CA /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 08DA6D062DD3AD74009208CA /* README.md */; };
 /* End PBXBuildFile section */
 
@@ -33,7 +30,6 @@
 /* Begin PBXFileReference section */
 		088142C72D58CE7300D67650 /* FlightComputer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlightComputer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0881435F2D5CEC2A00D67650 /* FlightComputerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlightComputerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		08DA66FD2DCF0AED009208CA /* AppTrackingTransparency.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppTrackingTransparency.framework; path = System/Library/Frameworks/AppTrackingTransparency.framework; sourceTree = SDKROOT; };
 		08DA6D062DD3AD74009208CA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		08F086E62EBA74CA0025E6B4 /* FlightComputerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlightComputerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -79,9 +75,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				08DA66FE2DCF0AED009208CA /* AppTrackingTransparency.framework in Frameworks */,
-				08DA66F92DCE8A12009208CA /* GoogleUserMessagingPlatform in Frameworks */,
-				08C013A82D92C1B700E1F01C /* GoogleMobileAds in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,7 +102,6 @@
 				088142C92D58CE7300D67650 /* FlightComputer */,
 				088143602D5CEC2B00D67650 /* FlightComputerTests */,
 				08F086E72EBA74CA0025E6B4 /* FlightComputerUITests */,
-				08DA66FC2DCF0AEC009208CA /* Frameworks */,
 				088142C82D58CE7300D67650 /* Products */,
 				08DA6D062DD3AD74009208CA /* README.md */,
 			);
@@ -123,14 +115,6 @@
 				08F086E62EBA74CA0025E6B4 /* FlightComputerUITests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		08DA66FC2DCF0AEC009208CA /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				08DA66FD2DCF0AED009208CA /* AppTrackingTransparency.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -154,8 +138,6 @@
 			);
 			name = FlightComputer;
 			packageProductDependencies = (
-				08C013A72D92C1B700E1F01C /* GoogleMobileAds */,
-				08DA66F82DCE8A12009208CA /* GoogleUserMessagingPlatform */,
 			);
 			productName = FlightComputer;
 			productReference = 088142C72D58CE7300D67650 /* FlightComputer.app */;
@@ -240,8 +222,6 @@
 			mainGroup = 088142BE2D58CE7300D67650;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				08C013A62D92C1B700E1F01C /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
-				08DA66F72DCE8A12009208CA /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 088142C82D58CE7300D67650 /* Products */;
@@ -468,7 +448,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.acs027.FlightComputer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -513,7 +493,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.acs027.FlightComputer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -645,38 +625,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		08C013A62D92C1B700E1F01C /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 12.2.0;
-			};
-		};
-		08DA66F72DCE8A12009208CA /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		08C013A72D92C1B700E1F01C /* GoogleMobileAds */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 08C013A62D92C1B700E1F01C /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
-			productName = GoogleMobileAds;
-		};
-		08DA66F82DCE8A12009208CA /* GoogleUserMessagingPlatform */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 08DA66F72DCE8A12009208CA /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */;
-			productName = GoogleUserMessagingPlatform;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 088142BF2D58CE7300D67650 /* Project object */;
 }

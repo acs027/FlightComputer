@@ -32,7 +32,7 @@ enum Tab: String, CaseIterable {
 
 struct MainTabView: View {
     @State private var selectedTab: Tab = .frontSide
-    @EnvironmentObject var adManager: InterstitialAdManager
+//    @EnvironmentObject var adManager: InterstitialAdManager
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -44,9 +44,9 @@ struct MainTabView: View {
                 calculator
             }
             .tabBarStyleByOS()
-            .onChange(of: selectedTab) { oldValue, newValue in
-                adManager.showAd()
-            }
+//            .onChange(of: selectedTab) { oldValue, newValue in
+//                adManager.showAd()
+//            }
         }
     }
     
@@ -117,11 +117,17 @@ struct MainTabView: View {
     
     var settingsMenu: some View {
         Menu {
-            Button("Privacy Settings") {
-                Task {
-                    try await ConsentManager.shared.presentPrivacyOptionsForm()
-                }
+//            Button("Privacy Settings") {
+//                Task {
+//                    try await ConsentManager.shared.presentPrivacyOptionsForm()
+//                }
+//            }
+            NavigationLink {
+                SupportView()
+            } label: {
+                Text("Support the Dev")
             }
+
             Button("Privacy Policy") {
                 if let url = URL(string: "https://acs027.github.io/E6BFlightPro/privacy") {
                     UIApplication.shared.open(url)

@@ -9,8 +9,8 @@ import SwiftUI
 
 struct CalculatorListView: View {
     @State var viewModel = CalculatorViewModel()
-    @EnvironmentObject var adManager: InterstitialAdManager
-    @Environment(\.dismiss) var dismiss
+//    @EnvironmentObject var adManager: InterstitialAdManager
+//    @Environment(\.dismiss) var dismiss
     let gridItems = [
         GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())
     ]
@@ -22,9 +22,9 @@ struct CalculatorListView: View {
                     NavigationLink {
                         calculator.calculatorView
                             .background(Color(.systemGroupedBackground))
-                            .onAppear {
-                                adManager.showAd()
-                            }
+//                            .onAppear {
+//                                adManager.showAd()
+//                            }
                     } label: {
                         calculatorLabel(calculator: calculator)
                     }
@@ -36,24 +36,7 @@ struct CalculatorListView: View {
         .tint(.primary)
         .frame(maxHeight: .infinity, alignment: .top)
         .navigationTitle("Calculators")
-//        .overlay {
-//            ZStack(alignment: .bottom) {
-//                Color.clear
-//                privacyPolicyButton
-//            }
-//            .padding()
-//        }
     }
-    
-//    private var privacyPolicyButton: some View {
-//        Button {
-//            if let url = URL(string: "https://acs027.github.io/E6BFlightPro/privacy") {
-//                                    UIApplication.shared.open(url)
-//                                }
-//        } label: {
-//            Text("Privacy Policy")
-//        }
-//    }
     
     func calculatorLabel(calculator: Calculator) -> some View {
         VStack {

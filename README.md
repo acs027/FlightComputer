@@ -33,7 +33,7 @@ This app is more than a calculator — it’s a complete simulation of the physi
 
 - **SwiftUI** – Modern and responsive interface design  
 - **MVVM Architecture** – Clean separation of logic and views
-- **AdMob** – Ad integration
+- ~~**AdMob** – Ad integration~~ - Removed in version 1.0.3
 
 ---
 

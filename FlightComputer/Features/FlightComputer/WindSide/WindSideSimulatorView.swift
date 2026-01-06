@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WindSideSimulatorView: View {
     @State var isProMode: Bool = false
-    @EnvironmentObject var adManager: InterstitialAdManager
+//    @EnvironmentObject var adManager: InterstitialAdManager
     
     var body: some View {
         ZStack {
@@ -28,9 +28,9 @@ struct WindSideSimulatorView: View {
             .padding(20)
         }
         .frame(maxHeight: .infinity)
-        .onChange(of: isProMode) { oldValue, newValue in
-            adManager.showAd()
-        }
+//        .onChange(of: isProMode) { oldValue, newValue in
+//            adManager.showAd()
+//        }
     }
     
     var switchModeButton: some View {

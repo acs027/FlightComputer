@@ -9,7 +9,7 @@ import SwiftUI
 
 struct UnitConversionGridView: View {
     @State private var viewModel = UnitConversionViewModel()
-    @EnvironmentObject var adManager: InterstitialAdManager
+//    @EnvironmentObject var adManager: InterstitialAdManager
     let gridItems = [
         GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())
     ]
@@ -30,27 +30,10 @@ struct UnitConversionGridView: View {
             UnitConversionView(viewModel: viewModel)
         }
         .navigationTitle("Unit Conversion")
-        .onChange(of: viewModel.selectedConversion) { oldValue, newValue in
-            adManager.showAd()
-        }
-//        .overlay {
-//            ZStack(alignment: .bottom) {
-//                Color.clear
-//                privacyPolicyButton
-//            }
-//            .padding()
+//        .onChange(of: viewModel.selectedConversion) { oldValue, newValue in
+//            adManager.showAd()
 //        }
     }
-    
-//    private var privacyPolicyButton: some View {
-//        Button {
-//            if let url = URL(string: "https://acs027.github.io/E6BFlightPro/privacy") {
-//                                    UIApplication.shared.open(url)
-//                                }
-//        } label: {
-//            Text("Privacy Policy")
-//        }
-//    }
     
     func unitTypeLabel(type: ConversionType) -> some View {
         VStack {
