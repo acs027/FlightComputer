@@ -18,7 +18,7 @@ struct FuelMassCalculatorView: View {
                 computedResults
             }
         }
-        .navigationTitle("Speed of sound")
+        .navigationTitle("Fuel Mass Calculator")
 //        .toolbar {
 //            ToolbarItemGroup(placement: .keyboard) {
 //                Spacer()
@@ -103,6 +103,8 @@ struct FuelMassCalculatorView: View {
                 }
             }
             .pickerStyle(.segmented)
+            .padding(.horizontal)
+            .padding(.top)
             CustomTextView(title: "Mass", value: vm.fuelMassCalculator.mass, unit: vm.fuelMassCalculator.massUnit.symbol)
         }
     }
@@ -121,4 +123,8 @@ extension FuelMassCalculatorView {
             }
         }
     }
+}
+
+#Preview {
+    FuelMassCalculatorView()
 }
