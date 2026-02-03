@@ -19,7 +19,7 @@ struct NumPad: View {
     let numbers = [
         "1", "2", "3","⥮",
         "4", "5", "6","C",
-        "7", "8", "9","",
+        "7", "8", "9","-",
         "00", "0", ".","⌫"
     ]
     
@@ -65,7 +65,12 @@ struct NumPad: View {
             if !inputText.contains(".") && !inputText.isEmpty {
                 inputText.append(value)
             }
-        } else {
+        } else if value == "-" {
+            if inputText.isEmpty || inputText == "0" {
+                inputText = value
+            }
+        }
+        else {
             if inputText == "0" {
                 inputText = value
             } else {
