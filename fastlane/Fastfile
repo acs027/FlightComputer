@@ -19,7 +19,6 @@ platform :ios do
   desc "This lane going to execute tests."
   lane :tests do
     run_tests(scheme: "FlightComputerTests",
-              devices: ["iPhone 16 Pro (18.5)"],
             )
   end
 
