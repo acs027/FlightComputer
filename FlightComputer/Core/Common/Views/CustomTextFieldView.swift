@@ -7,9 +7,11 @@
 
 import SwiftUI
 
-struct CustomTextFieldView: View {
+struct CustomTextFieldView<T:Hashable>: View {
     let title: String
     @Binding var value: Double
+    @FocusState.Binding var focus: T?
+    let field: T
     let placeHolder: String
     var unit: String?
     
@@ -20,7 +22,7 @@ struct CustomTextFieldView: View {
             HStack {
                 TextField(placeHolder, value: $value, format: .number)
                     .textFieldStyle(CustomTextFieldStyle())
-                    
+                    .focused($focus, equals: field)
                 if let unit = unit {
                     Text(unit)
                 }
@@ -30,6 +32,24 @@ struct CustomTextFieldView: View {
         .background(Constants.bgColor)
         .cornerRadius(10)
         .padding(.horizontal)
+        .toolbar {
+            if focus == field {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Button {
+                        value *= -1
+                    } label: {
+                        Image(systemName: "plus.forwardslash.minus")
+                            .fontWeight(.bold)
+                    }
+                    
+                    Spacer()
+                    
+                    Button("Done") {
+                        focus = nil
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -49,13 +69,13 @@ private struct CustomTextFieldStyle: TextFieldStyle {
             .overlay {
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-            
-            }
                 
+            }
+        
     }
 }
 
-#Preview {
-    @Previewable @State var value: Double = 240
-    CustomTextFieldView(title: "Wind Speed", value: $value, placeHolder: "Enter wind speed")
-}
+//#Preview {
+//    @Previewable @State var value: Double = 240
+//    CustomTextFieldView(title: "Wind Speed", value: $value, placeHolder: "Enter wind speed")
+//}
