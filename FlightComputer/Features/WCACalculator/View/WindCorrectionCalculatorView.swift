@@ -44,6 +44,7 @@ extension WindCorrectionCalculatorView {
 struct WindCorrectionCalculatorView: View {
     @State var vm = WindCorrectionViewModel()
     @FocusState var focused: WCACalculatorFocus?
+    typealias FocusField = WCACalculatorFocus
     
     let columns = [
 //            GridItem(.flexible()),
@@ -67,13 +68,14 @@ struct WindCorrectionCalculatorView: View {
         .background(Constants.bgColor)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    focused = nil
-                }
+//                Spacer()
+//                Button("Done") {
+//                    focused = nil
+//                }
                 Button("Next") {
                     focused = focused?.next()
                 }
+                Spacer()
             }
         }
     }
@@ -91,7 +93,7 @@ struct WindCorrectionCalculatorView: View {
     }
     
     var windDirectionTextField: some View {
-        CustomTextFieldView(title: "Wind Direction", value: $vm.wCACalculator.windDirection, placeHolder: "Enter wind direction")
+        CustomTextFieldView<FocusField>(title: "Wind Direction", value: $vm.wCACalculator.windDirection, focus: $focused, field: .windDirectionTextField, placeHolder: "Enter wind direction")
             .focused($focused, equals: .windDirectionTextField)
             .onSubmit {
                 focused = focused?.next()
@@ -99,21 +101,21 @@ struct WindCorrectionCalculatorView: View {
     }
     
     var windSpeedTextField: some View {
-        CustomTextFieldView(title: "Wind Speed", value: $vm.wCACalculator.windSpeed, placeHolder: "Enter wind speed")
+        CustomTextFieldView<FocusField>(title: "Wind Speed", value: $vm.wCACalculator.windSpeed, focus: $focused, field: .windSpeedTextField, placeHolder: "Enter wind speed")
             .focused($focused, equals: .windSpeedTextField)
             .onSubmit {
                 focused = focused?.next()
             }
     }
     var courseTextField: some View {
-        CustomTextFieldView(title: "Course", value: $vm.wCACalculator.trueCourse, placeHolder: "Enter the course")
+        CustomTextFieldView<FocusField>(title: "Course", value: $vm.wCACalculator.trueCourse, focus: $focused, field: .courseTextField, placeHolder: "Enter the course")
             .focused($focused, equals: .courseTextField)
             .onSubmit {
                 focused = focused?.next()
             }
     }
     var trueAirSpeedTextField: some View {
-        CustomTextFieldView(title: "True Air Speed", value: $vm.wCACalculator.trueAirSpeed, placeHolder: "Enter TAS")
+        CustomTextFieldView<FocusField>(title: "True Air Speed", value: $vm.wCACalculator.trueAirSpeed, focus: $focused, field: .trueAirSpeedTextField, placeHolder: "Enter TAS")
             .focused($focused, equals: .trueAirSpeedTextField)
             .onSubmit {
                 focused = focused?.next()

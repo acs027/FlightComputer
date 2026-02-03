@@ -19,14 +19,14 @@ struct CloudBaseCalculatorView: View {
                 computedResults
         }
         .navigationTitle("Cloud Base")
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    focused = nil
-                }
-            }
-        }
+//        .toolbar {
+//            ToolbarItemGroup(placement: .keyboard) {
+//                Spacer()
+//                Button("Done") {
+//                    focused = nil
+//                }
+//            }
+//        }
     }
     
     var userInputs: some View {
@@ -45,7 +45,7 @@ struct CloudBaseCalculatorView: View {
     
     var ambientTemp: some View {
         VStack {
-            CustomTextFieldView(title: "Ambient Temperature", value: $vm.cloudBaseCalculator.ambientTemp, placeHolder: "Temperature", unit: vm.cloudBaseCalculator.ambientTempUnit.symbol)
+            CustomTextFieldView<FocusField>(title: "Ambient Temperature", value: $vm.cloudBaseCalculator.ambientTemp, focus: $focused, field: .ambientTemp, placeHolder: "Temperature", unit: vm.cloudBaseCalculator.ambientTempUnit.symbol)
             Picker("Ambient Temperature Unit", selection: $vm.cloudBaseCalculator.ambientTempUnit) {
                 ForEach(Temperature.allCases, id: \.self) {
                     unit in
@@ -63,7 +63,7 @@ struct CloudBaseCalculatorView: View {
     
     var ambientDewpoint: some View {
         VStack {
-            CustomTextFieldView(title: "Dewpoint", value: $vm.cloudBaseCalculator.ambientDewpoint, placeHolder: "Dewpoint", unit: vm.cloudBaseCalculator.ambientDewpointUnit.symbol)
+            CustomTextFieldView<FocusField>(title: "Dewpoint", value: $vm.cloudBaseCalculator.ambientDewpoint, focus: $focused, field: .ambientDewpoint, placeHolder: "Dewpoint", unit: vm.cloudBaseCalculator.ambientDewpointUnit.symbol)
             Picker("Dewpoint Unit", selection: $vm.cloudBaseCalculator.ambientDewpointUnit) {
                 ForEach(Temperature.allCases, id: \.self) {
                     unit in
@@ -81,7 +81,7 @@ struct CloudBaseCalculatorView: View {
     
     var stationAltitude: some View {
         VStack {
-            CustomTextFieldView(title: "Station Altitude", value: $vm.cloudBaseCalculator.stationAltitude, placeHolder: "Station Altitude", unit: vm.cloudBaseCalculator.stationAltitudeUnit.symbol)
+            CustomTextFieldView<FocusField>(title: "Station Altitude", value: $vm.cloudBaseCalculator.stationAltitude, focus: $focused, field: .stationAltitude, placeHolder: "Station Altitude", unit: vm.cloudBaseCalculator.stationAltitudeUnit.symbol)
             Picker("Station Altitude Unit", selection: $vm.cloudBaseCalculator.stationAltitudeUnit) {
                 ForEach(Distance.allCases, id: \.self) {
                     unit in

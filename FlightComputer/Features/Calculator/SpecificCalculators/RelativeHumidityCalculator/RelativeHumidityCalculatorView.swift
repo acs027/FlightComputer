@@ -19,14 +19,14 @@ struct RelativeHumidityCalculatorView: View {
             }
         }
         .navigationTitle("Relative Humidity")
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    focused = nil
-                }
-            }
-        }
+//        .toolbar {
+//            ToolbarItemGroup(placement: .keyboard) {
+//                Spacer()
+//                Button("Done") {
+//                    focused = nil
+//                }
+//            }
+//        }
     }
 
     var userInputs: some View {
@@ -44,7 +44,7 @@ struct RelativeHumidityCalculatorView: View {
 
     var airTemp: some View {
         VStack {
-            CustomTextFieldView(title: "Air Temperature", value: $vm.calculator.airTemp, placeHolder: "Air Temperature", unit: vm.calculator.tempUnit.symbol)
+            CustomTextFieldView<FocusField>(title: "Air Temperature", value: $vm.calculator.airTemp, focus: $focused, field: .airTemp, placeHolder: "Air Temperature", unit: vm.calculator.tempUnit.symbol)
             Picker("Air Temperature Unit", selection: $vm.calculator.tempUnit) {
                 ForEach(Temperature.allCases, id: \.self) {
                     unit in
@@ -61,7 +61,7 @@ struct RelativeHumidityCalculatorView: View {
     }
 
     var dewpoint: some View {
-        CustomTextFieldView(title: "Dewpoint", value: $vm.calculator.dewpoint, placeHolder: "Dewpoint", unit: vm.calculator.tempUnit.symbol)
+        CustomTextFieldView<FocusField>(title: "Dewpoint", value: $vm.calculator.dewpoint, focus: $focused, field: .dewpoint, placeHolder: "Dewpoint", unit: vm.calculator.tempUnit.symbol)
             .focused($focused, equals: .dewpoint)
             .onSubmit {
                 focused = focused?.next()

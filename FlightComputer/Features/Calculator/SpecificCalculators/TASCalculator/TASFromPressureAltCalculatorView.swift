@@ -18,14 +18,14 @@ struct TASFromPressureAltCalculatorView: View {
             userInputs
             computedResults
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    focused = nil
-                }
-            }
-        }
+//        .toolbar {
+//            ToolbarItemGroup(placement: .keyboard) {
+//                Spacer()
+//                Button("Done") {
+//                    focused = nil
+//                }
+//            }
+//        }
     }
     
     var userInputs: some View {
@@ -44,7 +44,7 @@ struct TASFromPressureAltCalculatorView: View {
     
     var pressureAltitude: some View {
         VStack {
-            CustomTextFieldView(title: "Pressure Altitude", value: $vm.tasFromPressureAltCalculator.pressureAltitude, placeHolder: "Altitude (m)", unit: vm.tasFromPressureAltCalculator.pressureAltitudeUnit.symbol)
+            CustomTextFieldView<FocusField>(title: "Pressure Altitude", value: $vm.tasFromPressureAltCalculator.pressureAltitude, focus: $focused, field: .pressureAltitude, placeHolder: "Altitude (m)", unit: vm.tasFromPressureAltCalculator.pressureAltitudeUnit.symbol)
             Picker("Altitude Unit", selection: $vm.tasFromPressureAltCalculator.pressureAltitudeUnit) {
                 ForEach(Distance.allCases, id: \.symbol) {
                     unit in
@@ -63,7 +63,7 @@ struct TASFromPressureAltCalculatorView: View {
     
     var outsideAirTemp: some View {
         VStack {
-            CustomTextFieldView(title: "Outside Air Temperature", value: $vm.tasFromPressureAltCalculator.outsideAirTemp, placeHolder: "Temperature (°C)", unit: vm.tasFromPressureAltCalculator.outsideAirTempUnit.symbol)
+            CustomTextFieldView<FocusField>(title: "Outside Air Temperature", value: $vm.tasFromPressureAltCalculator.outsideAirTemp, focus: $focused, field: .oat, placeHolder: "Temperature (°C)", unit: vm.tasFromPressureAltCalculator.outsideAirTempUnit.symbol)
             Picker("Outside Air Temperature", selection: $vm.tasFromPressureAltCalculator.outsideAirTempUnit) {
                 ForEach(Temperature.allCases, id: \.symbol) {
                     unit in
@@ -81,7 +81,7 @@ struct TASFromPressureAltCalculatorView: View {
     }
     
     var indicatedAirSpeed: some View {
-        CustomTextFieldView(title: "Indicated Air Speed", value: $vm.tasFromPressureAltCalculator.indicatedAirSpeed, placeHolder: "Indicated Air Speed (IAS) (knots)")
+        CustomTextFieldView<FocusField>(title: "Indicated Air Speed", value: $vm.tasFromPressureAltCalculator.indicatedAirSpeed, focus: $focused, field: .ias, placeHolder: "Indicated Air Speed (IAS) (knots)")
             .focused($focused, equals: .ias)
             .onSubmit {
                 focused = focused?.next()

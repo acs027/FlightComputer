@@ -10,6 +10,7 @@ import SwiftUI
 struct FuelConsumptionView: View {
     @State var vm: WindCorrectionViewModel
     @FocusState.Binding var focused: WindCorrectionCalculatorView.WCACalculatorFocus?
+    typealias FocusField = WindCorrectionCalculatorView.WCACalculatorFocus
     
     var body: some View {
         VStack {
@@ -37,7 +38,7 @@ struct FuelConsumptionView: View {
     }
     
     var fuelPerHour: some View {
-        CustomTextFieldView(title: "Fuel per hour", value: $vm.fuelConsumptionCalc.fuelPerHour, placeHolder: "Fuel per hour")
+        CustomTextFieldView<FocusField>(title: "Fuel per hour", value: $vm.fuelConsumptionCalc.fuelPerHour, focus: $focused, field: .fuelPerHour, placeHolder: "Fuel per hour")
             .focused($focused, equals: .fuelPerHour)
             .onSubmit {
                 focused = focused?.next()

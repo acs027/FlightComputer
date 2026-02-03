@@ -16,14 +16,14 @@ struct IASFromPressureAltCalculatorView: View {
             userInputs
             computedResults
         }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    focused = nil
-                }
-            }
-        }
+//        .toolbar {
+//            ToolbarItemGroup(placement: .keyboard) {
+//                Spacer()
+//                Button("Done") {
+//                    focused = nil
+//                }
+//            }
+//        }
     }
 
     var userInputs: some View {
@@ -42,7 +42,7 @@ struct IASFromPressureAltCalculatorView: View {
 
     var pressureAltitude: some View {
         VStack {
-            CustomTextFieldView(title: "Pressure Altitude", value: $vm.fromPressureAltCalculator.pressureAltitude, placeHolder: "Altitude (m)", unit: vm.fromPressureAltCalculator.altitudeUnit.symbol)
+            CustomTextFieldView<FocusField>(title: "Pressure Altitude", value: $vm.fromPressureAltCalculator.pressureAltitude, focus: $focused, field: .pressureAltitude, placeHolder: "Altitude (m)", unit: vm.fromPressureAltCalculator.altitudeUnit.symbol)
                 .focused($focused, equals: .pressureAltitude)
                 .onSubmit {
                     focused = focused?.next()
@@ -61,7 +61,7 @@ struct IASFromPressureAltCalculatorView: View {
 
     var outsideAirTemp: some View {
         VStack {
-            CustomTextFieldView(title: "Outside Air Temperature", value: $vm.fromPressureAltCalculator.outsideAirTemp, placeHolder: "OAT (°C)", unit: vm.fromPressureAltCalculator.temperatureUnit.symbol)
+            CustomTextFieldView<FocusField>(title: "Outside Air Temperature", value: $vm.fromPressureAltCalculator.outsideAirTemp, focus: $focused, field: .outsideAirTemp, placeHolder: "OAT (°C)", unit: vm.fromPressureAltCalculator.temperatureUnit.symbol)
                 .focused($focused, equals: .outsideAirTemp)
                 .onSubmit {
                     focused = focused?.next()
@@ -78,7 +78,7 @@ struct IASFromPressureAltCalculatorView: View {
     }
 
     var trueAirSpeed: some View {
-        CustomTextFieldView(title: "True Air Speed", value: $vm.fromPressureAltCalculator.trueAirSpeed, placeHolder: "TAS (knots)")
+        CustomTextFieldView<FocusField>(title: "True Air Speed", value: $vm.fromPressureAltCalculator.trueAirSpeed, focus: $focused, field: .trueAirSpeed, placeHolder: "TAS (knots)")
             .focused($focused, equals: .trueAirSpeed)
             .onSubmit {
                 focused = focused?.next()

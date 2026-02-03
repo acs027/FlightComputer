@@ -19,14 +19,14 @@ struct WindDirectionSpeedCalculatorView: View {
             }
         }
         .navigationTitle("Wind")
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    focused = nil
-                }
-            }
-        }
+//        .toolbar {
+//            ToolbarItemGroup(placement: .keyboard) {
+//                Spacer()
+//                Button("Done") {
+//                    focused = nil
+//                }
+//            }
+//        }
     }
     
     var userInputs: some View {
@@ -46,7 +46,7 @@ struct WindDirectionSpeedCalculatorView: View {
     }
     
     var heading: some View {
-        CustomTextFieldView(title: "Aircraft Heading", value: $vm.windDirectionSpeedCalculator.heading, placeHolder: "Heading (° from North)")
+        CustomTextFieldView<FocusField>(title: "Aircraft Heading", value: $vm.windDirectionSpeedCalculator.heading, focus: $focused, field: .heading, placeHolder: "Heading (° from North)")
             .focused($focused, equals: .heading)
             .onSubmit {
                 focused = focused?.next()
@@ -54,7 +54,7 @@ struct WindDirectionSpeedCalculatorView: View {
     }
     
     var trueAirSpeed: some View {
-        CustomTextFieldView(title: "True Airspeed", value: $vm.windDirectionSpeedCalculator.trueAirSpeed, placeHolder: "TAS (knots)")
+        CustomTextFieldView<FocusField>(title: "True Airspeed", value: $vm.windDirectionSpeedCalculator.trueAirSpeed, focus: $focused, field: .tas, placeHolder: "TAS (knots)")
             .focused($focused, equals: .tas)
             .onSubmit {
                 focused = focused?.next()
@@ -62,7 +62,7 @@ struct WindDirectionSpeedCalculatorView: View {
     }
     
     var trueCourse: some View {
-        CustomTextFieldView(title: "True Course", value: $vm.windDirectionSpeedCalculator.trueCourse, placeHolder: "Course (° from North)")
+        CustomTextFieldView<FocusField>(title: "True Course", value: $vm.windDirectionSpeedCalculator.trueCourse, focus: $focused, field: .trueCourse, placeHolder: "Course (° from North)")
             .focused($focused, equals: .trueCourse)
             .onSubmit {
                 focused = focused?.next()
@@ -70,7 +70,7 @@ struct WindDirectionSpeedCalculatorView: View {
     }
     
     var groundSpeed: some View {
-        CustomTextFieldView(title: "Ground Speed", value: $vm.windDirectionSpeedCalculator.groundSpeed, placeHolder: "Ground Speed (knots)")
+        CustomTextFieldView<FocusField>(title: "Ground Speed", value: $vm.windDirectionSpeedCalculator.groundSpeed, focus: $focused, field: .groundSpeed, placeHolder: "Ground Speed (knots)")
             .focused($focused, equals: .groundSpeed)
             .onSubmit {
                 focused = focused?.next()

@@ -24,20 +24,20 @@ struct MachSpeedCalculatorView: View {
             }
         }
         .navigationTitle("Mach Speed Calculator")
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    focused = nil
-                }
-            }
-        }
+//        .toolbar {
+//            ToolbarItemGroup(placement: .keyboard) {
+//                Spacer()
+//                Button("Done") {
+//                    focused = nil
+//                }
+//            }
+//        }
     }
 
     var altitude: some View {
         VStack {
            
-            CustomTextFieldView(title: "Altitude", value: $vm.calculator.altitude, placeHolder: "Altitude", unit: vm.calculator.altitudeUnit.symbol)
+            CustomTextFieldView<FocusField>(title: "Altitude", value: $vm.calculator.altitude, focus: $focused, field: .altitude, placeHolder: "Altitude", unit: vm.calculator.altitudeUnit.symbol)
             Picker("Altitude Unit", selection: $vm.calculator.altitudeUnit) {
                 ForEach(Distance.allCases, id: \.symbol) {
                     unit in
@@ -55,7 +55,7 @@ struct MachSpeedCalculatorView: View {
 
     var standardTemperature: some View {
         VStack {
-            CustomTextFieldView(title: "Standard Temperature", value: $vm.calculator.standardTemperature, placeHolder: "Standard Temperature", unit: vm.calculator.standardTemperatureUnit.symbol)
+            CustomTextFieldView<FocusField>(title: "Standard Temperature", value: $vm.calculator.standardTemperature, focus: $focused, field: .standartTemp, placeHolder: "Standard Temperature", unit: vm.calculator.standardTemperatureUnit.symbol)
             Picker("Standart Temperature", selection: $vm.calculator.standardTemperatureUnit) {
                 ForEach(Temperature.allCases, id: \.symbol) {
                     unit in
@@ -79,7 +79,7 @@ struct MachSpeedCalculatorView: View {
     
     var speed: some View {
         VStack {
-            CustomTextFieldView(title: "Speed", value: $vm.calculator.speed, placeHolder: "Speed ", unit: vm.calculator.machSpeedUnit.symbol)
+            CustomTextFieldView<FocusField>(title: "Speed", value: $vm.calculator.speed, focus: $focused, field: .speed, placeHolder: "Speed ", unit: vm.calculator.machSpeedUnit.symbol)
             Picker("Mach Speed Unit", selection: $vm.calculator.machSpeedUnit) {
                 ForEach(Speed.allCases, id: \.self) {
                     unit in

@@ -11,7 +11,7 @@ import Foundation
 }
 
 enum Calculator: CaseIterable {
-    case cloudBase, course, densityAltitude, dewpoint, ias, machSpeed, pressureAltitude, relativeHumidity, speedOfSound, tas, windComponent, windDirectionSpeed
+    case cloudBase, course, densityAltitude, dewpoint, ias, machSpeed, pressureAltitude, relativeHumidity, speedOfSound, tas, windComponent, windDirectionSpeed, fuelMass
     
     var description: String {
         switch self {
@@ -39,6 +39,8 @@ enum Calculator: CaseIterable {
             return "Wind Components"
         case .windDirectionSpeed:
             return "Wind"
+        case .fuelMass:
+            return "Fuel Mass"
         }
     }
     
@@ -68,6 +70,8 @@ enum Calculator: CaseIterable {
             return "arrow.up.left.and.down.right.magnifyingglass"
         case .windDirectionSpeed:
             return "wind"
+        case .fuelMass:
+            return "fluid.transmission"
         }
     }
 }

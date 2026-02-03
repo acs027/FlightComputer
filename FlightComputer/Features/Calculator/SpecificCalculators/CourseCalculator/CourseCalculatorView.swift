@@ -20,14 +20,14 @@ struct CourseCalculatorView: View {
                 }
             }
             .navigationTitle("Course")
-            .toolbar {
-                ToolbarItem(placement: .keyboard) {
-                    Button("Done") {
-                        focused = nil
-                    }
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                }
-            }
+//            .toolbar {
+//                ToolbarItem(placement: .keyboard) {
+//                    Button("Done") {
+//                        focused = nil
+//                    }
+//                    .frame(maxWidth: .infinity, alignment: .trailing)
+//                }
+//            }
 //        }
     }
     
@@ -49,7 +49,7 @@ struct CourseCalculatorView: View {
     }
     
     var heading: some View {
-        CustomTextFieldView(title: "Heading", value: $vm.courseCalculator.heading, placeHolder: "Heading")
+        CustomTextFieldView<FocusField>(title: "Heading", value: $vm.courseCalculator.heading, focus: $focused, field: .heading, placeHolder: "Heading")
             .focused($focused, equals: .heading)
             .onSubmit {
                 focused = focused?.next()
@@ -57,21 +57,21 @@ struct CourseCalculatorView: View {
             
     }
     var trueAirSpeed: some View {
-        CustomTextFieldView(title: "True Air Speed", value: $vm.courseCalculator.trueAirSpeed, placeHolder: "TAS")
+        CustomTextFieldView<FocusField>(title: "True Air Speed", value: $vm.courseCalculator.trueAirSpeed, focus: $focused, field: .trueAirSpeed, placeHolder: "TAS")
             .focused($focused, equals: .trueAirSpeed)
             .onSubmit {
                 focused = focused?.next()
             }
     }
     var windDirection: some View {
-        CustomTextFieldView(title: "Wind Direction", value: $vm.courseCalculator.windDirection, placeHolder: "Wind Direction")
+        CustomTextFieldView<FocusField>(title: "Wind Direction", value: $vm.courseCalculator.windDirection, focus: $focused, field: .windDirection, placeHolder: "Wind Direction")
             .focused($focused, equals: .windDirection)
             .onSubmit {
                 focused = focused?.next()
             }
     }
     var windSpeed: some View {
-        CustomTextFieldView(title: "Wind Speed", value: $vm.courseCalculator.windSpeed, placeHolder: "Wind speed")
+        CustomTextFieldView<FocusField>(title: "Wind Speed", value: $vm.courseCalculator.windSpeed, focus: $focused, field: .windSpeed, placeHolder: "Wind speed")
             .focused($focused, equals: .windSpeed)
             .onSubmit {
                 focused = focused?.next()

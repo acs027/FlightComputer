@@ -19,14 +19,14 @@ struct WindComponentCalculatorView: View {
             }
         }
         .navigationTitle("Wind Component")
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    focused = nil
-                }
-            }
-        }
+//        .toolbar {
+//            ToolbarItemGroup(placement: .keyboard) {
+//                Spacer()
+//                Button("Done") {
+//                    focused = nil
+//                }
+//            }
+//        }
     }
     
     var userInputs: some View {
@@ -45,7 +45,7 @@ struct WindComponentCalculatorView: View {
     }
     
     var windSpeed: some View {
-        CustomTextFieldView(title: "Wind Speed", value: $vm.windComponentCalculator.windSpeed, placeHolder: "Wind Speed (knots)")
+        CustomTextFieldView<FocusField>(title: "Wind Speed", value: $vm.windComponentCalculator.windSpeed, focus: $focused, field: .windSpeed, placeHolder: "Wind Speed (knots)")
             .focused($focused, equals: .windSpeed)
             .onSubmit {
                 focused = focused?.next()
@@ -53,7 +53,7 @@ struct WindComponentCalculatorView: View {
     }
     
     var windDirection: some View {
-        CustomTextFieldView(title: "Wind Direction", value: $vm.windComponentCalculator.windDirection, placeHolder: "Wind Direction (° from North)")
+        CustomTextFieldView<FocusField>(title: "Wind Direction", value: $vm.windComponentCalculator.windDirection, focus: $focused, field: .windDirection, placeHolder: "Wind Direction (° from North)")
             .focused($focused, equals: .windDirection)
             .onSubmit {
                 focused = focused?.next()
@@ -61,7 +61,7 @@ struct WindComponentCalculatorView: View {
     }
     
     var runwayHeading: some View {
-        CustomTextFieldView(title: "Runway Heading", value: $vm.windComponentCalculator.runwayHeading, placeHolder: "Runway Heading (°)")
+        CustomTextFieldView<FocusField>(title: "Runway Heading", value: $vm.windComponentCalculator.runwayHeading, focus: $focused, field: .runwayHeading, placeHolder: "Runway Heading (°)")
             .focused($focused, equals: .runwayHeading)
             .onSubmit {
                 focused = focused?.next()

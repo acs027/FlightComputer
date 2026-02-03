@@ -84,6 +84,8 @@ extension Calculator {
             WindComponentCalculatorView()
         case .windDirectionSpeed:
             WindDirectionSpeedCalculatorView()
+        case .fuelMass:
+            FuelMassCalculatorView()
         }
     }
 }

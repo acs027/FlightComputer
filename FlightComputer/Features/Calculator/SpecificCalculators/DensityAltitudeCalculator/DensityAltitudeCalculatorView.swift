@@ -21,14 +21,14 @@ struct DensityAltitudeCalculatorView: View {
             }
         }
         .navigationTitle("Density Altitude")
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    focused = nil
-                }
-            }
-        }
+//        .toolbar {
+//            ToolbarItemGroup(placement: .keyboard) {
+//                Spacer()
+//                Button("Done") {
+//                    focused = nil
+//                }
+//            }
+//        }
     }
 
     var userInputs: some View {
@@ -48,7 +48,7 @@ struct DensityAltitudeCalculatorView: View {
 
     var pressureAltitude: some View {
         VStack {
-            CustomTextFieldView(title: "Pressure Altitude", value: $vm.calculator.pressureAltitude, placeHolder: "Pressure Altitude", unit: vm.calculator.pressureAltitudeUnit.symbol)
+            CustomTextFieldView<FocusField>(title: "Pressure Altitude", value: $vm.calculator.pressureAltitude, focus: $focused, field: .pressureAltitude, placeHolder: "Pressure Altitude", unit: vm.calculator.pressureAltitudeUnit.symbol)
             Picker("Pressure Altitude Unit", selection: $vm.calculator.pressureAltitudeUnit) {
                 ForEach(Distance.allCases, id: \.self) {
                     unit in
@@ -65,7 +65,7 @@ struct DensityAltitudeCalculatorView: View {
     }
     
     var trueAltitude: some View {
-        CustomTextFieldView(title: "True Altitude", value: $vm.calculator.trueAltitude, placeHolder: "True Altitude", unit: vm.calculator.pressureAltitudeUnit.symbol)
+        CustomTextFieldView<FocusField>(title: "True Altitude", value: $vm.calculator.trueAltitude, focus: $focused, field: .trueAltitude, placeHolder: "True Altitude", unit: vm.calculator.pressureAltitudeUnit.symbol)
             .focused($focused, equals: .trueAltitude)
             .onSubmit {
                 focused = focused?.next()
@@ -75,7 +75,7 @@ struct DensityAltitudeCalculatorView: View {
 
     var oat: some View {
         VStack {
-            CustomTextFieldView(title: "Outside Air Temperature", value: $vm.calculator.oat, placeHolder: "OAT", unit: vm.calculator.oatUnit.symbol)
+            CustomTextFieldView<FocusField>(title: "Outside Air Temperature", value: $vm.calculator.oat, focus: $focused, field: .oat, placeHolder: "OAT", unit: vm.calculator.oatUnit.symbol)
             Picker("OAT Unit", selection: $vm.calculator.oatUnit) {
                 ForEach(Temperature.allCases, id: \.self) {
                     unit in

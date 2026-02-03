@@ -19,14 +19,14 @@ struct PressureAltitudeCalculatorView: View {
             }
         }
         .navigationTitle("Pressure Altitude")
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    focused = nil
-                }
-            }
-        }
+//        .toolbar {
+//            ToolbarItemGroup(placement: .keyboard) {
+//                Spacer()
+//                Button("Done") {
+//                    focused = nil
+//                }
+//            }
+//        }
     }
 
     var userInputs: some View {
@@ -44,7 +44,7 @@ struct PressureAltitudeCalculatorView: View {
 
     var altimeterSetting: some View {
         VStack {
-            CustomTextFieldView(title: "Altimeter Setting", value: $vm.calculator.altimeterSetting, placeHolder: "Altimeter Setting", unit: vm.calculator.altimeterSettingUnit.symbol)
+            CustomTextFieldView<FocusField>(title: "Altimeter Setting", value: $vm.calculator.altimeterSetting, focus: $focused, field: .altimeterSetting, placeHolder: "Altimeter Setting", unit: vm.calculator.altimeterSettingUnit.symbol)
             Picker("Altimeter Unit", selection: $vm.calculator.altimeterSettingUnit) {
                 ForEach(Pressure.allCases, id: \.self) {
                     unit in
@@ -62,7 +62,7 @@ struct PressureAltitudeCalculatorView: View {
 
     var fieldElevation: some View {
         VStack {
-            CustomTextFieldView(title: "Field Elevation", value: $vm.calculator.fieldElevation, placeHolder: "Field Elevation", unit: vm.calculator.fieldElevationUnit.symbol)
+            CustomTextFieldView<FocusField>(title: "Field Elevation", value: $vm.calculator.fieldElevation, focus: $focused, field: .fieldElevation, placeHolder: "Field Elevation", unit: vm.calculator.fieldElevationUnit.symbol)
             Picker("Field Elevation Unit", selection: $vm.calculator.fieldElevationUnit) {
                 ForEach(Distance.allCases, id: \.self) {
                     unit in

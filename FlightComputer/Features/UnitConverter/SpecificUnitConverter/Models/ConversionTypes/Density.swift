@@ -13,6 +13,8 @@ enum Density: String, CaseIterable, Hashable, UnitType {
     case poundsPerCubicInch = "lb/in³"
     case poundsPerCubicFoot = "lb/ft³"
     case ouncesPerCubicInch = "oz/in³"
+    case poundsPerUSGallon = "lb/US gal"
+    case kilogramPerLiter = "kg/L"
 
     private var toKilogramsPerCubicMeter: Double {
         switch self {
@@ -26,6 +28,10 @@ enum Density: String, CaseIterable, Hashable, UnitType {
             return 16.0185
         case .ouncesPerCubicInch:
             return 1729.99
+        case .poundsPerUSGallon:
+            return 0.00834
+        case .kilogramPerLiter:
+            return 0.001
         }
     }
 

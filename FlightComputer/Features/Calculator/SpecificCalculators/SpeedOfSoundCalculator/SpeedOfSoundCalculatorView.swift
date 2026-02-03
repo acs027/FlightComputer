@@ -19,14 +19,14 @@ struct SpeedOfSoundCalculatorView: View {
             }
         }
         .navigationTitle("Speed of sound")
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    focused = nil
-                }
-            }
-        }
+//        .toolbar {
+//            ToolbarItemGroup(placement: .keyboard) {
+//                Spacer()
+//                Button("Done") {
+//                    focused = nil
+//                }
+//            }
+//        }
     }
     
     var userInputs: some View {
@@ -45,7 +45,7 @@ struct SpeedOfSoundCalculatorView: View {
     
     var altitude: some View {
         VStack {
-            CustomTextFieldView(title: "Altitude", value: $vm.speedOfSoundCalculator.altitude, placeHolder: "Altitude")
+            CustomTextFieldView<FocusField>(title: "Altitude", value: $vm.speedOfSoundCalculator.altitude, focus: $focused, field: .altitude, placeHolder: "Altitude")
             Picker("Altimeter Unit", selection: $vm.speedOfSoundCalculator.altitudeUnit) {
                 ForEach(Distance.allCases, id: \.self) {
                     unit in
@@ -63,7 +63,7 @@ struct SpeedOfSoundCalculatorView: View {
     
     var standardTemperature: some View {
         VStack {
-            CustomTextFieldView(title: "Standard Temperature", value: $vm.speedOfSoundCalculator.standardTemperature, placeHolder: "Temperature", unit: vm.speedOfSoundCalculator.standardTemperatureUnit.symbol)
+            CustomTextFieldView<FocusField>(title: "Standard Temperature", value: $vm.speedOfSoundCalculator.standardTemperature, focus: $focused, field: .standartTemp, placeHolder: "Temperature", unit: vm.speedOfSoundCalculator.standardTemperatureUnit.symbol)
             Picker("Standart Temperature Unit", selection: $vm.speedOfSoundCalculator.standardTemperatureUnit) {
                 ForEach(Temperature.allCases, id: \.self) {
                     unit in
