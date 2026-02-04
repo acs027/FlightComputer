@@ -22,18 +22,22 @@ platform :ios do
             )
   end
 
-  lane :beta do
+  desc "Sync signing"
+  lane :signing do
     app_store_connect_api_key
-  
-    # 🧱 Build the app for distribution
-    build_app(
-      scheme: "FlightComputer",
-      export_options: {
-        signingStyle: "automatic"
-      }
+    sync_code_signing(
+      readonly: true
     )
-  
-    # 🚀 Upload the build to TestFlight
+  end
+
+  desc "Build binary"
+  lane :build do
+    signing
+    gym(scheme: "FlightComputer")
+  end
+
+  lane :beta do
+    build
     upload_to_testflight
   end
 end
