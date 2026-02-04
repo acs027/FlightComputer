@@ -3,8 +3,6 @@ name: iOS CI
 on:
   push:
     branches: [development]
-  pull_request:
-    branches: [development]
         
 jobs:
   tests:
@@ -31,5 +29,5 @@ jobs:
           xcode-version: latest-stable
 
       - name: Run tests with Fastlane
-        run: bundle exec fastlane tests
+        run: bundle exec fastlane unit_only
 

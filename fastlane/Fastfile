@@ -16,9 +16,25 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "This lane going to execute tests."
+  desc "Execute all tests."
   lane :tests do
     run_tests(scheme: "FlightComputerTests",
+            )
+  end
+
+  desc "Execute only unit tests."
+  lane :unit_only do
+    run_tests(
+              scheme: "FlightComputerTests",
+              only_testing: "FlightComputerTests"
+            )
+  end
+
+  desc "Execute only UI tests."
+  lane :ui_only do
+    run_tests(
+              scheme: "FlightComputerTests",
+              only_testing: "FlightComputerUITests"
             )
   end
 
